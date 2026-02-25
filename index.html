@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Sound Scape Music Online</title>
+<title>SoundScape Online.</title>
 <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/bguhm/bguhm.github.io/main/images/favicons/soundscape/Untitled161_20260220092642.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"/>
 <style>
@@ -76,6 +76,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 .podium-card.silver .podium-score{color:var(--silver);}
 .podium-card.bronze .podium-score{color:var(--bronze);}
 .podium-loading{color:var(--muted);font-family:'Space Mono',monospace;font-size:11px;padding:20px;text-align:center;}
+.podium-cover-wrapper{width:80px;height:80px;margin:0 auto 10px;border-radius:8px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.4);}
+.podium-cover{width:100%;height:100%;object-fit:cover;display:block;}
+.podium-card.gold .podium-cover-wrapper{transform:scale(1.1);box-shadow:0 0 25px rgba(255,215,0,0.4);}
 .discovery-hero{padding:20px 24px 10px;background:linear-gradient(180deg,rgba(255,0,0,.08) 0%,transparent 100%);}
 .discovery-hero h1{font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:3px;line-height:1;}
 .discovery-hero p{color:var(--muted);font-size:13px;margin-top:6px;font-family:'Space Mono',monospace;}
@@ -152,10 +155,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 .btn-download:hover{color:#51cf66;border-color:#51cf66;}
 .btn-download.downloaded{color:#51cf66;border-color:#51cf66;}
 .tracklist-wrap{padding:0 16px 20px;}
-.tracklist-header{display:grid;grid-template-columns:36px 1fr 80px 100px 40px;padding:6px 12px;border-bottom:1px solid var(--border);margin-bottom:4px;}
+.tracklist-header{display:grid;grid-template-columns:36px 1fr 80px 40px;padding:6px 12px;border-bottom:1px solid var(--border);margin-bottom:4px;}
 .tracklist-header span{font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:1px;}
 .tracklist-header span:nth-child(3){text-align:right;}
-.track-row{display:grid;grid-template-columns:36px 1fr 80px 100px 40px;align-items:center;padding:8px 12px;border-radius:6px;cursor:pointer;transition:background .15s;gap:4px;}
+.track-row{display:grid;grid-template-columns:36px 1fr 80px 40px;align-items:center;padding:8px 12px;border-radius:6px;cursor:pointer;transition:background .15s;gap:4px;}
 .track-row:hover{background:var(--surface2);}
 .track-row.playing .track-num-text{display:none;}
 .track-row.playing .track-num-icon{display:block!important;color:var(--accent2);animation:pulse 1.2s infinite;}
@@ -166,9 +169,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 .track-num-icon{display:none;font-size:11px;}
 .track-name-cell{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .track-dur{font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;text-align:right;}
-.track-dl-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px;padding:3px 6px;border-radius:4px;transition:all .2s;font-family:'Space Mono',monospace;white-space:nowrap;}
-.track-dl-btn:hover{color:#51cf66;}
-.track-dl-btn.dl-done{color:#51cf66;}
 .track-menu-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;width:28px;height:28px;border-radius:50%;display:none;align-items:center;justify-content:center;transition:all .2s;}
 .track-row:hover .track-menu-btn{display:flex;}
 .track-menu-btn:hover{background:var(--surface3);color:var(--text);}
@@ -263,6 +263,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 .editor-track-album{font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;}
 .editor-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
 .editor-remove:hover{background:rgba(255,0,0,.15);color:var(--accent);}
+/* ── PLAYER BAR ── */
 .player-bar{grid-area:player;background:var(--surface);border-top:1px solid var(--border);display:grid;grid-template-columns:260px 1fr 260px;align-items:center;padding:0 20px;gap:10px;}
 .now-info{display:flex;align-items:center;gap:10px;min-width:0;}
 .now-art{width:52px;height:52px;border-radius:6px;object-fit:cover;background:var(--surface2);flex-shrink:0;transition:opacity .3s;}
@@ -286,9 +287,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 .seek-wrap:hover .seek-fill{background:var(--accent2);}
 .seek-input{position:absolute;inset:-8px 0;width:100%;opacity:0;cursor:pointer;margin:0;}
 .right-ctrl{display:flex;align-items:center;gap:10px;justify-content:flex-end;}
+/* ── VISUALIZER ── */
 .wave-viz{display:flex;align-items:center;gap:2px;height:18px;opacity:0;transition:opacity .3s;}
 .wave-viz.visible{opacity:1;}
-.wave-viz .stroke{display:block;width:3px;height:100%;background:linear-gradient(to top,var(--accent),var(--accent2));border-radius:2px;transform:scaleY(.2);transform-origin:center;}
+.wave-viz .stroke{display:block;width:3px;height:100%;background:linear-gradient(to top,var(--accent),var(--accent2));border-radius:2px;transform:scaleY(.2);transform-origin:center;transition:transform 0.05s ease;}
 .vol-wrap{display:flex;align-items:center;gap:6px;}
 .vol-wrap i{color:var(--muted);font-size:12px;}
 .vol-slider{position:relative;width:80px;height:4px;background:var(--surface3);border-radius:2px;}
@@ -306,44 +308,26 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 .create-playlist-btn:hover{border-color:var(--accent2);color:var(--accent2);}
 .stats-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent2);margin-right:5px;animation:blink 2s infinite;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
-/* download progress */
-.dl-progress-bar{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 20px;z-index:99999;min-width:260px;display:none;}
-.dl-progress-bar.show{display:block;}
-.dl-progress-label{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:6px;}
-.dl-progress-fill-wrap{height:4px;background:var(--surface3);border-radius:2px;overflow:hidden;}
-.dl-progress-fill{height:100%;background:linear-gradient(90deg,#51cf66,#00e5ff);border-radius:2px;width:0%;transition:width .3s;}
-.podium-cover-wrapper {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 10px;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
-}
-
-.podium-cover {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.podium-card.gold .podium-cover-wrapper {
-  transform: scale(1.1);
-  box-shadow: 0 0 25px rgba(255,215,0,0.4);
-}
+/* Full list view */
+.full-list-hero{padding:24px 24px 16px;background:linear-gradient(180deg,rgba(0,229,255,.07) 0%,transparent 100%);border-bottom:1px solid var(--border);}
+.full-list-hero h1{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3px;}
+.full-list-hero p{color:var(--muted);font-size:12px;font-family:'Space Mono',monospace;margin-top:4px;}
 </style>
 </head>
 <body>
+
 <div class="app">
+
 <!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="sidebar-logo-row">
-    <div class="sidebar-logo"><img style="width:100%;height:100%;" src="sound-scape-transparent.png"/></div>
+    <div class="sidebar-logo"><img style="width:100%;height:100%;" src="https://raw.githubusercontent.com/soundscapeonline/soundscapeonline.github.io/main/images/logos/Untitled162_20260220130644.png"/></div>
   </div>
   <div class="sidebar-nav">
-    <button class="nav-btn active" id="navDiscover" onclick="showView('discover')"><i class="fas fa-compass"></i>Discover</button>
+    <button class="nav-btn active" id="navHome" onclick="showView('home')"><i class="fas fa-home"></i>Home</button>
+    <button class="nav-btn" id="navDiscover" onclick="showView('discover')"><i class="fas fa-compass"></i>Discover</button>
     <button class="nav-btn" id="navSearch" onclick="showView('search')"><i class="fas fa-search"></i>Search</button>
-    <button class="nav-btn" id="navStats" onclick="openFullStats()"><i class="fas fa-chart-bar"></i>Top 100</button>
+    <button class="nav-btn" id="navSettings" onclick="showView('settings')"><i class="fas fa-cog"></i>Settings</button>
   </div>
   <div class="sidebar-section-label">
     <span>Library</span>
@@ -357,6 +341,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 
 <!-- MAIN -->
 <main class="main">
+  <!-- Topbar -->
   <div class="topbar">
     <button class="topbar-back" id="btnBack" onclick="navBack()"><i class="fas fa-chevron-left"></i></button>
     <button class="topbar-fwd" id="btnFwd" onclick="navFwd()"><i class="fas fa-chevron-right"></i></button>
@@ -367,17 +352,27 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
     <div class="topbar-right" id="topbarRight"></div>
   </div>
 
+  <!-- HOME VIEW -->
+  <div class="view active" id="viewHome">
+    <div class="discovery-hero">
+      <h1>HOME</h1>
+      <p>Welcome back. Pick up where you left off.</p>
+    </div>
+    <div class="section-title"><div class="section-title-left">Recently Available</div></div>
+    <div class="album-grid" id="gridHome"></div>
+  </div>
+
   <!-- DISCOVER VIEW -->
-  <div class="view active" id="viewDiscover">
+  <div class="view" id="viewDiscover">
+    <div class="discovery-hero">
+      <h1>DISCOVERY</h1>
+      <p>Find the Best Music available! <br>adding more albums soon! recommend an album at <a href="https://example.com" style="color:var(--accent2);">Recommendations</a></p>
+    </div>
     <div class="podium-section">
       <div class="podium-title"><i class="fas fa-trophy"></i>BEST</div>
       <div class="podium-row" id="podiumRow">
         <div class="podium-loading"><span class="stats-dot"></span>Loading live stats…</div>
       </div>
-    </div>
-    <div class="discovery-hero">
-      <h1>DISCOVERY</h1>
-      <p>Find the Best Music available! <br>adding more albums soon! recommend an album at <a href="https://example.com" style="color:var(--accent2);">Recommendations</a></p>
     </div>
     <div class="section-title">
       <div class="section-title-left">Top #100</div>
@@ -389,13 +384,39 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
       </div>
     </div>
     <div class="section-title">
-      <div class="section-title-left">Albums <span style="font-size:14px;color:var(--muted);font-family:'Space Mono',monospace;margin-left:6px;">18 albums </span><span id="releasedCountSpan" style="font-size:14px;color:var(--muted);font-family:'Space Mono',monospace;margin-left:6px;">(loading…)</span></div>
+      <div class="section-title-left">
+        Albums
+        <span style="font-size:14px;color:var(--muted);font-family:'Space Mono',monospace;margin-left:6px;" id="releasedCountSpan">(loading…)</span>
+        <button class="see-all-btn" onclick="openFullList('released')" style="margin-left:8px;">More</button>
+      </div>
     </div>
     <div class="album-grid" id="gridOfficial"></div>
     <div class="section-title">
-      <div class="section-title-left">Unreleased / Shelved Albums <span style="font-size:14px;color:var(--muted);font-family:'Space Mono',monospace;margin-left:6px;">18 albums</span> <span id="unreleasedCountSpan" style="font-size:14px;color:var(--muted);font-family:'Space Mono',monospace;margin-left:6px;">(loading…)</span></div>
+      <div class="section-title-left">
+        Unreleased / Shelved Albums
+        <span style="font-size:14px;color:var(--muted);font-family:'Space Mono',monospace;margin-left:6px;" id="unreleasedCountSpan">(loading…)</span>
+        <button class="see-all-btn" onclick="openFullList('unreleased')" style="margin-left:8px;">More</button>
+      </div>
     </div>
     <div class="album-grid" id="gridUnreleased"></div>
+  </div>
+
+  <!-- FULL LIST: RELEASED -->
+  <div class="view" id="viewFullReleased">
+    <div class="full-list-hero">
+      <h1>ALL RELEASED ALBUMS</h1>
+      <p id="fullReleasedDesc">All official releases</p>
+    </div>
+    <div class="album-grid" id="gridFullReleased"></div>
+  </div>
+
+  <!-- FULL LIST: UNRELEASED -->
+  <div class="view" id="viewFullUnreleased">
+    <div class="full-list-hero">
+      <h1>ALL UNRELEASED / SHELVED</h1>
+      <p id="fullUnreleasedDesc">Shelved and unreleased projects</p>
+    </div>
+    <div class="album-grid" id="gridFullUnreleased"></div>
   </div>
 
   <!-- ALBUM VIEW -->
@@ -403,7 +424,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
     <div class="album-hero" id="albumHero"></div>
     <div class="tracklist-wrap">
       <div class="tracklist-header">
-        <span>#</span><span>TITLE</span><span style="text-align:right">DURATION</span><span>DOWNLOAD</span><span></span>
+        <span>#</span><span>TITLE</span><span style="text-align:right">DURATION</span><span></span>
       </div>
       <div id="albumTrackRows"></div>
     </div>
@@ -415,14 +436,14 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
     <div id="artistAlbums"></div>
   </div>
 
-  <!-- SEARCH VIEW -->
+  <!-- SEARCH RESULTS VIEW -->
   <div class="view" id="viewSearch">
     <div class="search-results" id="searchResults">
       <div class="empty-state"><i class="fas fa-search"></i>Type to search albums, artists, tracks, users</div>
     </div>
   </div>
 
-  <!-- PROFILE VIEW -->
+  <!-- PROFILE (own) VIEW -->
   <div class="view" id="viewProfile">
     <div id="profileContent"></div>
   </div>
@@ -471,7 +492,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
     </div>
     <div class="progress-row">
       <span class="time-label" id="currTime">0:00</span>
-      <div class="seek-wrap"><div class="seek-fill" id="seekFill"></div><input type="range" class="seek-input" id="seekSlider" min="0" max="100" value="0"/></div>
+      <div class="seek-wrap"><div class="seek-fill" id="seekFill"></div><input type="range" class="seek-input" id="seekSlider" min="0" max="100" value="0" step="0.1"/></div>
       <span class="time-label" id="totalTime">0:00</span>
     </div>
   </div>
@@ -487,35 +508,30 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
     </div>
   </div>
 </div>
+
 </div><!-- end .app -->
 
 <!-- FULL STATS OVERLAY -->
 <div class="fullstats-overlay" id="fullStatsOverlay">
   <div class="fullstats-inner">
     <div class="fullstats-header">
-      <div class="fullstats-title">FULL STATISTICS</div>
+      <div class="fullstats-title">FULL STATS</div>
       <button class="fullstats-close" onclick="closeFullStats()"><i class="fas fa-times"></i></button>
     </div>
     <div class="fullstats-tabs">
-      <button class="fstab active" onclick="switchFSTab('best')">🏆 BEST</button>
-      <button class="fstab" onclick="switchFSTab('views')"><i class="fas fa-eye"></i> Top Viewed</button>
-      <button class="fstab" onclick="switchFSTab('listens')"><i class="fas fa-headphones"></i> Top Listened</button>
-      <button class="fstab" onclick="switchFSTab('saves')"><i class="fas fa-heart"></i> Top Saved</button>
-      <button class="fstab" onclick="switchFSTab('downloads')"><i class="fas fa-download"></i> Top Downloaded</button>
+      <button class="fstab active" onclick="switchFSTab('best')">Best Score</button>
+      <button class="fstab" onclick="switchFSTab('views')">Views</button>
+      <button class="fstab" onclick="switchFSTab('listens')">Listens</button>
+      <button class="fstab" onclick="switchFSTab('saves')">Saves</button>
+      <button class="fstab" onclick="switchFSTab('downloads')">Downloads</button>
     </div>
-    <div class="fullstats-body" id="fullStatsBody">
-      <div class="fs-loading"><span class="stats-dot"></span>Loading statistics…</div>
-    </div>
+    <div class="fullstats-body" id="fullStatsBody"></div>
   </div>
 </div>
 
-<!-- DOWNLOAD PROGRESS -->
-<div class="dl-progress-bar" id="dlProgressBar">
-  <div class="dl-progress-label" id="dlProgressLabel">Preparing download…</div>
-  <div class="dl-progress-fill-wrap"><div class="dl-progress-fill" id="dlProgressFill"></div></div>
-</div>
-
 <!-- MODALS -->
+
+<!-- Auth Modal -->
 <div class="modal-overlay" id="modalAuth">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modalAuth')"><i class="fas fa-times"></i></button>
@@ -579,6 +595,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   </div>
 </div>
 
+<!-- Profile Edit Modal -->
 <div class="modal-overlay" id="modalEditProfile">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modalEditProfile')"><i class="fas fa-times"></i></button>
@@ -610,6 +627,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   </div>
 </div>
 
+<!-- Create Playlist Modal -->
 <div class="modal-overlay" id="modalCreatePlaylist">
   <div class="modal" style="max-width:360px;">
     <button class="modal-close" onclick="closeModal('modalCreatePlaylist')"><i class="fas fa-times"></i></button>
@@ -629,6 +647,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   </div>
 </div>
 
+<!-- Add to Playlist Modal -->
 <div class="modal-overlay" id="modalAddToPlaylist">
   <div class="modal" style="max-width:360px;">
     <button class="modal-close" onclick="closeModal('modalAddToPlaylist')"><i class="fas fa-times"></i></button>
@@ -640,6 +659,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   </div>
 </div>
 
+<!-- Playlist Editor Modal -->
 <div class="modal-overlay" id="modalPlaylistEditor">
   <div class="modal" style="max-width:500px;">
     <button class="modal-close" onclick="closeModal('modalPlaylistEditor')"><i class="fas fa-times"></i></button>
@@ -657,6 +677,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   </div>
 </div>
 
+<!-- Remove Artist/Album Modal -->
 <div class="modal-overlay" id="modalRemoveGroup">
   <div class="modal" style="max-width:360px;">
     <button class="modal-close" onclick="closeModal('modalRemoveGroup')"><i class="fas fa-times"></i></button>
@@ -665,7 +686,10 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   </div>
 </div>
 
+<!-- Context Menu -->
 <div class="ctx-menu" id="ctxMenu"></div>
+
+<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
@@ -699,88 +723,56 @@ async function fetchSheetData() {
   return sheetData;
 }
 
-// Sheet columns (row 1 = headers):
-// A=title, B=author, C=id,
-// D=total-views, E=total-full-listens, F=total-saves, G=total-downloads, H=overAll-score,
-// I=(skip),
-// J=top-viewed, K=top-listened, L=top-saved, M=top-downloaded,
-// N=BEST-SCORE, O=BEST-TRACK, P=BEST-ARTIST
-
 function parseSheet(rows) {
-  // Returns { trackRows, topViewed, topListened, topSaved, topDownloaded, podium }
   if (!rows || !rows.length) return { trackRows: [], topViewed: [], topListened: [], topSaved: [], topDownloaded: [], podium: [] };
-
   const isObj = typeof rows[0] === 'object' && !Array.isArray(rows[0]);
-
-  // Skip header row if present
   let dataRows = rows;
-  if (isObj) {
-    const keys = Object.keys(rows[0]).map(k => k.toLowerCase());
-    const hasHeader = keys.some(k => k.includes('title') || k.includes('id') || k.includes('track'));
-    // Headers are already the keys in object mode — all rows are data
-    dataRows = rows;
-  } else {
-    // Array mode: check if row[0] is a header string
+  if (!isObj) {
     const first = rows[0];
     if (isNaN(parseFloat(first[3])) && String(first[0]).toLowerCase().includes('title')) {
       dataRows = rows.slice(1);
     }
   }
-
-  const trackRows = [];
-  const topViewed = [];
-  const topListened = [];
-  const topSaved = [];
-  const topDownloaded = [];
-  const podium = [];
-
+  const trackRows = [], topViewed = [], topListened = [], topSaved = [], topDownloaded = [], podium = [];
   dataRows.forEach(row => {
     if (!row) return;
-
     if (isObj) {
-      // ── Per-track stats (columns A–H) ──
       const id = String(row['id'] || row['c'] || row['C'] || '').trim();
       if (id && id !== 'id') {
         trackRows.push({
-          trackId:   id,
-          views:     parseInt(row['total-views']        || row['D'] || 0) || 0,
-          listens:   parseInt(row['total-full-listens'] || row['E'] || 0) || 0,
-          saves:     parseInt(row['total-saves']        || row['F'] || 0) || 0,
-          downloads: parseInt(row['total-downloads']    || row['G'] || 0) || 0,
-          score:     parseFloat(row['overAll-score']    || row['H'] || 0) || 0,
+          trackId: id,
+          views: parseInt(row['total-views'] || row['D'] || 0) || 0,
+          listens: parseInt(row['total-full-listens'] || row['E'] || 0) || 0,
+          saves: parseInt(row['total-saves'] || row['F'] || 0) || 0,
+          downloads: parseInt(row['total-downloads'] || row['G'] || 0) || 0,
+          score: parseFloat(row['overAll-score'] || row['H'] || 0) || 0,
         });
       }
-
-      // ── Pre-sorted top lists (columns J–M) ──
-      const tv = parseInt(row['top-viewed']     || row['J'] || 0) || 0;
-      const tl = parseInt(row['top-listened']   || row['K'] || 0) || 0;
-      const ts = parseInt(row['top-saved']      || row['L'] || 0) || 0;
+      const tv = parseInt(row['top-viewed'] || row['J'] || 0) || 0;
+      const tl = parseInt(row['top-listened'] || row['K'] || 0) || 0;
+      const ts = parseInt(row['top-saved'] || row['L'] || 0) || 0;
       const td = parseInt(row['top-downloaded'] || row['M'] || 0) || 0;
       if (tv) topViewed.push(tv);
       if (tl) topListened.push(tl);
       if (ts) topSaved.push(ts);
       if (td) topDownloaded.push(td);
-
-      // ── Podium (columns N–P) ──
-      const bs = parseFloat(row['BEST-SCORE']  || row['N'] || 0) || 0;
-      const bt = String(row['BEST-TRACK']      || row['O'] || '').trim();
-      const ba = String(row['BEST-ARTIST']     || row['P'] || '').trim();
+      const bs = parseFloat(row['BEST-SCORE'] || row['N'] || 0) || 0;
+      const bt = String(row['BEST-TRACK'] || row['O'] || '').trim();
+      const ba = String(row['BEST-ARTIST'] || row['P'] || '').trim();
       if (bs && bt) podium.push({ score: bs, trackName: bt, artistName: ba });
-
     } else {
-      // Array mode indices: 0=title,1=author,2=id,3=views,4=listens,5=saves,6=downloads,7=score,8=skip,9=topV,10=topL,11=topS,12=topD,13=bestScore,14=bestTrack,15=bestArtist
       const id = String(row[2] || '').trim();
       if (id && id !== 'id') {
         trackRows.push({
-          trackId:   id,
-          views:     parseInt(row[3])  || 0,
-          listens:   parseInt(row[4])  || 0,
-          saves:     parseInt(row[5])  || 0,
-          downloads: parseInt(row[6])  || 0,
-          score:     parseFloat(row[7]) || 0,
+          trackId: id,
+          views: parseInt(row[3]) || 0,
+          listens: parseInt(row[4]) || 0,
+          saves: parseInt(row[5]) || 0,
+          downloads: parseInt(row[6]) || 0,
+          score: parseFloat(row[7]) || 0,
         });
       }
-      const tv = parseInt(row[9])  || 0;
+      const tv = parseInt(row[9]) || 0;
       const tl = parseInt(row[10]) || 0;
       const ts = parseInt(row[11]) || 0;
       const td = parseInt(row[12]) || 0;
@@ -788,18 +780,15 @@ function parseSheet(rows) {
       if (tl) topListened.push(tl);
       if (ts) topSaved.push(ts);
       if (td) topDownloaded.push(td);
-
       const bs = parseFloat(row[13]) || 0;
       const bt = String(row[14] || '').trim();
       const ba = String(row[15] || '').trim();
       if (bs && bt) podium.push({ score: bs, trackName: bt, artistName: ba });
     }
   });
-
   return { trackRows, topViewed, topListened, topSaved, topDownloaded, podium };
 }
 
-// Build lookup by trackId for per-track stat access
 function buildStatsLookup(trackRows) {
   const lookup = {};
   trackRows.forEach(r => { if (r.trackId) lookup[r.trackId] = r; });
@@ -816,25 +805,23 @@ function findTrackByStatId(statId) {
   return null;
 }
 
-// Find a track by its name (for podium BEST-TRACK column)
 function findTrackByName(trackName, artistName) {
   for (const album of ALBUMS) {
     if (artistName && !album.artist.toLowerCase().includes(artistName.toLowerCase()) &&
-        !(album.primaryArtist || '').toLowerCase().includes(artistName.toLowerCase())) continue;
+      !(album.primaryArtist || '').toLowerCase().includes(artistName.toLowerCase())) continue;
     for (let i = 0; i < album.tracks.length; i++) {
       const t = album.tracks[i];
       if (t.name.toLowerCase().includes(trackName.toLowerCase()) ||
-          trackName.toLowerCase().includes(t.name.toLowerCase())) {
+        trackName.toLowerCase().includes(t.name.toLowerCase())) {
         return { track: t, album, origIdx: i };
       }
     }
   }
-  // Fallback: search all albums ignoring artist
   for (const album of ALBUMS) {
     for (let i = 0; i < album.tracks.length; i++) {
       const t = album.tracks[i];
       if (t.name.toLowerCase().includes(trackName.toLowerCase()) ||
-          trackName.toLowerCase().includes(t.name.toLowerCase())) {
+        trackName.toLowerCase().includes(t.name.toLowerCase())) {
         return { track: t, album, origIdx: i };
       }
     }
@@ -859,14 +846,8 @@ function countTrackIds() {
 // ══════════════════════════════════════════════════════
 const STATS_POST_API = "https://script.google.com/macros/s/AKfycbwbOjxHcujPPF2GKZuMmq5-fisDnVkwsZCpUpGaEFPnHiJ-LVy8biGo5OUg9hYVaag4/exec";
 
-function localStatGet(type, statId) {
-  if (!statId) return true;
-  return localStorage.getItem(`ss_${type}_${statId}`) === '1';
-}
-function localStatSet(type, statId) {
-  if (!statId) return;
-  localStorage.setItem(`ss_${type}_${statId}`, '1');
-}
+function localStatGet(type, statId) { if (!statId) return true; return localStorage.getItem(`ss_${type}_${statId}`) === '1'; }
+function localStatSet(type, statId) { if (!statId) return; localStorage.setItem(`ss_${type}_${statId}`, '1'); }
 
 async function postStatIncrement(statId, field) {
   if (!statId) return;
@@ -876,63 +857,33 @@ async function postStatIncrement(statId, field) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'increment', trackId: statId, field })
     });
-  } catch(e) {
-    console.warn('Stat post failed for', statId, field, e.message);
-  }
+  } catch (e) { console.warn('Stat post failed', e.message); }
 }
 
 function recordTrackView(statId) {
-  const u = getCurrentUser();
-  if (!u || !statId) return;
+  const u = getCurrentUser(); if (!u || !statId) return;
   if (localStatGet('v', statId)) return;
-  localStatSet('v', statId);
-  postStatIncrement(statId, 'views');
+  localStatSet('v', statId); postStatIncrement(statId, 'views');
 }
 
-let _listenStartStatId = null;
-let _listenStarted = false;
+let _listenStartStatId = null, _listenStarted = false;
 function onTrackPlayStart(statId, duration) {
   if (!duration || duration < 1) { _listenStarted = false; return; }
-  _listenStartStatId = statId;
-  _listenStarted = true;
+  _listenStartStatId = statId; _listenStarted = true;
 }
 function onTrackFullListenComplete() {
-  const u = getCurrentUser();
-  if (!u || !_listenStarted || !_listenStartStatId) return;
-  const statId = _listenStartStatId;
-  _listenStarted = false;
-  _listenStartStatId = null;
+  const u = getCurrentUser(); if (!u || !_listenStarted || !_listenStartStatId) return;
+  const statId = _listenStartStatId; _listenStarted = false; _listenStartStatId = null;
   if (localStatGet('l', statId)) return;
-  localStatSet('l', statId);
-  postStatIncrement(statId, 'listens');
+  localStatSet('l', statId); postStatIncrement(statId, 'listens');
 }
 
 function recordTrackDownload(statId) {
-  const u = getCurrentUser();
-  if (!u || !statId) return false;
+  const u = getCurrentUser(); if (!u || !statId) return false;
   if (localStatGet('d', statId)) return true;
-  localStatSet('d', statId);
-  postStatIncrement(statId, 'downloads');
-  return true;
+  localStatSet('d', statId); postStatIncrement(statId, 'downloads'); return true;
 }
-function hasDownloaded(statId) {
-  if (!statId) return false;
-  return localStatGet('d', statId);
-}
-
-function recordAlbumSaveChange(albumId, delta) {
-  const album = ALBUMS.find(a => a.id === albumId);
-  if (!album) return;
-  album.tracks.forEach(t => {
-    if (t.statId) postStatIncrement(t.statId, delta > 0 ? 'saves_inc' : 'saves_dec');
-  });
-}
-function recordTrackSaveChange(albumId, origIdx, delta) {
-  const album = ALBUMS.find(a => a.id === albumId);
-  if (!album) return;
-  const t = album.tracks[origIdx];
-  if (t && t.statId) postStatIncrement(t.statId, delta > 0 ? 'saves_inc' : 'saves_dec');
-}
+function hasDownloaded(statId) { if (!statId) return false; return localStatGet('d', statId); }
 
 // ══════════════════════════════════════════════════════
 //  RENDER STATS UI
@@ -958,155 +909,68 @@ async function loadAndRenderStats() {
   renderTop100Preview(parsed);
 }
 
-
-// ─────────────────────────────────────────────────────
-//  PODIUM (USES COVER ART INSTEAD OF EMOJIS)
-// ─────────────────────────────────────────────────────
 function renderPodium(podiumRows) {
   const podiumRow = document.getElementById('podiumRow');
   if (!podiumRow) return;
-
-  const top3 = [...podiumRows]
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 3);
-
+  const top3 = [...podiumRows].sort((a, b) => b.score - a.score).slice(0, 3);
   if (!top3.length) {
-    podiumRow.innerHTML =
-      '<div style="color:var(--muted);font-family:\'Space Mono\',monospace;font-size:12px;">No score data available yet</div>';
+    podiumRow.innerHTML = '<div style="color:var(--muted);font-family:\'Space Mono\',monospace;font-size:12px;">No score data available yet</div>';
     return;
   }
-
   const classes = ['gold', 'silver', 'bronze'];
-  const labels  = ['BEST SCORE', '2nd PLACE', '3rd PLACE'];
-  const order   = top3.length >= 3 ? [1, 0, 2] : top3.map((_, i) => i);
-
+  const labels = ['BEST SCORE', '2nd PLACE', '3rd PLACE'];
+  const order = top3.length >= 3 ? [1, 0, 2] : top3.map((_, i) => i);
   podiumRow.innerHTML = '';
-
   order.forEach(idx => {
     if (idx >= top3.length) return;
-
     const item = top3[idx];
     const info = findTrackByName(item.trackName, item.artistName);
-
     const card = document.createElement('div');
     card.className = `podium-card ${classes[idx]}`;
-
-    const coverSrc = info ? info.album.cover : '';
-
-    card.innerHTML = `
-      <div class="podium-cover-wrapper">
-        <img class="podium-cover"
-             src="${coverSrc}"
-             onerror="this.style.background='#222'"/>
-      </div>
-      <div class="podium-rank">${labels[idx]}</div>
-      <div class="podium-track">${item.trackName}</div>
-      <div class="podium-artist">${item.artistName}</div>
-      <div class="podium-score">
-        ${item.score.toFixed ? item.score.toFixed(1) : item.score}
-      </div>
-    `;
-
-    if (info) {
-      card.style.cursor = 'pointer';
-      card.addEventListener('click', () => openAlbum(info.album.id));
-    }
-
+    card.innerHTML = `<div class="podium-cover-wrapper"><img class="podium-cover" src="${info ? info.album.cover : ''}" onerror="this.style.background='#222'"/></div><div class="podium-rank">${labels[idx]}</div><div class="podium-track">${item.trackName}</div><div class="podium-artist">${item.artistName}</div><div class="podium-score">${item.score.toFixed ? item.score.toFixed(1) : item.score}</div>`;
+    if (info) { card.style.cursor = 'pointer'; card.addEventListener('click', () => openAlbum(info.album.id)); }
     podiumRow.appendChild(card);
   });
 }
 
-
-// ─────────────────────────────────────────────────────
-//  TOP 100 PREVIEW
-// ─────────────────────────────────────────────────────
 function renderTop100Preview(parsed) {
   const grid = document.getElementById('top100Grid');
   if (!grid) return;
-
-  const byViews     = [...parsed.trackRows].filter(r => r.views     > 0).sort((a,b) => b.views     - a.views).slice(0, 6);
-  const byListens   = [...parsed.trackRows].filter(r => r.listens   > 0).sort((a,b) => b.listens   - a.listens).slice(0, 6);
-  const bySaves     = [...parsed.trackRows].filter(r => r.saves     > 0).sort((a,b) => b.saves     - a.saves).slice(0, 6);
-  const byDownloads = [...parsed.trackRows].filter(r => r.downloads > 0).sort((a,b) => b.downloads - a.downloads).slice(0, 6);
-
+  const byViews = [...parsed.trackRows].filter(r => r.views > 0).sort((a, b) => b.views - a.views).slice(0, 6);
+  const byListens = [...parsed.trackRows].filter(r => r.listens > 0).sort((a, b) => b.listens - a.listens).slice(0, 6);
+  const bySaves = [...parsed.trackRows].filter(r => r.saves > 0).sort((a, b) => b.saves - a.saves).slice(0, 6);
+  const byDownloads = [...parsed.trackRows].filter(r => r.downloads > 0).sort((a, b) => b.downloads - a.downloads).slice(0, 6);
   const categories = [
-    { key: 'views',     label: 'Top Viewed',     icon: 'fa-eye',        color: '#00e5ff', rows: byViews     },
-    { key: 'listens',   label: 'Top Listened',   icon: 'fa-headphones', color: '#a259ff', rows: byListens   },
-    { key: 'saves',     label: 'Top Saved',      icon: 'fa-heart',      color: '#ff6b6b', rows: bySaves     },
-    { key: 'downloads', label: 'Top Downloaded', icon: 'fa-download',   color: '#51cf66', rows: byDownloads },
+    { key: 'views', label: 'Top Viewed', icon: 'fa-eye', color: '#00e5ff', rows: byViews },
+    { key: 'listens', label: 'Top Listened', icon: 'fa-headphones', color: '#a259ff', rows: byListens },
+    { key: 'saves', label: 'Top Saved', icon: 'fa-heart', color: '#ff6b6b', rows: bySaves },
+    { key: 'downloads', label: 'Top Downloaded', icon: 'fa-download', color: '#51cf66', rows: byDownloads },
   ];
-
   grid.innerHTML = '';
-
   categories.forEach(cat => {
     const card = document.createElement('div');
     card.className = 'top100-card';
-    card.innerHTML =
-      `<div class="top100-card-header">
-         <div class="top100-card-title" style="color:${cat.color}">
-           <i class="fas ${cat.icon}"></i>${cat.label}
-         </div>
-       </div>
-       <div class="top100-list" id="top100list_${cat.key}"></div>`;
-
+    card.innerHTML = `<div class="top100-card-header"><div class="top100-card-title" style="color:${cat.color}"><i class="fas ${cat.icon}"></i>${cat.label}</div></div><div class="top100-list" id="top100list_${cat.key}"></div>`;
     grid.appendChild(card);
-
     const list = document.getElementById(`top100list_${cat.key}`);
-
-    if (!cat.rows.length) {
-      list.innerHTML =
-        '<div style="padding:12px 14px;color:var(--muted);font-family:\'Space Mono\',monospace;font-size:11px;">No data yet</div>';
-      return;
-    }
-
+    if (!cat.rows.length) { list.innerHTML = '<div style="padding:12px 14px;color:var(--muted);font-family:\'Space Mono\',monospace;font-size:11px;">No data yet</div>'; return; }
     cat.rows.forEach((item, i) => {
       const info = findTrackByStatId(item.trackId);
       const numClass = i === 0 ? 'top1' : i === 1 ? 'top2' : i === 2 ? 'top3' : '';
       const val = item[cat.key];
-      const valStr =
-        val >= 1000000 ? (val/1000000).toFixed(1)+'M' :
-        val >= 1000    ? (val/1000).toFixed(1)+'k' :
-        String(val);
-
+      const valStr = val >= 1000000 ? (val / 1000000).toFixed(1) + 'M' : val >= 1000 ? (val / 1000).toFixed(1) + 'k' : String(val);
       const row = document.createElement('div');
       row.className = 'top100-row';
-      row.innerHTML =
-        `<div class="top100-num ${numClass}">${i+1}</div>
-         <img class="top100-art"
-              src="${info ? info.album.cover : ''}"
-              onerror="this.style.background='#222'"/>
-         <div class="top100-info">
-           <div class="top100-name">${info ? info.track.name : item.trackId}</div>
-           <div class="top100-sub">${info ? info.album.artist : '—'}</div>
-         </div>
-         <div class="top100-val" style="color:${cat.color}">${valStr}</div>`;
-
-      if (info) {
-        row.addEventListener('click', () =>
-          playAlbumFromTrack(info.album.id, info.origIdx)
-        );
-      }
-
+      row.innerHTML = `<div class="top100-num ${numClass}">${i + 1}</div><img class="top100-art" src="${info ? info.album.cover : ''}" onerror="this.style.background='#222'"/><div class="top100-info"><div class="top100-name">${info ? info.track.name : item.trackId}</div><div class="top100-sub">${info ? info.album.artist : '—'}</div></div><div class="top100-val" style="color:${cat.color}">${valStr}</div>`;
+      if (info) row.addEventListener('click', () => playAlbumFromTrack(info.album.id, info.origIdx));
       list.appendChild(row);
     });
   });
 }
 
-
-// ─────────────────────────────────────────────────────
-//  FULL STATS OVERLAY
-// ─────────────────────────────────────────────────────
 let currentFSTab = 'best';
-
-function openFullStats() {
-  document.getElementById('fullStatsOverlay').classList.add('open');
-  switchFSTab('best');
-}
-
-function closeFullStats() {
-  document.getElementById('fullStatsOverlay').classList.remove('open');
-}
-
+function openFullStats() { document.getElementById('fullStatsOverlay').classList.add('open'); switchFSTab('best'); }
+function closeFullStats() { document.getElementById('fullStatsOverlay').classList.remove('open'); }
 function switchFSTab(tab) {
   currentFSTab = tab;
   document.querySelectorAll('.fstab').forEach(b => b.classList.remove('active'));
@@ -1116,275 +980,50 @@ function switchFSTab(tab) {
   if (tabs[idx]) tabs[idx].classList.add('active');
   renderFSTab(tab);
 }
-
-
 async function renderFSTab(tab) {
   const body = document.getElementById('fullStatsBody');
   body.innerHTML = '<div class="fs-loading"><span class="stats-dot"></span>Loading…</div>';
-
   const rows = await fetchSheetData();
   const parsed = parseSheet(rows);
   body.innerHTML = '';
-
   if (tab === 'best') {
-
-    const top3 = [...parsed.podium]
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 3);
-
-    const podiumDiv = document.createElement('div');
-    podiumDiv.className = 'fs-podium';
-
-    const inner = document.createElement('div');
-    inner.style.cssText = 'display:flex;gap:10px;margin-bottom:20px;';
-    podiumDiv.appendChild(inner);
-    body.appendChild(podiumDiv);
-
-    const classes = ['gold','silver','bronze'];
-    const labels  = ['BEST SCORE','2nd PLACE','3rd PLACE'];
-
+    const top3 = [...parsed.podium].sort((a, b) => b.score - a.score).slice(0, 3);
+    const podiumDiv = document.createElement('div'); podiumDiv.className = 'fs-podium';
+    const inner = document.createElement('div'); inner.style.cssText = 'display:flex;gap:10px;margin-bottom:20px;';
+    podiumDiv.appendChild(inner); body.appendChild(podiumDiv);
+    const classes = ['gold', 'silver', 'bronze']; const labels = ['BEST SCORE', '2nd PLACE', '3rd PLACE'];
     top3.forEach((item, idx) => {
       const info = findTrackByName(item.trackName, item.artistName);
-      const card = document.createElement('div');
-      card.className = `podium-card ${classes[idx]}`;
-      card.style.flex = '1';
-
-      card.innerHTML =
-        `<div class="podium-cover-wrapper">
-           <img class="podium-cover"
-                src="${info ? info.album.cover : ''}"
-                onerror="this.style.background='#222'"/>
-         </div>
-         <div class="podium-rank">${labels[idx]}</div>
-         <div class="podium-track">${item.trackName}</div>
-         <div class="podium-artist">${item.artistName}</div>
-         <div class="podium-score">
-           ${item.score.toFixed ? item.score.toFixed(1) : item.score}
-         </div>`;
-
-      if (info) {
-        card.style.cursor = 'pointer';
-        card.addEventListener('click', () => {
-          closeFullStats();
-          openAlbum(info.album.id);
-        });
-      }
-
+      const card = document.createElement('div'); card.className = `podium-card ${classes[idx]}`; card.style.flex = '1';
+      card.innerHTML = `<div class="podium-cover-wrapper"><img class="podium-cover" src="${info ? info.album.cover : ''}" onerror="this.style.background='#222'"/></div><div class="podium-rank">${labels[idx]}</div><div class="podium-track">${item.trackName}</div><div class="podium-artist">${item.artistName}</div><div class="podium-score">${item.score.toFixed ? item.score.toFixed(1) : item.score}</div>`;
+      if (info) { card.style.cursor = 'pointer'; card.addEventListener('click', () => { closeFullStats(); openAlbum(info.album.id); }); }
       inner.appendChild(card);
     });
-
-    const sorted = [...parsed.trackRows]
-      .filter(r => r.score > 0)
-      .sort((a, b) => b.score - a.score);
-
-    if (!sorted.length) {
-      body.innerHTML += '<div class="fs-empty">No score data available</div>';
-      return;
-    }
-
-    sorted.forEach((item, i) => {
-      const s = item.score.toFixed ? item.score.toFixed(1) : String(item.score);
-      renderFSRow(body, item, i, 'score', s);
-    });
-
+    const sorted = [...parsed.trackRows].filter(r => r.score > 0).sort((a, b) => b.score - a.score);
+    if (!sorted.length) { body.innerHTML += '<div class="fs-empty">No score data available</div>'; return; }
+    sorted.forEach((item, i) => renderFSRow(body, item, i, 'score', item.score.toFixed ? item.score.toFixed(1) : String(item.score)));
   } else {
-
-    const sorted = [...parsed.trackRows]
-      .filter(r => r[tab] > 0)
-      .sort((a, b) => b[tab] - a[tab]);
-
-    if (!sorted.length) {
-      body.innerHTML = '<div class="fs-empty">No data available</div>';
-      return;
-    }
-
+    const sorted = [...parsed.trackRows].filter(r => r[tab] > 0).sort((a, b) => b[tab] - a[tab]);
+    if (!sorted.length) { body.innerHTML = '<div class="fs-empty">No data available</div>'; return; }
     sorted.forEach((item, i) => {
       const v = item[tab];
-      const s =
-        v >= 1000000 ? (v/1000000).toFixed(1)+'M' :
-        v >= 1000    ? (v/1000).toFixed(1)+'k' :
-        String(v);
-
+      const s = v >= 1000000 ? (v / 1000000).toFixed(1) + 'M' : v >= 1000 ? (v / 1000).toFixed(1) + 'k' : String(v);
       renderFSRow(body, item, i, tab, s);
     });
   }
 }
-
-
 function renderFSRow(container, item, i, key, displayVal) {
   const info = findTrackByStatId(item.trackId);
   const rankClass = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : '';
-
-  const row = document.createElement('div');
-  row.className = 'fs-row';
-
-  row.innerHTML =
-    `<div class="fs-rank ${rankClass}">${i+1}</div>
-     <img class="fs-art"
-          src="${info ? info.album.cover : ''}"
-          onerror="this.style.background='#222'"/>
-     <div class="fs-info">
-       <div class="fs-name">${info ? info.track.name : item.trackId}</div>
-       <div class="fs-sub">
-         ${info ? info.album.artist : '—'}
-         ${info ? ' · ' + info.album.title : ''}
-       </div>
-     </div>
-     <div class="fs-val">${displayVal}</div>`;
-
-  if (info) {
-    row.addEventListener('click', () => {
-      closeFullStats();
-      openAlbum(info.album.id);
-    });
-  }
-
+  const row = document.createElement('div'); row.className = 'fs-row';
+  row.innerHTML = `<div class="fs-rank ${rankClass}">${i + 1}</div><img class="fs-art" src="${info ? info.album.cover : ''}" onerror="this.style.background='#222'"/><div class="fs-info"><div class="fs-name">${info ? info.track.name : item.trackId}</div><div class="fs-sub">${info ? info.album.artist : '—'}${info ? ' · ' + info.album.title : ''}</div></div><div class="fs-val">${displayVal}</div>`;
+  if (info) row.addEventListener('click', () => { closeFullStats(); openAlbum(info.album.id); });
   container.appendChild(row);
-}
-
-// ══════════════════════════════════════════════════════
-//  DOWNLOAD SYSTEM
-// ══════════════════════════════════════════════════════
-
-// Download a single track file
-async function downloadTrack(albumId, origIdx) {
-  const album = ALBUMS.find(a => a.id === albumId);
-  if (!album) return;
-  const track = album.tracks[origIdx];
-  if (!track || !track.file || track.file === '#') { showToast('Track not available'); return; }
-
-  const u = getCurrentUser();
-  if (!u) { showToast('Sign in to download'); openModal('modalAuth'); return; }
-
-  const files = Array.isArray(track.file) ? track.file : [track.file];
-  const statId = track.statId || null;
-  const alreadyDl = hasDownloaded(statId);
-
-  // Record stat (once per device)
-  recordTrackDownload(statId);
-
-  // Actually download all file parts
-  showToast(`Downloading "${track.name}"…`);
-
-  for (let pi = 0; pi < files.length; pi++) {
-    const src = album.basePath + files[pi];
-    const ext = files[pi].split('.').pop();
-    const safeName = track.name.replace(/[^a-zA-Z0-9\s\-_.]/g,'').trim();
-    const filename = files.length > 1 ? `${safeName} (Part ${pi+1}).${ext}` : `${safeName}.${ext}`;
-    try {
-      const resp = await fetch(src);
-      if (!resp.ok) throw new Error('not found');
-      const blob = await resp.blob();
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = filename;
-      a.click();
-      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-    } catch(e) {
-      showToast(`Could not download "${track.name}"`);
-    }
-  }
-
-  // Update download button state in current album view
-  refreshDownloadButtons(albumId);
-}
-
-// Download entire album as ZIP
-async function downloadAlbumZip(albumId) {
-  const album = ALBUMS.find(a => a.id === albumId);
-  if (!album) return;
-  const u = getCurrentUser();
-  if (!u) { showToast('Sign in to download'); openModal('modalAuth'); return; }
-
-  // Check if JSZip is available, load if not
-  if (typeof JSZip === 'undefined') {
-    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
-  }
-
-  const dlBar = document.getElementById('dlProgressBar');
-  const dlLabel = document.getElementById('dlProgressLabel');
-  const dlFill = document.getElementById('dlProgressFill');
-  dlBar.classList.add('show');
-  dlLabel.textContent = `Preparing "${album.title}" ZIP…`;
-  dlFill.style.width = '0%';
-
-  const zip = new JSZip();
-  const albumFolder = zip.folder(`albums/${album.title}`);
-
-  const availTracks = album.tracks.filter(t => t.file && t.file !== '#');
-  let done = 0;
-
-  for (const track of availTracks) {
-    const files = Array.isArray(track.file) ? track.file : [track.file];
-    for (let pi = 0; pi < files.length; pi++) {
-      const src = album.basePath + files[pi];
-      const ext = files[pi].split('.').pop();
-      const safeName = track.name.replace(/[^a-zA-Z0-9\s\-_.]/g,'').trim();
-      const filename = files.length > 1 ? `${safeName} (Part ${pi+1}).${ext}` : `${safeName}.${ext}`;
-      dlLabel.textContent = `Fetching: ${filename}`;
-      try {
-        const resp = await fetch(src);
-        if (!resp.ok) throw new Error('not found');
-        const blob = await resp.blob();
-        albumFolder.file(filename, blob);
-        // Record download stat (once per track per device)
-        recordTrackDownload(track.statId);
-      } catch(e) {
-        // Skip unavailable tracks silently
-      }
-      done++;
-      dlFill.style.width = `${Math.round((done / availTracks.length) * 100)}%`;
-    }
-  }
-
-  dlLabel.textContent = 'Generating ZIP…';
-  dlFill.style.width = '95%';
-
-  try {
-    const content = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(content);
-    a.download = `${album.title}.zip`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-    dlFill.style.width = '100%';
-    dlLabel.textContent = '✓ Download complete!';
-  } catch(e) {
-    dlLabel.textContent = 'ZIP generation failed';
-  }
-
-  setTimeout(() => { dlBar.classList.remove('show'); }, 2500);
-  refreshDownloadButtons(albumId);
-}
-
-function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = src; s.onload = resolve; s.onerror = reject;
-    document.head.appendChild(s);
-  });
-}
-
-// Refresh download button visuals on the current album view
-function refreshDownloadButtons(albumId) {
-  document.querySelectorAll('[data-dl-album]').forEach(btn => {
-    if (btn.dataset.dlAlbum !== albumId) return;
-    const origIdx = parseInt(btn.dataset.dlIdx);
-    const album = ALBUMS.find(a => a.id === albumId);
-    if (!album) return;
-    const track = album.tracks[origIdx];
-    if (!track) return;
-    const dl = hasDownloaded(track.statId);
-    btn.classList.toggle('dl-done', dl);
-    btn.title = dl ? 'Downloaded' : 'Download track';
-    btn.innerHTML = dl ? '<i class="fas fa-check"></i>' : '<i class="fas fa-download"></i>';
-  });
 }
 
 // ══════════════════════════════════════════════════════
 //  DATA: ALBUMS
 // ══════════════════════════════════════════════════════
-const ART_BASE="https://raw.githubusercontent.com/jag-proj3ct/jag-proj3ct.github.io/main/";
 const CD_TRACKS=[
   {name:"Intro (Skit)",file:"intro.mp3",url:"https://open.spotify.com/track/7lIr3vVhpDkU5mQEDcnA0S",statId:"#CD_INTRO"},
   {name:"We Don't Care",file:"we-dont-care.mp3",url:"https://open.spotify.com/track/0IW0qaeyxL5Et4UG2MrJKB",statId:"#CD_WDC"},
@@ -1410,8 +1049,8 @@ const CD_TRACKS=[
 ];
 
 const ALBUMS=[
-  {id:"the-college-dropout:album",title:"The College Dropout",artist:"Kanye West",year:"2004",type:"official",tags:["kanye","west","college","dropout","rap","hip hop","2004"],cover:"https://i.scdn.co/image/ab67616d0000b27325b055377757b3cdd6f26b78",basePath:"",tracks:CD_TRACKS},
-  {id:"late-registration:album",title:"Late Registration",artist:"Kanye West",year:"2005",type:"official",tags:["kanye","west","late","registration","gold digger","diamonds","rap","hip hop","2005"],cover:"https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/Late_registration_cd_cover.jpg/250px-Late_registration_cd_cover.jpg",basePath:"",tracks:[
+  {id:"the-college-dropout",title:"The College Dropout",artist:"Kanye West",year:"2004",type:"official",tags:["kanye","west","college","dropout","rap","hip hop","2004"],cover:"https://i.scdn.co/image/ab67616d0000b27325b055377757b3cdd6f26b78",basePath:"../audio/",tracks:CD_TRACKS},
+  {id:"late-registration",title:"Late Registration",artist:"Kanye West",year:"2005",type:"official",tags:["kanye","west","late","registration","gold digger","diamonds","rap","hip hop","2005"],cover:"https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/Late_registration_cd_cover.jpg/250px-Late_registration_cd_cover.jpg",basePath:"../audio/",tracks:[
     {name:"Wake Up Mr. West (Skit)",file:"#"},{name:"Heard 'Em Say",file:"heard-em-say.mp3",statId:"#LR_HES"},{name:"Touch the Sky",file:"touch-the-sky.mp3",statId:"#LR_TTS"},
     {name:"Gold Digger",file:"gold-digger.mp3",statId:"#LR_GD"},{name:"Drive Slow",file:"drive-slow.mp3",statId:"#LR_DS"},{name:"My Way Home (Skit)",file:"#"},
     {name:"Crack Music",file:"crack-music.mp3",statId:"#LR_CM"},{name:"Roses",file:"roses.mp3",statId:"#LR_ROSES"},{name:"Bring Me Down",file:"bring-me-down.mp3",statId:"#LR_BMD"},
@@ -1419,46 +1058,46 @@ const ALBUMS=[
     {name:"We Major",file:"we-major.mp3",statId:"#LR_WM"},{name:"Hey Mama",file:"hey-mama.mp3",statId:"#LR_HM"},{name:"Celebration",file:"celebration.mp3",statId:"#LR_CEL"},
     {name:"Gone",file:"gone.mp3",statId:"#LR_GONE"},{name:"Late",file:"late.mp3",statId:"#LR_LATE"},{name:"Number One",file:"number-one.mp3",statId:"#LR_N1"},{name:"We Can Make It Better",file:"we-can-make-it.mp3",statId:"#LR_WCMIB"}
   ]},
-  {id:"graduation",title:"Graduation",artist:"Kanye West",year:"2007",type:"official",tags:["kanye","west","graduation","stronger","good morning","rap","hip hop","2007"],cover:"https://m.media-amazon.com/images/I/71pxGj4RoVS._AC_UF894,1000_QL80_.jpg",basePath:"",tracks:[
+  {id:"graduation",title:"Graduation",artist:"Kanye West",year:"2007",type:"official",tags:["kanye","west","graduation","stronger","good morning","rap","hip hop","2007"],cover:"https://m.media-amazon.com/images/I/71pxGj4RoVS._AC_UF894,1000_QL80_.jpg",basePath:"../audio/",tracks:[
     {name:"Good Morning",file:"good-morning.mp3",statId:"#GR_GM"},{name:"Champion",file:"champion.mp3",statId:"#GR_CHAMP"},{name:"Stronger",file:"stronger.mp3",statId:"#GR_STR"},
     {name:"I Wonder",file:"i-wonder.mp3",statId:"#GR_IW"},{name:"Good Life",file:"good-life.mp3",statId:"#GR_GL"},{name:"Can't Tell Me Nothing",file:"cant-tell-me-nothing.mp3",statId:"#GR_CTMN"},
     {name:"Barry Bonds",file:"barry-bonds.mp3",statId:"#GR_BB"},{name:"Drunk and Hot Girls",file:"drunk-hot-girls.mp3",statId:"#GR_DHG"},{name:"Flashing Lights",file:"flashing-lights.mp3",statId:"#GR_FL"},
     {name:"Everything I Am",file:"everything-i-am.mp3",statId:"#GR_EIA"},{name:"The Glory",file:"the-glory.mp3",statId:"#GR_TG"},{name:"Homecoming",file:"homecoming.mp3",statId:"#GR_HC"},{name:"Big Brother",file:"big-brother.mp3",statId:"#GR_BIG"}
   ]},
-  {id:"808s",title:"808s & Heartbreak",artist:"Kanye West",year:"2008",type:"official",tags:["kanye","west","808s","heartbreak","heartless","love lockdown","autotune","rap","pop","2008"],cover:"https://m.media-amazon.com/images/I/51-HCBAsFRL._UF1000,1000_QL80_.jpg",basePath:"",tracks:[
+  {id:"808s",title:"808s & Heartbreak",artist:"Kanye West",year:"2008",type:"official",tags:["kanye","west","808s","heartbreak","heartless","love lockdown","autotune","rap","pop","2008"],cover:"https://m.media-amazon.com/images/I/51-HCBAsFRL._UF1000,1000_QL80_.jpg",basePath:"../audio/",tracks:[
     {name:"Say You Will",file:"say-you-will.mp3",statId:"#808_SYW"},{name:"Welcome to Heartbreak",file:"welcome-to-heartbreak.mp3",statId:"#808_WTH"},{name:"Heartless",file:"heartless.mp3",statId:"#808_HL"},
     {name:"Amazing",file:"amazing.mp3",statId:"#808_AMAZ"},{name:"Love Lockdown",file:"love-lockdown.mp3",statId:"#808_LL"},{name:"Paranoid",file:"paranoid.mp3",statId:"#808_PAR"},
     {name:"RoboCop",file:"robocop.mp3",statId:"#808_RC"},{name:"Street Lights",file:"street-lights.mp3",statId:"#808_SL"},{name:"Bad News",file:"bad-news.mp3",statId:"#808_BN"},
     {name:"See You in My Nightmares",file:"see-you-in-my-nightmares.mp3",statId:"#808_SYMN"},{name:"Coldest Winter",file:"coldest-winter.mp3",statId:"#808_CW"},{name:"Pinocchio Story (Live)",file:"pinocchio-story.mp3",statId:"#808_PS"}
   ]},
-  {id:"mbdtf",title:"My Beautiful Dark Twisted Fantasy",artist:"Kanye West",year:"2010",type:"official",tags:["kanye","west","mbdtf","beautiful","dark","twisted","fantasy","runaway","power","rap","hip hop","2010"],cover:"https://i.scdn.co/image/ab67616d0000b273d9194aa18fa4c9362b47464f",basePath:"",tracks:[
+  {id:"mbdtf",title:"My Beautiful Dark Twisted Fantasy",artist:"Kanye West",year:"2010",type:"official",tags:["kanye","west","mbdtf","beautiful","dark","twisted","fantasy","runaway","power","rap","hip hop","2010"],cover:"https://i.scdn.co/image/ab67616d0000b273d9194aa18fa4c9362b47464f",basePath:"../audio/",tracks:[
     {name:"Dark Fantasy",file:"dark-fantasy.mp3",statId:"#MBDTF_DF"},{name:"Gorgeous",file:"gorgeous.mp3",statId:"#MBDTF_GOR"},{name:"POWER",file:"power.mp3",statId:"#MBDTF_PWR"},
     {name:"All of the Lights (Interlude)",file:"all-of-lights-interlude.mp3",statId:"#MBDTF_AOLI"},{name:"All of the Lights",file:"all-of-lights.mp3",statId:"#MBDTF_AOL"},
     {name:"Monster",file:"monster.mp3",statId:"#MBDTF_MON"},{name:"So Appalled",file:"so-appalled.mp3",statId:"#MBDTF_SA"},{name:"Devil in a New Dress",file:"devil-new-dress.mp3",statId:"#MBDTF_DIAND"},
     {name:"Runaway",file:"runaway.mp3",statId:"#MBDTF_RUN"},{name:"Hell of a Life",file:"hell-of-a-life.mp3",statId:"#MBDTF_HOAL"},{name:"Blame Game",file:"blame-game.mp3",statId:"#MBDTF_BG"},
     {name:"Lost in the World",file:"lost-in-the-world.mp3",statId:"#MBDTF_LITW"},{name:"Who Will Survive in America",file:"who-will-survive.mp3",statId:"#MBDTF_WWSIA"}
   ]},
-  {id:"watch-throne",title:"Watch the Throne",artist:"Jay-Z & Kanye West",primaryArtist:"Kanye West",featuredArtists:["Jay-Z"],year:"2011",type:"official",tags:["kanye","west","jayz","watch","throne","niggas in paris","rap","hip hop","2011"],cover:"https://upload.wikimedia.org/wikipedia/en/thumb/e/ee/Watch_The_Throne.jpg/250px-Watch_The_Throne.jpg",basePath:"",tracks:[
+  {id:"watch-throne",title:"Watch the Throne",artist:"Jay-Z",primaryArtist:"Kanye West",featuredArtists:["Jay-Z"],year:"2011",type:"official",tags:["kanye","west","jayz","watch","throne","niggas in paris","rap","hip hop","2011"],cover:"https://upload.wikimedia.org/wikipedia/en/thumb/e/ee/Watch_The_Throne.jpg/250px-Watch_The_Throne.jpg",basePath:"../audio/",tracks:[
     {name:"No Church in the Wild",file:"no-church.mp3",statId:"#WTT_NCITW"},{name:"Lift Off",file:"lift-off.mp3",statId:"#WTT_LO"},{name:"Niggas in Paris",file:"niggas-in-paris.mp3",statId:"#WTT_NIP"},
     {name:"Otis",file:"otis.mp3",statId:"#WTT_OTIS"},{name:"Gotta Have It",file:"gotta-have-it.mp3",statId:"#WTT_GHI"},{name:"New Day",file:"new-day.mp3",statId:"#WTT_ND"},
     {name:"That's My Bitch",file:"thats-my-bitch.mp3",statId:"#WTT_TMB"},{name:"Welcome to the Jungle",file:"welcome-jungle.mp3",statId:"#WTT_WTTJ"},{name:"Who Gon Stop Me",file:"who-gon-stop-me.mp3",statId:"#WTT_WGSM"},
     {name:"Murder to Excellence",file:"murder-excellence.mp3",statId:"#WTT_MTE"},{name:"Sweet Baby Jesus",file:"#"},{name:"Why I Love You",file:"why-i-love-you.mp3",statId:"#WTT_WILY"},
     {name:"H•A•M",file:"ham.mp3",statId:"#WTT_HAM"},{name:"Primetime",file:"primetime.mp3",statId:"#WTT_PT"},{name:"The Joy",file:"the-joy.mp3",statId:"#WTT_TJ"}
   ]},
-  {id:"cruel-summer",title:"Cruel Summer",artist:"GOOD Music",primaryArtist:"Kanye West",featuredArtists:["Big Sean","2 Chainz","John Legend","Teyana Taylor"],year:"2012",type:"official",tags:["kanye","west","good","music","cruel","summer","mercy","clique","rap","hip hop","2012"],cover:"https://media.cdr.nl/COVER/MEDIUM/FRONT/JK177020/Good-music-cruel-summer.jpg",basePath:"",tracks:[
+  {id:"cruel-summer",title:"Cruel Summer",artist:"GOOD Music",primaryArtist:"Kanye West",featuredArtists:["Big Sean","2 Chainz","John Legend","Teyana Taylor"],year:"2012",type:"official",tags:["kanye","west","good","music","cruel","summer","mercy","clique","rap","hip hop","2012"],cover:"https://upload.wikimedia.org/wikipedia/en/thumb/a/ab/CruelSummercover.jpg/250px-CruelSummercover.jpg",basePath:"../audio/",tracks:[
     {name:"To the World",file:"to-the-world.mp3",statId:"#CS_TTW"},{name:"Mercy",file:"mercy.mp3",statId:"#CS_MERCY"},{name:"New God Flow",file:"new-god-flow.mp3",statId:"#CS_NGF"},
     {name:"Clique",file:"clique.mp3",statId:"#CS_CLIQUE"},{name:"Bliss",file:"bliss.mp3",statId:"#CS_BLISS"},{name:"Cruel Summer",file:"cruel-summer.mp3",statId:"#CS_CS"},
     {name:"Higher",file:"higher.mp3",statId:"#CS_HIGH"},{name:"Don't Like (Remix)",file:"dont-like.mp3",statId:"#CS_DL"},{name:"The Morning",file:"the-morning.mp3",statId:"#CS_TM"},
     {name:"Cold",file:"cold.mp3",statId:"#CS_COLD"},{name:"Sweet Baby Jesus",file:"sweet-baby-jesus.mp3",statId:"#CS_SBJ"},{name:"Sin City",file:"sin-city.mp3",statId:"#CS_SC"},
     {name:"Way Too Cold",file:"way-too-cold.mp3",statId:"#CS_WTC"},{name:"Creepers",file:"creepers.mp3",statId:"#CS_CREEP"}
   ]},
-  {id:"yeezus",title:"Yeezus",artist:"Kanye West",year:"2013",type:"official",tags:["kanye","west","yeezus","bound 2","new slaves","black skinhead","rap","industrial","2013"],cover:"https://m.media-amazon.com/images/I/516qybuOZhL._UF1000,1000_QL80_.jpg",basePath:"",tracks:[
+  {id:"yeezus",title:"Yeezus",artist:"Kanye West",year:"2013",type:"official",tags:["kanye","west","yeezus","bound 2","new slaves","black skinhead","rap","industrial","2013"],cover:"https://m.media-amazon.com/images/I/516qybuOZhL._UF1000,1000_QL80_.jpg",basePath:"../audio/",tracks:[
     {name:"On Sight",file:"on-sight.mp3",statId:"#YZ_OS"},{name:"Black Skinhead",file:"black-skinhead.mp3",statId:"#YZ_BSH"},{name:"I Am a God",file:"i-am-a-god.mp3",statId:"#YZ_IAAG"},
     {name:"New Slaves",file:"new-slaves.mp3",statId:"#YZ_NS"},{name:"Hold My Liquor",file:"hold-my-liquor.mp3",statId:"#YZ_HML"},{name:"I'm in It",file:"im-in-it.mp3",statId:"#YZ_III"},
     {name:"Blood on the Leaves",file:"blood-on-leaves.mp3",statId:"#YZ_BOTL"},{name:"Guilt Trip",file:"guilt-trip.mp3",statId:"#YZ_GT"},{name:"Send It Up",file:"send-it-up.mp3",statId:"#YZ_SIU"},
     {name:"Bound 2",file:"bound-2.mp3",statId:"#YZ_B2"}
   ]},
-  {id:"tlop",title:"The Life of Pablo",artist:"Kanye West",year:"2016",type:"official",tags:["kanye","west","pablo","tlop","ultralight beam","famous","fade","rap","gospel","2016"],cover:"https://preview.redd.it/puu7vsw10fb01.png?width=640&crop=smart&auto=webp&s=cef42bec02f7a6064349d8cfd34df097bfe12ade",basePath:"",tracks:[
+  {id:"tlop",title:"The Life of Pablo",artist:"Kanye West",year:"2016",type:"official",tags:["kanye","west","pablo","tlop","ultralight beam","famous","fade","rap","gospel","2016"],cover:"https://preview.redd.it/puu7vsw10fb01.png?width=640&crop=smart&auto=webp&s=cef42bec02f7a6064349d8cfd34df097bfe12ade",basePath:"../audio/",tracks:[
     {name:"Ultralight Beam",file:"ultralight-beam.mp3",statId:"#TLOP_UB"},{name:"Father Stretch My Hands Pt. 1",file:"fsmh-pt1.mp3",statId:"#TLOP_FSMH1"},
     {name:"Pt. 2",file:"fsmh-pt2.mp3",statId:"#TLOP_FSMH2"},{name:"Famous",file:"famous.mp3",statId:"#TLOP_FAM"},{name:"Feedback",file:"feedback.mp3",statId:"#TLOP_FB"},
     {name:"Low Lights",file:"low-lights.mp3",statId:"#TLOP_LL"},{name:"Highlights",file:"highlights.mp3",statId:"#TLOP_HL"},{name:"Freestyle 4",file:"freestyle-4.mp3",statId:"#TLOP_F4"},
@@ -1468,23 +1107,23 @@ const ALBUMS=[
     {name:"No More Parties in LA",file:"no-more-parties.mp3",statId:"#TLOP_NMPLA"},{name:"Facts (Charlie Heat Version)",file:"facts.mp3",statId:"#TLOP_FACTS"},
     {name:"Fade",file:"fade.mp3",statId:"#TLOP_FADE"},{name:"Saint Pablo",file:"saint-pablo.mp3",statId:"#TLOP_SP"}
   ]},
-  {id:"ye",title:"ye",artist:"Kanye West",year:"2018",type:"official",tags:["kanye","west","ye","yikes","ghost town","violent crimes","rap","2018"],cover:"https://upload.wikimedia.org/wikipedia/en/7/74/Ye_album_cover.jpg",basePath:"",tracks:[
+  {id:"ye",title:"ye",artist:"Kanye West",year:"2018",type:"official",tags:["kanye","west","ye","yikes","ghost town","violent crimes","rap","2018"],cover:"https://upload.wikimedia.org/wikipedia/en/7/74/Ye_album_cover.jpg",basePath:"../audio/",tracks:[
     {name:"I Thought About Killing You",file:"i-thought-about.mp3",statId:"#YE_ITAKY"},{name:"Yikes",file:"yikes.mp3",statId:"#YE_YK"},{name:"All Mine",file:"all-mine.mp3",statId:"#YE_AM"},
     {name:"Wouldn't Leave",file:"wouldnt-leave.mp3",statId:"#YE_WL"},{name:"No Mistakes",file:"no-mistakes.mp3",statId:"#YE_NM"},{name:"Ghost Town",file:"ghost-town.mp3",statId:"#YE_GT"},
     {name:"Violent Crimes",file:"violent-crimes.mp3",statId:"#YE_VC"}
   ]},
-  {id:"kids-see-ghosts",title:"Kids See Ghosts",artist:"Kids See Ghosts",primaryArtist:"Kanye West",featuredArtists:["Kid Cudi"],year:"2018",type:"official",tags:["kanye","west","cudi","kids","see","ghosts","reborn","rap","2018"],cover:"https://upload.wikimedia.org/wikipedia/en/4/44/Kids_See_Ghosts_Cover.png",basePath:"",tracks:[
+  {id:"kids-see-ghosts",title:"Kids See Ghosts",artist:"Kids See Ghosts",primaryArtist:"Kanye West",featuredArtists:["Kid Cudi"],year:"2018",type:"official",tags:["kanye","west","cudi","kids","see","ghosts","reborn","rap","2018"],cover:"https://upload.wikimedia.org/wikipedia/en/4/44/Kids_See_Ghosts_Cover.png",basePath:"../audio/",tracks:[
     {name:"Feel the Love",file:"feel-the-love.mp3",statId:"#KSG_FTL"},{name:"Fire",file:"fire.mp3",statId:"#KSG_FIRE"},{name:"4th Dimension",file:"4th-dimension.mp3",statId:"#KSG_4D"},
     {name:"Freeee (Ghost Town Pt. 2)",file:"freeee.mp3",statId:"#KSG_FREE"},{name:"Reborn",file:"reborn.mp3",statId:"#KSG_REB"},{name:"Kids See Ghosts",file:"kids-see-ghosts.mp3",statId:"#KSG_KSG"},
     {name:"0 to 100 / The Catch Up",file:"#"},{name:"Cudi Montage",file:"cudi-montage.mp3",statId:"#KSG_CM"}
   ]},
-  {id:"jesus-is-king",title:"Jesus Is King",artist:"Kanye West",year:"2019",type:"official",tags:["kanye","west","jesus","king","gospel","follow god","closed on sunday","rap","2019"],cover:"https://media.pitchfork.com/photos/5db73da8fd8a1f0009ad5c80/master/pass/jesusisking_kanye.jpg",basePath:"",tracks:[
+  {id:"jesus-is-king",title:"Jesus Is King",artist:"Kanye West",year:"2019",type:"official",tags:["kanye","west","jesus","king","gospel","follow god","closed on sunday","rap","2019"],cover:"https://media.pitchfork.com/photos/5db73da8fd8a1f0009ad5c80/master/pass/jesusisking_kanye.jpg",basePath:"../audio/",tracks:[
     {name:"Every Hour",file:"every-hour.mp3",statId:"#JIK_EH"},{name:"Follow God",file:"follow-god.mp3",statId:"#JIK_FG"},{name:"Closed on Sunday",file:"closed-on-sunday.mp3",statId:"#JIK_COS"},
     {name:"On God",file:"on-god.mp3",statId:"#JIK_OG"},{name:"Everything We Need",file:"everything-we-need.mp3",statId:"#JIK_EWN"},{name:"Water",file:"water.mp3",statId:"#JIK_WAT"},
     {name:"God Is",file:"god-is.mp3",statId:"#JIK_GI"},{name:"Hands On",file:"hands-on.mp3",statId:"#JIK_HO"},{name:"Use This Gospel",file:"use-this-gospel.mp3",statId:"#JIK_UTG"},
     {name:"Jesus Is Lord",file:"jesus-is-lord.mp3",statId:"#JIK_JIL"}
   ]},
-  {id:"donda",title:"Donda",artist:"Kanye West",year:"2021",type:"official",tags:["kanye","west","donda","off the grid","hurricane","praise god","jail","rap","gospel","2021"],cover:"https://i.redd.it/jvst2ity53d51.jpg",basePath:"",tracks:[
+  {id:"donda",title:"Donda",artist:"Kanye West",year:"2021",type:"official",tags:["kanye","west","donda","off the grid","hurricane","praise god","jail","rap","gospel","2021"],cover:"https://i.redd.it/jvst2ity53d51.jpg",basePath:"../audio/",tracks:[
     {name:"Donda Chant",file:"donda-chant.mp3",statId:"#DON_DC"},{name:"Jail",file:"jail.mp3",statId:"#DON_JAIL"},{name:"God Breathed",file:"god-breathed.mp3",statId:"#DON_GB"},
     {name:"Off the Grid",file:"off-the-grid.mp3",statId:"#DON_OTG"},{name:"Hurricane",file:"hurricane.mp3",statId:"#DON_HUR"},{name:"Praise God",file:"praise-god.mp3",statId:"#DON_PG"},
     {name:"Jonah",file:"jonah.mp3",statId:"#DON_JON"},{name:"Ok Ok",file:"ok-ok.mp3",statId:"#DON_OO"},{name:"Junya",file:"junya.mp3",statId:"#DON_JUN"},
@@ -1494,12 +1133,12 @@ const ALBUMS=[
     {name:"Jail pt 2",file:"jail-pt2.mp3",statId:"#DON_JAIL2"},{name:"Jesus Lord",file:"jesus-lord.mp3",statId:"#DON_JL"},{name:"New Again",file:"new-again.mp3",statId:"#DON_NA"},
     {name:"Tell the Vision",file:"tell-the-vision.mp3",statId:"#DON_TTV"},{name:"Lord I Need You",file:"lord-i-need-you.mp3",statId:"#DON_LINY"},{name:"Jail pt 3",file:"#"}
   ]},
-  {id:"donda-2",title:"Donda 2",artist:"Kanye West",year:"2022",type:"official",tags:["kanye","west","donda","2","stem player","rap","2022"],cover:"https://i.scdn.co/image/ab67616d0000b2736dc675e2b4f4d86b762f3bfa",basePath:"",tracks:[
+  {id:"donda-2",title:"Donda 2",artist:"Kanye West",year:"2022",type:"official",tags:["kanye","west","donda","2","stem player","rap","2022"],cover:"https://i.scdn.co/image/ab67616d0000b2736dc675e2b4f4d86b762f3bfa",basePath:"../audio/",tracks:[
     {name:"Sci Fi",file:"sci-fi.mp3",statId:"#D2_SF"},{name:"True Love",file:"true-love.mp3",statId:"#D2_TL"},{name:"Security",file:"security.mp3",statId:"#D2_SEC"},
     {name:"Too Easy",file:"too-easy.mp3",statId:"#D2_TE"},{name:"Louie Bags",file:"louie-bags.mp3",statId:"#D2_LB"},{name:"Pablo",file:"pablo.mp3",statId:"#D2_PAB"},
     {name:"Rich Flex",file:"rich-flex.mp3",statId:"#D2_RF"},{name:"Happy",file:"happy.mp3",statId:"#D2_HAP"},{name:"We Did It Kid",file:"we-did-it-kid.mp3",statId:"#D2_WDIK"},{name:"Flowers",file:"flowers.mp3",statId:"#D2_FLW"}
   ]},
-  {id:"vultures-1",title:"Vultures 1",artist:"¥$",primaryArtist:"Kanye West",featuredArtists:["Ty Dolla $ign"],year:"2024",type:"official",tags:["kanye","west","ty dolla sign","vultures","carnival","hoodrat","rap","2024"],cover:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Kanye_West_and_Ty_Dolla_Sign_-_Vultures_Vol._1_%28Cover%29.png/250px-Kanye_West_and_Ty_Dolla_Sign_-_Vultures_Vol._1_%28Cover%29.png",basePath:"",tracks:[
+  {id:"vultures-1",title:"Vultures 1",artist:"¥$",primaryArtist:"Kanye West",featuredArtists:["Ty Dolla $ign"],year:"2024",type:"official",tags:["kanye","west","ty dolla sign","vultures","carnival","hoodrat","rap","2024"],cover:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Kanye_West_and_Ty_Dolla_Sign_-_Vultures_Vol._1_%28Cover%29.png/250px-Kanye_West_and_Ty_Dolla_Sign_-_Vultures_Vol._1_%28Cover%29.png",basePath:"../audio/",tracks:[
     {name:"Vultures",file:"vultures-title.mp3",statId:"#V1_VUL"},{name:"Paid",file:"paid.mp3",statId:"#V1_PAID"},{name:"Hoodrat",file:"hoodrat.mp3",statId:"#V1_HR"},
     {name:"Talking",file:"talking.mp3",statId:"#V1_TALK"},{name:"Carnival",file:"carnival.mp3",statId:"#V1_CARN"},{name:"Burn",file:"burn.mp3",statId:"#V1_BURN"},
     {name:"King",file:"king.mp3",statId:"#V1_KING"},{name:"Keys to My Life",file:"keys-to-my-life.mp3",statId:"#V1_KTML"},{name:"FML (feat. The Weeknd)",file:"#"},
@@ -1507,19 +1146,19 @@ const ALBUMS=[
     {name:"Beg Forgiveness",file:"beg-forgiveness.mp3",statId:"#V1_BF"},{name:"Paperwork",file:"paperwork.mp3",statId:"#V1_PW"},{name:"Back to Me",file:"back-to-me.mp3",statId:"#V1_BTM"},
     {name:"Vultures 2",file:"vultures-2-track.mp3",statId:"#V1_V2"},{name:"Lifestyle",file:"lifestyle.mp3",statId:"#V1_LS"}
   ]},
-  {id:"vultures-2",title:"Vultures 2",artist:"¥$",primaryArtist:"Kanye West",featuredArtists:["Ty Dolla $ign"],year:"2024",type:"official",tags:["kanye","west","ty dolla sign","vultures","2","rap","2024"],cover:"https://images.genius.com/8e2c3c0e076e066fa40966001b956663.1000x1000x1.jpg",basePath:"",tracks:[
+  {id:"vultures-2",title:"Vultures 2",artist:"¥$",primaryArtist:"Kanye West",featuredArtists:["Ty Dolla $ign"],year:"2024",type:"official",tags:["kanye","west","ty dolla sign","vultures","2","rap","2024"],cover:"https://images.genius.com/8e2c3c0e076e066fa40966001b956663.1000x1000x1.jpg",basePath:"../audio/",tracks:[
     {name:"Field Trip",file:"field-trip.mp3",statId:"#V2_FT"},{name:"Everybody",file:"everybody.mp3",statId:"#V2_EVB"},{name:"Bomb",file:"bomb.mp3",statId:"#V2_BOMB"},
     {name:"River",file:"river.mp3",statId:"#V2_RIV"},{name:"Science",file:"science.mp3",statId:"#V2_SCI"},{name:"Munch",file:"munch.mp3",statId:"#V2_MUNCH"},
     {name:"Drive",file:"drive.mp3",statId:"#V2_DRV"},{name:"Mast",file:"mast.mp3",statId:"#V2_MAST"},{name:"Beg",file:"beg.mp3",statId:"#V2_BEG"},
     {name:"Lonely Roads",file:"lonely-roads.mp3",statId:"#V2_LR"},{name:"Gun To My Head",file:"gun-to-my-head.mp3",statId:"#V2_GTMH"},
     {name:"Preacher Man",file:"preacher-man.mp3",statId:"#V2_PM"},{name:"Slide",file:"slide.mp3",statId:"#V2_SLD"},{name:"Fvcking Demons",file:"fvcking-demons.mp3",statId:"#V2_FD"}
   ]},
-  {id:"bully",title:"Bully",artist:"Kanye West",year:"2025",type:"official",tags:["kanye","west","ye","bully","rap","2025"],cover:"https://news.artnet.com/app/news-upload/2024/10/kanye-west-bully-ye.jpg",basePath:"",tracks:[
+  {id:"bully",title:"Bully",artist:"Kanye West",year:"2025",type:"official",tags:["kanye","west","ye","bully","rap","2025"],cover:"https://news.artnet.com/app/news-upload/2024/10/kanye-west-bully-ye.jpg",basePath:"../audio/",tracks:[
     {name:"Bully",file:"bully-title.mp3",statId:"#BUL_BUL"},{name:"Lonely",file:"lonely.mp3",statId:"#BUL_LON"},{name:"Industry",file:"industry.mp3",statId:"#BUL_IND"},
     {name:"Witches",file:"witches.mp3",statId:"#BUL_WIT"},{name:"Field Trip",file:"#"},{name:"New Body",file:"new-body.mp3",statId:"#BUL_NB"},
     {name:"Hard Way",file:"hard-way.mp3",statId:"#BUL_HW"},{name:"Forever",file:"forever.mp3",statId:"#BUL_FOR"},{name:"Champion 2",file:"champion-2.mp3",statId:"#BUL_C2"},{name:"Empire",file:"empire.mp3",statId:"#BUL_EMP"}
   ]},
-  {id:"die-lit",title:"Die Lit",artist:"Playboi Carti",year:"2018",type:"official",tags:["playboi carti","rap","2018"],cover:"https://upload.wikimedia.org/wikipedia/en/c/c6/Die_Lit_by_Playboi_Carti.jpg",basePath:"",tracks:[
+  {id:"die-lit",title:"Die Lit",artist:"Playboi Carti",year:"2018",type:"official",tags:["playboi carti","rap","2018"],cover:"https://upload.wikimedia.org/wikipedia/en/c/c6/Die_Lit_by_Playboi_Carti.jpg",basePath:"../audio/",tracks:[
     {name:"Long Time (Intro)",file:"long-time.mp3",statId:"#DL_LT"},{name:"R.I.P.",file:"rip.mp3",statId:"#DL_RIP"},{name:"Lean 4 Real (feat. Skepta)",file:"lean-4-real.mp3",statId:"#DL_L4R"},
     {name:"Old Money",file:"old-money.mp3",statId:"#DL_OM"},{name:"Love Hurts (feat. Travis Scott)",file:"love-hurts.mp3",statId:"#DL_LH"},{name:"Shoota (feat. Lil Uzi Vert)",file:"shoota.mp3",statId:"#DL_SHOOT"},
     {name:"Right Now (feat. Pi'erre Bourne)",file:"right-now.mp3",statId:"#DL_RN"},{name:"Poke It Out (feat. Nicki Minaj)",file:"poke-it-out.mp3",statId:"#DL_PIO"},
@@ -1531,21 +1170,21 @@ const ALBUMS=[
     {name:"Top (feat. Pi'erre Bourne)",file:"top.mp3",statId:"#DL_TOP"}
   ]},
   // UNRELEASED
-  {id:"yandhi",title:"Yandhi",artist:"Kanye West",year:"2018 (unreleased)",type:"unreleased",tags:["kanye","west","yandhi","unreleased","shelved","rap","2018"],cover:"https://upload.wikimedia.org/wikipedia/commons/1/1d/Yandhi_Cover_Art_%28Free_License%29.jpg",basePath:"",tracks:[
+  {id:"yandhi",title:"Yandhi",artist:"Kanye West",year:"2018 (unreleased)",type:"unreleased",tags:["kanye","west","yandhi","unreleased","shelved","rap","2018"],cover:"https://upload.wikimedia.org/wikipedia/commons/1/1d/Yandhi_Cover_Art_%28Free_License%29.jpg",basePath:"../audio/",tracks:[
     {name:"Chakras",file:"chakras.mp3",statId:"$YAN_CHAK"},{name:"Garden",file:"garden.mp3",statId:"$YAN_GARD"},{name:"New Body",file:"new-body.mp3",statId:"$YAN_NB"},
     {name:"Vibez",file:"vibez.mp3",statId:"$YAN_VIB"},{name:"Easy",file:"easy.mp3",statId:"$YAN_EASY"},{name:"Brothers",file:"brothers.mp3",statId:"$YAN_BRO"},
     {name:"Like God",file:"like-god.mp3",statId:"$YAN_LG"},{name:"Yandhi",file:"yandhi-title.mp3",statId:"$YAN_YAN"},{name:"Violent Crimes",file:"violent-crimes.mp3",statId:"$YAN_VC"},
     {name:"Nah Nah Nah",file:"nah-nah-nah.mp3",statId:"$YAN_NNN"},{name:"Background Noise",file:"background-noise.mp3",statId:"$YAN_BN"},
     {name:"True Love",file:"true-love-yandhi.mp3",statId:"$YAN_TL"},{name:"In the Fire",file:"in-the-fire.mp3",statId:"$YAN_ITF"}
   ]},
-  {id:"turbo-grafx-16",title:"Turbo Grafx 16",artist:"Kanye West",year:"2019 (unreleased)",type:"unreleased",tags:["kanye","west","turbo","grafx","16","unreleased","shelved","rap","2019"],cover:"https://lastfm.freetls.fastly.net/i/u/ar0/68bd0237ddfa94159b35a684e5ee8be7.jpg",basePath:"",tracks:[
+  {id:"turbo-grafx-16",title:"Turbo Grafx 16",artist:"Kanye West",year:"2019 (unreleased)",type:"unreleased",tags:["kanye","west","turbo","grafx","16","unreleased","shelved","rap","2019"],cover:"https://lastfm.freetls.fastly.net/i/u/ar0/68bd0237ddfa94159b35a684e5ee8be7.jpg",basePath:"../audio/",tracks:[
     {name:"Nah Nah Nah (OG)",file:"nah-nah-nah-og.mp3",statId:"$TG_NNN"},{name:"Turbo Grafx 16",file:"turbo-title.mp3",statId:"$TG_TG"},
     {name:"Water (Coachella)",file:"water-coachella.mp3",statId:"$TG_WAT"},{name:"Closed on Sunday (Early)",file:"closed-early.mp3",statId:"$TG_COS"},
     {name:"Follow God (Rough)",file:"follow-god-rough.mp3",statId:"$TG_FG"},{name:"God's Country",file:"gods-country.mp3",statId:"$TG_GC"},
     {name:"Everything We Need (Demo)",file:"ewen-demo.mp3",statId:"$TG_EWN"},{name:"Hands On (Early)",file:"hands-on-early.mp3",statId:"$TG_HO"},
     {name:"Use This Gospel (Demo)",file:"utg-demo.mp3",statId:"$TG_UTG"},{name:"Jesus Is Lord (Rough)",file:"jil-rough.mp3",statId:"$TG_JIL"}
   ]},
-  {id:"maybe-maybe",title:"maybe (Maybe).",artist:"Rhap5ody",year:"2029 (soon)",type:"unreleased",tags:["rhap5dy","maybe","2029"],cover:"https://raw.githubusercontent.com/bguhm/bguhm.github.io/main/music/albums/maybe-maybe/maybe-maybe-cover-art.png",basePath:"",tracks:[
+  {id:"maybe-maybe",title:"maybe (Maybe).",artist:"Rhap5ody",year:"2029 (soon)",type:"unreleased",tags:["rhap5dy","maybe","2029"],cover:"https://raw.githubusercontent.com/bguhm/bguhm.github.io/main/music/albums/maybe-maybe/maybe-maybe-cover-art.png",basePath:"../audio/",tracks:[
     {name:"slackrr.",file:"slackrr.mp3",statId:"$MM_SLK"},{name:"Caramel eyes.",file:"caramel-eyes.mp3",statId:"$MM_CE"},
     {name:"PUNK HAZARD.",file:"punk-hazard.mp3",statId:"$MM_PH"},{name:"HOUND.",file:"hound.mp3",statId:"$MM_HND"},
     {name:"Arizona Girl",file:"arizona-girl.mp3",statId:"$MM_AZ"},{name:"MARIGOLD.",file:"marigold.mp3",statId:"$MM_MG"},
@@ -1557,44 +1196,43 @@ const ALBUMS=[
     {name:"Bg.uhm",file:"bg-uhm.mp3",statId:"$MM_BG"},{name:"6:27",file:"6-27.mp3",statId:"$MM_627"},
     {name:"Daisy.",file:"daisy.mp3",statId:"$MM_DAISY"},{name:"Maybe (Maybe).",file:"maybe-maybe.m4a",statId:"$MM_MM"}
   ]},
-  {id:"syndicate",title:"Syndicate",artist:"Rhap5ody",year:"2029 (soon)",type:"unreleased",tags:["syndicate","rhap5ody","2029"],cover:"https://raw.githubusercontent.com/bguhm/bguhm.github.io/main/music/albums/syndicate/Untitled157_20260219144858.png",basePath:"",tracks:[
+  {id:"syndicate",title:"Syndicate",artist:"Rhap5ody",year:"2029 (soon)",type:"unreleased",tags:["syndicate","rhap5ody","2029"],cover:"https://raw.githubusercontent.com/bguhm/bguhm.github.io/main/music/albums/syndicate/Untitled157_20260219144858.png",basePath:"../audio/",tracks:[
     {name:"BOHEMETH.",file:"bohemeth.mp3",statId:"$SYN_BOH"}
   ]},
-  {id:"nuralistics",title:"NURALISTICS",artist:"Rhap5ody",year:"2029 (soon)",type:"unreleased",tags:["NURALISTICS","rhap5ody","insomnia","2029"],cover:"https://raw.githubusercontent.com/bguhm/bguhm.github.io/main/music/albums/NURALISTICS/IMG_6099.png",basePath:"",tracks:[
+  {id:"nuralistics",title:"NURALISTICS",artist:"Rhap5ody",year:"2029 (soon)",type:"unreleased",tags:["NURALISTICS","rhap5ody","insomnia","2029"],cover:"https://raw.githubusercontent.com/bguhm/bguhm.github.io/main/music/albums/NURALISTICS/IMG_6099.png",basePath:"../audio/",tracks:[
     {name:"Insomnia.",file:"insomnia.mp3",statId:"$NUR_INS"}
   ]},
-  {id:"r5",title:"rhapsody",artist:"Rhap5ody",year:"2029 (soon)",type:"unreleased",tags:["rhap5ody","r5","2029"],cover:"https://raw.githubusercontent.com/bguhm/bguhm.github.io/main/music/albums/r5/IMG_6100.png",basePath:"",tracks:[
+  {id:"r5",title:"rhapsody",artist:"Rhap5ody",year:"2029 (soon)",type:"unreleased",tags:["rhap5ody","r5","2029"],cover:"https://raw.githubusercontent.com/bguhm/bguhm.github.io/main/music/albums/r5/IMG_6100.png",basePath:"../audio/",tracks:[
     {name:"R5.",file:"r5.mp3",statId:"$R5_R5"}
   ]}
 ];
 
 // ══════════════════════════════════════════════════════
-//  ACCOUNT SYSTEM (localStorage)
+//  ACCOUNT SYSTEM
 // ══════════════════════════════════════════════════════
-const INACTIVE_DAYS=160, DELETE_DAYS=80;
-function getAccounts(){try{return JSON.parse(localStorage.getItem('player_accounts')||'{}')}catch{return {}}}
-function saveAccounts(a){localStorage.setItem('player_accounts',JSON.stringify(a))}
-function getSession(){return localStorage.getItem('player_session')||null}
-function setSession(id){localStorage.setItem('player_session',id||'')}
-function getCurrentUser(){const s=getSession();if(!s)return null;const a=getAccounts();const u=a[s];if(!u)return null;if(isInactive(u))return null;return u;}
-function isInactive(u){return(Date.now()-u.lastActive)>(INACTIVE_DAYS*86400000);}
-function isPendingDelete(u){return(Date.now()-u.lastActive)>((INACTIVE_DAYS+DELETE_DAYS)*86400000);}
-function touchActivity(){const u=getCurrentUser();if(!u)return;const a=getAccounts();a[u.id].lastActive=Date.now();saveAccounts(a);}
-function genId(){const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';let r='#';for(let i=0;i<8;i++)r+=chars[Math.floor(Math.random()*chars.length)];return r;}
-function cleanInactive(){const a=getAccounts();let changed=false;Object.keys(a).forEach(id=>{if(isPendingDelete(a[id])){delete a[id];changed=true;}});if(changed)saveAccounts(a);}
+const INACTIVE_DAYS = 160, DELETE_DAYS = 80;
+function getAccounts() { try { return JSON.parse(localStorage.getItem('player_accounts') || '{}') } catch { return {} } }
+function saveAccounts(a) { localStorage.setItem('player_accounts', JSON.stringify(a)) }
+function getSession() { return localStorage.getItem('player_session') || null }
+function setSession(id) { localStorage.setItem('player_session', id || '') }
+function getCurrentUser() { const s = getSession(); if (!s) return null; const a = getAccounts(); const u = a[s]; if (!u) return null; if (isInactive(u)) return null; return u; }
+function isInactive(u) { return (Date.now() - u.lastActive) > (INACTIVE_DAYS * 86400000); }
+function isPendingDelete(u) { return (Date.now() - u.lastActive) > ((INACTIVE_DAYS + DELETE_DAYS) * 86400000); }
+function touchActivity() { const u = getCurrentUser(); if (!u) return; const a = getAccounts(); a[u.id].lastActive = Date.now(); saveAccounts(a); }
+function genId() { const c = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; let r = '#'; for (let i = 0; i < 8; i++) r += c[Math.floor(Math.random() * c.length)]; return r; }
+function cleanInactive() { const a = getAccounts(); let changed = false; Object.keys(a).forEach(id => { if (isPendingDelete(a[id])) { delete a[id]; changed = true; } }); if (changed) saveAccounts(a); }
 
 // ══════════════════════════════════════════════════════
-//  AUDIO ENGINE
+//  AUDIO ENGINE — based on proven simple player pattern
 // ══════════════════════════════════════════════════════
-const audio = new Audio();
-audio.crossOrigin = "anonymous";
 
-let audioCtx, analyser, audioSource, bufLen, dataArr;
-let flatList = [], trackIdx = 0, isPlaying = false, isRandom = false, isRepeat = false;
-let cachedDurations = {};
-let _didSeek = false;
+// Single Audio element, created once, never recreated
+const curr_track = new Audio();
 
-function initCtx() {
+// AudioContext created LAZILY on first user gesture — browser blocks it if created at page load
+let audioCtx = null, analyser = null, bufferLength = 0, dataArray = null;
+
+function ensureAudioCtx() {
   if (audioCtx) {
     if (audioCtx.state === 'suspended') audioCtx.resume();
     return;
@@ -1602,14 +1240,16 @@ function initCtx() {
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   analyser = audioCtx.createAnalyser();
   analyser.fftSize = 256;
-  bufLen = analyser.frequencyBinCount;
-  dataArr = new Uint8Array(bufLen);
-  // createMediaElementSource must only ever be called ONCE per audio element
-  audioSource = audioCtx.createMediaElementSource(audio);
-  audioSource.connect(analyser);
+  bufferLength = analyser.frequencyBinCount;
+  dataArray = new Uint8Array(bufferLength);
+  const src = audioCtx.createMediaElementSource(curr_track);
+  src.connect(analyser);
   analyser.connect(audioCtx.destination);
-  renderWave();
 }
+
+let flatList = [], trackIdx = 0, isPlaying = false, isRandom = false, isRepeat = false;
+let cachedDurations = {};
+let updateTimer = null;
 
 function fmt(s) {
   if (isNaN(s) || !isFinite(s)) return '0:00';
@@ -1624,964 +1264,915 @@ function buildFlat(album) {
     const files = Array.isArray(t.file) ? t.file : [t.file];
     files.forEach((f, pIdx) => {
       list.push({
-        name: t.name, src: album.basePath + f, albumId: album.id,
-        albumTitle: album.title, cover: album.cover, artist: album.artist,
-        spotUrl: t.url || '', origIdx, pIdx, lastPIdx: files.length - 1,
-        isMulti: files.length > 1, statId: t.statId || null
+        name: t.name,
+        src: album.basePath + f,
+        albumId: album.id,
+        albumTitle: album.title,
+        cover: album.cover,
+        artist: album.artist,
+        spotUrl: t.url || '',
+        statId: t.statId || null,
+        origIdx, pIdx,
+        lastPIdx: files.length - 1,
+        isMulti: files.length > 1
       });
     });
   });
   return list;
 }
 
-function loadTrack(idx, play = true) {
+// Update seek bar and time — called on interval while playing
+function setUpdate() {
+  if (isNaN(curr_track.duration) || curr_track.duration === 0) return;
+  const seekPosition = (curr_track.currentTime / curr_track.duration) * 100;
+  document.getElementById('seekSlider').value = seekPosition;
+  document.getElementById('seekFill').style.width = seekPosition + '%';
+  document.getElementById('currTime').textContent = fmt(curr_track.currentTime);
+}
+
+// loadTrack ONLY loads — never plays. Caller must call playTrack() explicitly.
+// This matches the old working player pattern exactly.
+function loadTrack(idx) {
   if (!flatList.length) return;
   if (idx < 0) idx = flatList.length - 1;
   if (idx >= flatList.length) idx = 0;
   trackIdx = idx;
   const t = flatList[idx];
-  _didSeek = false;
-  _listenStarted = false;
 
-  // Must init context before setting src so the media element source is wired
-  initCtx();
+  // Stop current playback and clear update timer
+  curr_track.pause();
+  isPlaying = false;
+  clearInterval(updateTimer);
 
-  audio.src = t.src;
-  audio.load();
-
-  document.getElementById('nowTitle').innerHTML = t.spotUrl
-    ? `<a href="${t.spotUrl}" target="_blank">${t.name}</a>` : t.name;
-  document.getElementById('nowArtist').textContent = t.artist;
-  const na = document.getElementById('nowArt');
-  na.src = t.cover; na.classList.remove('hidden');
-  document.getElementById('seekFill').style.width = '0%';
+  // Reset UI
   document.getElementById('seekSlider').value = 0;
+  document.getElementById('seekFill').style.width = '0%';
   document.getElementById('currTime').textContent = '0:00';
   document.getElementById('totalTime').textContent = '0:00';
+  document.getElementById('btnPlay').innerHTML = '<i class="fas fa-play"></i>';
+  document.getElementById('waveViz').classList.remove('visible');
 
-  audio.onloadedmetadata = () => {
-    const dur = audio.duration;
-    document.getElementById('totalTime').textContent = fmt(dur);
-    recordTrackView(t.statId);
-    if (dur && dur > 1) onTrackPlayStart(t.statId, dur);
+  // Set new source and load — exactly like the old player
+  curr_track.src = t.src;
+  curr_track.load();
+
+  // Update duration once metadata arrives
+  curr_track.onloadedmetadata = () => {
+    document.getElementById('totalTime').textContent = fmt(curr_track.duration);
   };
 
+  // Update now-playing UI
+  document.getElementById('nowTitle').innerHTML = t.spotUrl
+    ? `<a href="${t.spotUrl}" target="_blank">${t.name}</a>`
+    : t.name;
+  document.getElementById('nowArtist').textContent = t.artist;
+  const na = document.getElementById('nowArt');
+  na.src = t.cover;
+  na.classList.remove('hidden');
   document.title = `${t.name} — ${t.artist}`;
   renderTrackHighlights();
-  if (play) playAudio();
   touchActivity();
 }
 
-function playAudio() {
-  if (!audioCtx) initCtx();
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-  audio.play().catch(() => {});
+function playTrack() {
+  if (!flatList.length) return;
+  ensureAudioCtx();
+  curr_track.play().catch(e => console.warn('play() failed:', e.message));
   isPlaying = true;
   document.getElementById('btnPlay').innerHTML = '<i class="fas fa-pause"></i>';
   document.getElementById('waveViz').classList.add('visible');
+  clearInterval(updateTimer);
+  updateTimer = setInterval(setUpdate, 500);
 }
 
-function pauseAudio() {
-  audio.pause();
+function pauseTrack() {
+  curr_track.pause();
   isPlaying = false;
   document.getElementById('btnPlay').innerHTML = '<i class="fas fa-play"></i>';
   document.getElementById('waveViz').classList.remove('visible');
+  clearInterval(updateTimer);
 }
 
 function togglePlay() {
-  // If nothing loaded yet, do nothing
-  if (!flatList.length && !audio.src) return;
-  isPlaying ? pauseAudio() : playAudio();
+  if (!flatList.length) return;
+  isPlaying ? pauseTrack() : playTrack();
 }
 
 function nextTrack() {
-  _listenStarted = false;
   if (isRandom) {
     let ri;
-    do { ri = Math.floor(Math.random() * flatList.length); }
-    while (ri === trackIdx && flatList.length > 1);
-    ri = flatList.findIndex(t => t.origIdx === flatList[ri].origIdx && t.pIdx === 0);
-    loadTrack(ri); return;
+    do { ri = Math.floor(Math.random() * flatList.length); } while (ri === trackIdx && flatList.length > 1);
+    const origIdx = flatList[ri].origIdx;
+    ri = flatList.findIndex(f => f.origIdx === origIdx && f.pIdx === 0);
+    loadTrack(ri);
+    playTrack();
+    return;
   }
-  const cur = flatList[trackIdx];
-  if (cur.isMulti && cur.pIdx < cur.lastPIdx) {
-    const ni = flatList.findIndex(t => t.origIdx > cur.origIdx && t.pIdx === 0);
-    loadTrack(ni === -1 ? 0 : ni);
-  } else {
-    loadTrack(trackIdx + 1 >= flatList.length ? 0 : trackIdx + 1);
-  }
+  loadTrack(trackIdx + 1 >= flatList.length ? 0 : trackIdx + 1);
+  playTrack();
 }
 
 function prevTrack() {
-  _listenStarted = false;
-  const cur = flatList[trackIdx];
-  if (audio.currentTime > 3 || (cur.isMulti && cur.pIdx > 0)) {
-    if (cur.isMulti && cur.pIdx > 0) { loadTrack(trackIdx - 1); return; }
-    audio.currentTime = 0;
-    if (isPlaying) return;
+  if (curr_track.currentTime > 3) {
+    curr_track.currentTime = 0;
+    return;
   }
-  const pf = flatList.findLastIndex(t => t.origIdx < cur.origIdx && t.pIdx === 0);
-  if (pf !== -1) {
-    const pl = flatList.findLastIndex(t => t.origIdx === flatList[pf].origIdx);
-    loadTrack(pl);
-  } else {
-    loadTrack(flatList.length - 1);
-  }
+  loadTrack(trackIdx - 1 < 0 ? flatList.length - 1 : trackIdx - 1);
+  playTrack();
 }
 
-audio.addEventListener('ended', () => {
-  if (!_didSeek && _listenStarted) onTrackFullListenComplete();
-  _listenStarted = false;
-  if (isRepeat) { audio.currentTime = 0; playAudio(); return; }
+// Auto-advance when track ends
+curr_track.addEventListener('ended', () => {
+  isPlaying = false;
+  clearInterval(updateTimer);
+  if (isRepeat) {
+    curr_track.currentTime = 0;
+    playTrack();
+    return;
+  }
   const cur = flatList[trackIdx];
-  if (cur && cur.isMulti && cur.pIdx < cur.lastPIdx) loadTrack(trackIdx + 1);
-  else nextTrack();
+  if (cur && cur.isMulti && cur.pIdx < cur.lastPIdx) {
+    loadTrack(trackIdx + 1);
+    playTrack();
+  } else {
+    nextTrack();
+  }
 });
 
-document.getElementById('seekSlider').addEventListener('mousedown', () => { _didSeek = true; });
-document.getElementById('seekSlider').addEventListener('input', function () {
-  if (!isNaN(audio.duration)) audio.currentTime = (this.value / 100) * audio.duration;
+// Seek slider
+const seekSlider = document.getElementById('seekSlider');
+seekSlider.addEventListener('input', function () {
+  if (isNaN(curr_track.duration)) return;
+  const t = (this.value / 100) * curr_track.duration;
+  curr_track.currentTime = t;
+  document.getElementById('seekFill').style.width = this.value + '%';
+  document.getElementById('currTime').textContent = fmt(t);
 });
-document.getElementById('volSlider').addEventListener('input', function () {
-  audio.volume = this.value / 100;
+
+// Volume slider
+const volSlider = document.getElementById('volSlider');
+volSlider.addEventListener('input', function () {
+  curr_track.volume = this.value / 100;
   document.getElementById('volFill').style.width = this.value + '%';
 });
-audio.volume = 0.99;
+curr_track.volume = volSlider.value / 100;
 
-setInterval(() => {
-  if (!isNaN(audio.duration) && audio.duration > 0) {
-    const p = (audio.currentTime / audio.duration) * 100;
-    document.getElementById('seekFill').style.width = p + '%';
-    document.getElementById('seekSlider').value = p;
-    document.getElementById('currTime').textContent = fmt(audio.currentTime);
-  }
-}, 500);
-
+// Player button controls
 document.getElementById('btnPlay').addEventListener('click', togglePlay);
 document.getElementById('btnNext').addEventListener('click', nextTrack);
 document.getElementById('btnPrev').addEventListener('click', prevTrack);
 document.getElementById('btnRandom').addEventListener('click', function () {
-  isRandom = !isRandom; this.classList.toggle('active', isRandom);
+  isRandom = !isRandom;
+  this.classList.toggle('active', isRandom);
 });
 document.getElementById('btnRepeat').addEventListener('click', function () {
-  isRepeat = !isRepeat; this.classList.toggle('active', isRepeat);
+  isRepeat = !isRepeat;
+  this.classList.toggle('active', isRepeat);
 });
 
+// ── VISUALIZER ──
 function renderWave() {
   requestAnimationFrame(renderWave);
   const strokes = document.querySelectorAll('#waveViz .stroke');
-  if (!analyser || !isPlaying) {
+  if (!isPlaying || !analyser) {
     strokes.forEach(s => s.style.transform = 'scaleY(0.2)');
     return;
   }
-  analyser.getByteFrequencyData(dataArr);
-  const step = Math.floor(dataArr.length / strokes.length);
+  analyser.getByteFrequencyData(dataArray);
+  const step = Math.floor(bufferLength / strokes.length);
   strokes.forEach((s, i) => {
-    let v = dataArr[i * step] / 256;
-    if (i < 3) v = Math.sqrt(v);
-    s.style.transform = `scaleY(${Math.max(0.2, v)})`;
+    const v = dataArray[i * step] / 256;
+    s.style.transform = `scaleY(${Math.max(0.15, v)})`;
   });
 }
+renderWave();
 
-// ══════════════════════════════════════════════════════
-//  KEYBOARD
-// ══════════════════════════════════════════════════════
-document.addEventListener('keydown',e=>{
-  if(['INPUT','TEXTAREA'].includes(e.target.tagName))return;
-  if(e.key===' '){e.preventDefault();togglePlay();}
-  if(e.key==='ArrowRight')nextTrack();
-  if(e.key==='ArrowLeft')prevTrack();
-  if(e.key==='Escape'){closeFullStats();}
+// ── KEYBOARD ──
+document.addEventListener('keydown', e => {
+  if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+  if (e.key === ' ') { e.preventDefault(); togglePlay(); }
+  if (e.key === 'ArrowRight') nextTrack();
+  if (e.key === 'ArrowLeft') prevTrack();
 });
 
 // ══════════════════════════════════════════════════════
 //  NAV HISTORY
 // ══════════════════════════════════════════════════════
-let navHistory=[],navPos=-1;
-function pushNav(fn){if(navPos<navHistory.length-1)navHistory=navHistory.slice(0,navPos+1);navHistory.push(fn);navPos++;}
-function navBack(){if(navPos>0){navPos--;navHistory[navPos]();}}
-function navFwd(){if(navPos<navHistory.length-1){navPos++;navHistory[navPos]();}}
+let navHistory = [], navPos = -1;
+function pushNav(fn) { if (navPos < navHistory.length - 1) navHistory = navHistory.slice(0, navPos + 1); navHistory.push(fn); navPos++; }
+function navBack() { if (navPos > 0) { navPos--; navHistory[navPos](); } }
+function navFwd() { if (navPos < navHistory.length - 1) { navPos++; navHistory[navPos](); } }
 
 // ══════════════════════════════════════════════════════
 //  VIEW SWITCHING
 // ══════════════════════════════════════════════════════
-let currentAlbumId=null,currentPlaylistId=null;
-function showView(id,push=true){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  const v=document.getElementById('view'+id.charAt(0).toUpperCase()+id.slice(1));
-  if(v)v.classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  if(id==='discover')document.getElementById('navDiscover')?.classList.add('active');
-  if(id==='search')document.getElementById('navSearch')?.classList.add('active');
+let currentAlbumId = null, currentPlaylistId = null;
+
+function showView(id, push = true) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const viewId = 'view' + id.charAt(0).toUpperCase() + id.slice(1);
+  const v = document.getElementById(viewId);
+  if (v) v.classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  if (id === 'home') { document.getElementById('navHome')?.classList.add('active'); renderHome(); }
+  if (id === 'discover') document.getElementById('navDiscover')?.classList.add('active');
+  if (id === 'search') document.getElementById('navSearch')?.classList.add('active');
+  if (id === 'settings') document.getElementById('navSettings')?.classList.add('active');
 }
 
-function renderTrackHighlights(){
-  document.querySelectorAll('[data-orig-idx]').forEach(row=>{
-    const oi=parseInt(row.dataset.origIdx);
-    const aid=row.dataset.albumId;
-    const cur=flatList[trackIdx];
-    const active=cur&&cur.origIdx===oi&&cur.albumId===aid;
-    row.classList.toggle('playing',active);
+function renderHome() {
+  const grid = document.getElementById('gridHome');
+  if (!grid || grid.children.length) return; // already rendered
+  // Show the 6 most recently added albums
+  const recent = [...ALBUMS].slice(-6).reverse();
+  recent.forEach(album => grid.appendChild(makeAlbumCard(album)));
+}
+
+function renderTrackHighlights() {
+  document.querySelectorAll('[data-orig-idx]').forEach(row => {
+    const oi = parseInt(row.dataset.origIdx);
+    const aid = row.dataset.albumId;
+    const cur = flatList[trackIdx];
+    const active = cur && cur.origIdx === oi && cur.albumId === aid;
+    row.classList.toggle('playing', active);
   });
 }
 
 // ══════════════════════════════════════════════════════
-//  DISCOVER VIEW
+//  DISCOVER VIEW — fixed grid limits
 // ══════════════════════════════════════════════════════
-function renderDiscover(){
-  const official=document.getElementById('gridOfficial');
-  const unreleased=document.getElementById('gridUnreleased');
-  official.innerHTML='';unreleased.innerHTML='';
-  ALBUMS.forEach(album=>{
-    const card=document.createElement('div');card.className='album-card';
-    card.innerHTML=`<img class="album-card-art" src="${album.cover}" alt="${album.title}" onerror="this.style.background='#222'"/><div class="album-card-title">${album.title}</div><div class="album-card-sub">${album.artist} · ${album.year}</div>`;
-    card.addEventListener('click',()=>openAlbum(album.id));
-    // Record view when album card is clicked (tracks will be viewed individually when opened)
-    if(album.type==='unreleased')unreleased.appendChild(card);
-    else official.appendChild(card);
+const DISCOVER_RELEASED_LIMIT = 18;
+const DISCOVER_UNRELEASED_LIMIT = 6;
+
+function renderDiscover() {
+  const official = document.getElementById('gridOfficial');
+  const unreleased = document.getElementById('gridUnreleased');
+  official.innerHTML = '';
+  unreleased.innerHTML = '';
+
+  const officialAlbums = ALBUMS.filter(a => a.type !== 'unreleased');
+  const unreleasedAlbums = ALBUMS.filter(a => a.type === 'unreleased');
+
+  officialAlbums.slice(0, DISCOVER_RELEASED_LIMIT).forEach(album => {
+    official.appendChild(makeAlbumCard(album));
+  });
+
+  unreleasedAlbums.slice(0, DISCOVER_UNRELEASED_LIMIT).forEach(album => {
+    unreleased.appendChild(makeAlbumCard(album));
   });
 }
 
-// ══════════════════════════════════════════════════════
-//  ARTIST LINKS
-// ══════════════════════════════════════════════════════
-function buildArtistLinks(album){
-  const safe=n=>n.replace(/'/g,"\'");
-  const style='color:var(--muted);font-family:\'Space Mono\',monospace;font-size:13px;cursor:pointer;transition:color .2s;text-decoration:none;';
-  const hov='onmouseover="this.style.color=\'var(--accent2)\'" onmouseout="this.style.color=\'var(--muted)\'"';
-  const artists=[];
-  if(album.primaryArtist){
-    artists.push(`<span style="${style}" ${hov} onclick="openArtist('${safe(album.primaryArtist)}')">${album.primaryArtist}</span>`);
-    if(album.featuredArtists&&album.featuredArtists.length){
-      album.featuredArtists.forEach(fa=>{artists.push(`<span style="${style}" ${hov} onclick="openArtist('${safe(fa)}')">${fa}</span>`);});
-    }
+function makeAlbumCard(album) {
+  const card = document.createElement('div');
+  card.className = 'album-card';
+  card.innerHTML = `<img class="album-card-art" src="${album.cover}" alt="${album.title}" onerror="this.style.background='#222'"/><div class="album-card-title">${album.title}</div><div class="album-card-sub">${album.artist} · ${album.year}</div>`;
+  card.addEventListener('click', () => openAlbum(album.id));
+  return card;
+}
+
+// ── Full List Views ──
+function openFullList(type, push = true) {
+  if (type === 'released') {
+    const albums = ALBUMS.filter(a => a.type !== 'unreleased');
+    const grid = document.getElementById('gridFullReleased');
+    const desc = document.getElementById('fullReleasedDesc');
+    grid.innerHTML = '';
+    if (desc) desc.textContent = `${albums.length} official albums`;
+    albums.forEach(album => grid.appendChild(makeAlbumCard(album)));
+    showView('fullReleased');
+    if (push) pushNav(() => openFullList('released', false));
   } else {
-    artists.push(`<span style="${style}" ${hov} onclick="openArtist('${safe(album.artist)}')">${album.artist}</span>`);
+    const albums = ALBUMS.filter(a => a.type === 'unreleased');
+    const grid = document.getElementById('gridFullUnreleased');
+    const desc = document.getElementById('fullUnreleasedDesc');
+    grid.innerHTML = '';
+    if (desc) desc.textContent = `${albums.length} shelved / unreleased projects`;
+    albums.forEach(album => grid.appendChild(makeAlbumCard(album)));
+    showView('fullUnreleased');
+    if (push) pushNav(() => openFullList('unreleased', false));
   }
-  return artists.join('<span style="color:var(--muted);margin:0 4px;">&</span>');
-}
-
-// ══════════════════════════════════════════════════════
-//  ALBUM VIEW
-// ══════════════════════════════════════════════════════
-function openAlbum(id,push=true){
-  const album=ALBUMS.find(a=>a.id===id);if(!album)return;
-  currentAlbumId=id;
-  const fl=buildFlat(album);
-  const u=getCurrentUser();
-  const saved=u&&u.savedAlbums&&u.savedAlbums.includes(id);
-
-  // Record views for all tracks in album when opened
-  album.tracks.forEach(t => { if(t.statId) recordTrackView(t.statId); });
-
-  const hero=document.getElementById('albumHero');
-  hero.innerHTML=`
-    <img class="album-hero-art" src="${album.cover}" alt="${album.title}" onerror="this.style.background='#333'"/>
-    <div class="album-hero-info">
-      <div class="album-hero-label">Album · ${album.type==='unreleased'?'Unreleased':album.year}</div>
-      <div class="album-hero-title">${album.title}</div>
-      <div class="album-hero-artist" onclick="openArtist('${album.artist.replace(/'/g,"\\'")}')">${album.artist}</div>
-      <div class="album-hero-meta">${album.year} · ${album.tracks.length} tracks</div>
-      <div class="album-actions">
-        <button class="btn-play-all" onclick="playAlbum('${id}')"><i class="fas fa-play"></i></button>
-        <button class="btn-save ${saved?'saved':''}" id="btnSaveAlbum" onclick="toggleSaveAlbum('${id}')">${saved?'✓ Saved':'+ Save'}</button>
-        <button class="btn-download" id="btnDlAlbum" onclick="downloadAlbumZip('${id}')"><i class="fas fa-download"></i> Download Album</button>
-      </div>
-    </div>`;
-
-  const rows=document.getElementById('albumTrackRows');rows.innerHTML='';
-  let logicalNum=0;
-  album.tracks.forEach((t,origIdx)=>{
-    const unavail=!t.file||t.file==='#';
-    if(!unavail)logicalNum++;
-    const fi=fl.findIndex(f=>f.origIdx===origIdx&&f.pIdx===0);
-    const row=document.createElement('div');
-    row.className='track-row'+(unavail?' unavailable':'');
-    row.dataset.origIdx=origIdx;row.dataset.albumId=id;
-    const isMulti=Array.isArray(t.file);
-    const dl=hasDownloaded(t.statId);
-    row.innerHTML=`
-      <div class="track-num"><span class="track-num-text">${logicalNum||'·'}</span><span class="track-num-icon" style="display:none"><i class="fas fa-volume-up"></i></span></div>
-      <div class="track-name-cell">${t.name}${isMulti?'<span style="color:var(--muted);font-size:10px;margin-left:4px;">(multi)</span>':''}${t.statId?`<span style="color:var(--muted);font-size:9px;margin-left:5px;font-family:'Space Mono',monospace;opacity:.4;">${t.statId}</span>`:''}</div>
-      <div class="track-dur">${cachedDurations[fl[fi]?.src]||'—'}</div>
-      ${!unavail?`<button class="track-dl-btn ${dl?'dl-done':''}" data-dl-album="${id}" data-dl-idx="${origIdx}" onclick="event.stopPropagation();downloadTrack('${id}',${origIdx})" title="${dl?'Downloaded':'Download track'}">${dl?'<i class="fas fa-check"></i>':'<i class="fas fa-download"></i>'}</button>`:'<div></div>'}
-      ${!unavail?`<button class="track-menu-btn" onclick="openTrackCtx(event,'${id}',${origIdx})"><i class="fas fa-ellipsis-h"></i></button>`:'<div></div>'}`;
-    if(!unavail){
-      row.addEventListener('click',e=>{if(e.target.closest('.track-menu-btn')||e.target.closest('.track-dl-btn'))return;playAlbumFromTrack(id,origIdx);});
-    }
-    rows.appendChild(row);
-  });
-
-  showView('album');
-  if(push)pushNav(()=>openAlbum(id,false));
-  renderSidebarLibrary();
-  setTimeout(()=>loadDurationsFor(album,()=>{
-    album.tracks.forEach((t,origIdx)=>{
-      const fl2=buildFlat(album);const fi=fl2.findIndex(f=>f.origIdx===origIdx&&f.pIdx===0);
-      const durEl=rows.children[origIdx]?.querySelector('.track-dur');
-      if(durEl&&fi!==-1)durEl.textContent=cachedDurations[fl2[fi].src]||'—';
-    });
-  }),100);
-}
-
-function playAlbum(id){
-  const album=ALBUMS.find(a=>a.id===id);if(!album)return;
-  flatList=buildFlat(album);loadTrack(0);
-}
-
-function playAlbumFromTrack(albumId,origIdx){
-  const album=ALBUMS.find(a=>a.id===albumId);if(!album)return;
-  flatList=buildFlat(album);
-  const fi=flatList.findIndex(f=>f.origIdx===origIdx&&f.pIdx===0);
-  loadTrack(fi===-1?0:fi);
-}
-
-function loadDurationsFor(album,cb){
-  const fl=buildFlat(album);let i=0;
-  function next(){
-    if(i>=fl.length){if(cb)cb();return;}
-    const t=fl[i++];
-    if(t.pIdx>0){next();return;}
-    if(cachedDurations[t.src]){next();return;}
-    const a=new Audio();a.preload='metadata';a.src=t.src;
-    const to=setTimeout(()=>{a.src='';next();},3000);
-    a.onloadedmetadata=()=>{clearTimeout(to);cachedDurations[t.src]=fmt(a.duration);next();};
-    a.onerror=()=>{clearTimeout(to);next();};
-  }
-  next();
 }
 
 // ══════════════════════════════════════════════════════
 //  ARTIST PROFILES
 // ══════════════════════════════════════════════════════
-const ARTIST_PROFILES={
-  "Kanye West":{pfp:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Kanye_West_at_the_2009_Tribeca_Film_Festival.jpg/330px-Kanye_West_at_the_2009_Tribeca_Film_Festival.jpg",bio:"Chicago-born rapper, producer, and creative director. One of the most influential artists in hip-hop history."},
-  "Jay-Z":{pfp:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Jay-Z_at_the_2009_Tribeca_Film_Festival_%28crop%29.jpg/330px-Jay-Z_at_the_2009_Tribeca_Film_Festival_%28crop%29.jpg",bio:"Brooklyn rapper, entrepreneur, and business mogul. Co-founder of Roc-A-Fella Records and Tidal."},
-  "Kid Cudi":{pfp:"",bio:"Cleveland rapper and singer known for introspective, genre-defying music."},
-  "Ty Dolla $ign":{pfp:"",bio:"Los Angeles-based rapper and singer, frequent collaborator on the ¥$ project."},
-  "Kids See Ghosts":{pfp:"",bio:"Supergroup formed by Kanye West and Kid Cudi, releasing their self-titled debut in 2018."},
-  "GOOD Music":{pfp:"",bio:"Kanye West's record label collective featuring Big Sean, Pusha T, Teyana Taylor, and more."},
-  "¥$":{pfp:"",bio:"Collaborative project between Kanye West and Ty Dolla $ign, released as Vultures 1 & 2."},
-  "Playboi Carti":{pfp:"",bio:"Atlanta rapper known for his energetic delivery and Die Lit era aesthetic."},
-  "Rhap5ody":{pfp:"",bio:"Independent artist with upcoming releases."}
+const ARTIST_PROFILES = {
+  "Kanye West": { pfp: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Kanye_West_at_the_2009_Tribeca_Film_Festival.jpg/330px-Kanye_West_at_the_2009_Tribeca_Film_Festival.jpg", bio: "Chicago-born rapper, producer, and creative director. One of the most influential artists in hip-hop history." },
+  "Jay-Z": { pfp: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Jay-Z_at_the_2009_Tribeca_Film_Festival_%28crop%29.jpg/330px-Jay-Z_at_the_2009_Tribeca_Film_Festival_%28crop%29.jpg", bio: "Brooklyn rapper, entrepreneur, and business mogul. Co-founder of Roc-A-Fella Records and Tidal." },
+  "Kid Cudi": { pfp: "", bio: "Cleveland rapper and singer known for introspective, genre-defying music." },
+  "Ty Dolla $ign": { pfp: "", bio: "Los Angeles-based rapper and singer, frequent collaborator on the ¥$ project." },
+  "Kids See Ghosts": { pfp: "", bio: "Supergroup formed by Kanye West and Kid Cudi, releasing their self-titled debut in 2018." },
+  "GOOD Music": { pfp: "", bio: "Kanye West's record label collective featuring Big Sean, Pusha T, Teyana Taylor, and more." },
+  "¥$": { pfp: "", bio: "Collaborative project between Kanye West and Ty Dolla $ign, released as Vultures 1 & 2." },
+  "Playboi Carti": { pfp: "", bio: "Atlanta-based rapper known for his experimental sound and Die Lit." },
+  "Rhap5ody": { pfp: "", bio: "Upcoming artist with unreleased projects including maybe (Maybe). and Syndicate." }
 };
-function getArtistProfile(name){return ARTIST_PROFILES[name]||{pfp:'',bio:''};}
+function getArtistProfile(name) { return ARTIST_PROFILES[name] || { pfp: '', bio: '' }; }
+
+// ══════════════════════════════════════════════════════
+//  ALBUM VIEW
+// ══════════════════════════════════════════════════════
+function openAlbum(id, push = true) {
+  const album = ALBUMS.find(a => a.id === id);
+  if (!album) return;
+  currentAlbumId = id;
+  const u = getCurrentUser();
+  const saved = u && u.savedAlbums && u.savedAlbums.includes(id);
+
+  const hero = document.getElementById('albumHero');
+  hero.innerHTML = `
+    <img class="album-hero-art" src="${album.cover}" alt="${album.title}" onerror="this.style.background='#333'"/>
+    <div class="album-hero-info">
+      <div class="album-hero-label">Album · ${album.type === 'unreleased' ? 'Unreleased' : album.year}</div>
+      <div class="album-hero-title">${album.title}</div>
+      <div class="album-hero-artist" onclick="openArtist('${(album.primaryArtist || album.artist).replace(/'/g, "\\'")}', true)">${album.primaryArtist || album.artist}</div>
+      <div class="album-hero-meta">${album.year} · ${album.tracks.length} tracks</div>
+      <div class="album-actions">
+        <button class="btn-play-all" onclick="playAlbum('${id}')"><i class="fas fa-play"></i></button>
+        <button class="btn-save ${saved ? 'saved' : ''}" id="btnSaveAlbum" onclick="toggleSaveAlbum('${id}')">${saved ? '✓ Saved' : '+ Save'}</button>
+      </div>
+    </div>`;
+
+  const rows = document.getElementById('albumTrackRows');
+  rows.innerHTML = '';
+  let logicalNum = 0;
+  album.tracks.forEach((t, origIdx) => {
+    const unavail = !t.file || t.file === '#';
+    if (!unavail) logicalNum++;
+    const row = document.createElement('div');
+    row.className = 'track-row' + (unavail ? ' unavailable' : '');
+    row.dataset.origIdx = origIdx;
+    row.dataset.albumId = id;
+    const isMulti = Array.isArray(t.file);
+    row.innerHTML = `
+      <div class="track-num">
+        <span class="track-num-text">${logicalNum || '·'}</span>
+        <span class="track-num-icon" style="display:none"><i class="fas fa-volume-up"></i></span>
+      </div>
+      <div class="track-name-cell">${t.name}${isMulti ? '<span style="color:var(--muted);font-size:10px;margin-left:4px;">(multi)</span>' : ''}</div>
+      <div class="track-dur">—</div>
+      ${!unavail ? `<button class="track-menu-btn" onclick="openTrackCtx(event,'${id}',${origIdx})"><i class="fas fa-ellipsis-h"></i></button>` : '<div></div>'}`;
+    if (!unavail) {
+      row.addEventListener('click', e => {
+        if (e.target.closest('.track-menu-btn')) return;
+        playAlbumFromTrack(id, origIdx);
+      });
+    }
+    rows.appendChild(row);
+  });
+
+  showView('album');
+  if (push) pushNav(() => openAlbum(id, false));
+  renderSidebarLibrary();
+  // Lazy-load durations
+  setTimeout(() => loadDurationsFor(album, (src, dur) => {
+    rows.querySelectorAll('.track-row').forEach(row => {
+      const oi = parseInt(row.dataset.origIdx);
+      const t2 = album.tracks[oi];
+      if (!t2) return;
+      const files = Array.isArray(t2.file) ? t2.file : [t2.file];
+      if (files[0] && album.basePath + files[0] === src) {
+        row.querySelector('.track-dur').textContent = dur;
+      }
+    });
+  }), 50);
+}
+
+function playAlbum(id) {
+  const album = ALBUMS.find(a => a.id === id);
+  if (!album) return;
+  flatList = buildFlat(album);
+  loadTrack(0);
+  playTrack();
+}
+
+function playAlbumFromTrack(albumId, origIdx) {
+  const album = ALBUMS.find(a => a.id === albumId);
+  if (!album) return;
+  flatList = buildFlat(album);
+  const fi = flatList.findIndex(f => f.origIdx === origIdx && f.pIdx === 0);
+  loadTrack(fi === -1 ? 0 : fi);
+  playTrack();
+}
+
+function loadDurationsFor(album, onEach) {
+  const fl = buildFlat(album);
+  let i = 0;
+  function next() {
+    if (i >= fl.length) return;
+    const t = fl[i++];
+    if (t.pIdx > 0) { next(); return; }
+    if (cachedDurations[t.src]) { onEach(t.src, cachedDurations[t.src]); next(); return; }
+    const a = new Audio();
+    a.preload = 'metadata';
+    a.src = t.src;
+    const to = setTimeout(() => { a.src = ''; next(); }, 4000);
+    a.onloadedmetadata = () => {
+      clearTimeout(to);
+      const d = fmt(a.duration);
+      cachedDurations[t.src] = d;
+      onEach(t.src, d);
+      next();
+    };
+    a.onerror = () => { clearTimeout(to); next(); };
+  }
+  next();
+}
 
 // ══════════════════════════════════════════════════════
 //  ARTIST VIEW
 // ══════════════════════════════════════════════════════
-function openArtist(artistName,push=true){
-  const primaryAlbums=ALBUMS.filter(a=>a.artist===artistName||a.primaryArtist===artistName);
-  const featuredOnAlbums=ALBUMS.filter(a=>a.featuredArtists&&a.featuredArtists.includes(artistName)&&a.primaryArtist!==artistName&&a.artist!==artistName);
-  const u=getCurrentUser();
-  const following=u&&u.following&&u.following.includes(artistName);
-  const profile=getArtistProfile(artistName);
-  const hero=document.getElementById('artistHero');
-  hero.style.cssText='display:flex;align-items:flex-end;gap:24px;padding:36px 24px 24px;background:linear-gradient(180deg,rgba(255,0,0,.08) 0%,transparent 100%);border-bottom:1px solid var(--border);flex-shrink:0;';
-  const pfpHtml=profile.pfp?`<div class="artist-pfp"><img src="${profile.pfp}" alt="${artistName}" onerror="this.style.display='none';this.parentNode.textContent='🎤'"/></div>`:`<div class="artist-pfp">🎤</div>`;
-  hero.innerHTML=`${pfpHtml}<div>
+function openArtist(artistName, push = true) {
+  const primaryAlbums = ALBUMS.filter(a => a.artist === artistName || a.primaryArtist === artistName);
+  const featuredOnAlbums = ALBUMS.filter(a => a.featuredArtists && a.featuredArtists.includes(artistName) && a.primaryArtist !== artistName && a.artist !== artistName);
+  const u = getCurrentUser();
+  const following = u && u.following && u.following.includes(artistName);
+  const profile = getArtistProfile(artistName);
+
+  const hero = document.getElementById('artistHero');
+  hero.style.cssText = 'display:flex;align-items:flex-end;gap:24px;padding:36px 24px 24px;background:linear-gradient(180deg,rgba(255,0,0,.08) 0%,transparent 100%);border-bottom:1px solid var(--border);flex-shrink:0;';
+  const pfpHtml = profile.pfp
+    ? `<div class="artist-pfp"><img src="${profile.pfp}" alt="${artistName}" onerror="this.parentNode.innerHTML='<img src=\'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png\'/>'"/></div>`
+    : `<div class="artist-pfp"><img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"/></div>`;
+  hero.innerHTML = `${pfpHtml}<div>
     <div style="font-size:10px;font-family:'Space Mono',monospace;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">Artist</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:4px;line-height:1;">${artistName}</div>
-    <div style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;margin-top:6px;">${primaryAlbums.length} release${primaryAlbums.length!==1?'s':''}${featuredOnAlbums.length?` · Featured on ${featuredOnAlbums.length} more`:''}</div>
-    ${profile.bio?`<div style="font-size:12px;color:var(--muted);margin-top:6px;max-width:460px;line-height:1.5;">${profile.bio}</div>`:''}
-    <div style="display:flex;gap:10px;margin-top:16px;align-items:center;">
-      <button class="btn-play-all" onclick="playArtist('${artistName.replace(/'/g,"\\'")}')"><i class="fas fa-play"></i></button>
-      <button class="btn-follow ${following?'following':''}" id="btnFollowArtist" onclick="toggleFollowArtist('${artistName.replace(/'/g,"\\'")}')">${following?'Following':'Follow'}</button>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:2px;">${artistName}</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:4px;">${primaryAlbums.length} release${primaryAlbums.length !== 1 ? 's' : ''}${featuredOnAlbums.length ? ` · Featured on ${featuredOnAlbums.length} more` : ''}</div>
+    ${profile.bio ? `<div style="font-size:12px;color:var(--muted);margin-top:6px;max-width:460px;line-height:1.5;">${profile.bio}</div>` : ''}
+    <div style="display:flex;gap:10px;margin-top:14px;align-items:center;">
+      <button class="btn-play-all" onclick="playArtist('${artistName.replace(/'/g, "\\'")}')"><i class="fas fa-play"></i></button>
+      <button class="btn-follow ${following ? 'following' : ''}" id="btnFollowArtist" onclick="toggleFollowArtist('${artistName.replace(/'/g, "\\'")}')">${following ? 'Following' : 'Follow'}</button>
     </div>
   </div>`;
-  const aa=document.getElementById('artistAlbums');aa.innerHTML='';aa.style.cssText='padding:0 24px 24px;';
-  if(primaryAlbums.length){
-    const sec=document.createElement('div');
-    sec.innerHTML=`<div class="section-title"><div class="section-title-left">Discography</div></div><div class="album-grid" id="artistPrimaryGrid"></div>`;
+
+  const aa = document.getElementById('artistAlbums');
+  aa.innerHTML = '';
+  aa.style.cssText = 'padding:0 24px 24px;';
+
+  if (primaryAlbums.length) {
+    const sec = document.createElement('div');
+    sec.innerHTML = `<div class="section-title">Discography</div><div class="album-grid" id="artistPrimaryGrid" style="padding:0 0 20px;"></div>`;
     aa.appendChild(sec);
-    const grid=document.getElementById('artistPrimaryGrid');
-    primaryAlbums.forEach(album=>{
-      const card=document.createElement('div');card.className='album-card';
-      card.innerHTML=`<img class="album-card-art" src="${album.cover}" alt="${album.title}" onerror="this.style.background='#222'"/><div class="album-card-title">${album.title}</div><div class="album-card-sub">${album.year}</div>`;
-      card.addEventListener('click',()=>openAlbum(album.id));
-      grid.appendChild(card);
-    });
+    primaryAlbums.forEach(album => document.getElementById('artistPrimaryGrid').appendChild(makeAlbumCard(album)));
   }
-  if(featuredOnAlbums.length){
-    const sec=document.createElement('div');
-    sec.innerHTML=`<div class="section-title"><div class="section-title-left">Featured On</div></div><div class="album-grid" id="artistFeatGrid"></div>`;
+
+  if (featuredOnAlbums.length) {
+    const sec = document.createElement('div');
+    sec.innerHTML = `<div class="section-title">Featured On</div><div class="album-grid" id="artistFeatGrid" style="padding:0 0 20px;"></div>`;
     aa.appendChild(sec);
-    const grid=document.getElementById('artistFeatGrid');
-    featuredOnAlbums.forEach(album=>{
-      const card=document.createElement('div');card.className='album-card';
-      card.innerHTML=`<img class="album-card-art" src="${album.cover}" onerror="this.style.background='#222'"/><div class="album-card-title">${album.title}</div><div class="album-card-sub">${album.artist} · ${album.year}</div>`;
-      card.addEventListener('click',()=>openAlbum(album.id));
-      grid.appendChild(card);
-    });
+    featuredOnAlbums.forEach(album => document.getElementById('artistFeatGrid').appendChild(makeAlbumCard(album)));
   }
+
   showView('artist');
-  if(push)pushNav(()=>openArtist(artistName,false));
+  if (push) pushNav(() => openArtist(artistName, false));
 }
 
-function playArtist(artistName){
-  const albums=ALBUMS.filter(a=>a.artist===artistName||a.primaryArtist===artistName);
-  if(!albums.length)return;
-  let all=[];albums.forEach(a=>all=all.concat(buildFlat(a)));
-  flatList=all;loadTrack(0);
+function playArtist(artistName) {
+  const albums = ALBUMS.filter(a => a.artist === artistName || a.primaryArtist === artistName);
+  if (!albums.length) return;
+  let all = [];
+  albums.forEach(a => all = all.concat(buildFlat(a)));
+  flatList = all;
+  loadTrack(0);
+  playTrack();
 }
 
 // ══════════════════════════════════════════════════════
 //  SEARCH
 // ══════════════════════════════════════════════════════
-let searchTimer=null;
-document.getElementById('globalSearch').addEventListener('input',function(){
-  clearTimeout(searchTimer);const q=this.value.trim();
-  if(!q){showView('discover');return;}
+let searchTimer = null;
+document.getElementById('globalSearch').addEventListener('input', function () {
+  clearTimeout(searchTimer);
+  const q = this.value.trim();
+  if (!q) { showView('home'); return; }
   showView('search');
-  searchTimer=setTimeout(()=>doSearch(q),200);
+  searchTimer = setTimeout(() => doSearch(q), 200);
 });
 
-function doSearch(q){
-  const lq=q.toLowerCase();
-  const res=document.getElementById('searchResults');res.innerHTML='';
-  const albumMatches=ALBUMS.filter(a=>a.title.toLowerCase().includes(lq)||a.artist.toLowerCase().includes(lq)||(a.tags&&a.tags.some(t=>t.toLowerCase().includes(lq))));
-  const trackMatches=[];
-  ALBUMS.forEach(album=>{
-    album.tracks.forEach((t,origIdx)=>{
-      if((!t.file||t.file==='#'))return;
-      if(t.name.toLowerCase().includes(lq)||album.artist.toLowerCase().includes(lq)||album.title.toLowerCase().includes(lq)){
-        trackMatches.push({track:t,album,origIdx});
+function doSearch(q) {
+  const lq = q.toLowerCase();
+  const res = document.getElementById('searchResults');
+  res.innerHTML = '';
+  const albumMatches = ALBUMS.filter(a => a.title.toLowerCase().includes(lq) || a.artist.toLowerCase().includes(lq) || (a.tags && a.tags.some(t => t.toLowerCase().includes(lq))));
+  const trackMatches = [];
+  ALBUMS.forEach(album => {
+    album.tracks.forEach((t, origIdx) => {
+      if (!t.file || t.file === '#') return;
+      if (t.name.toLowerCase().includes(lq) || album.artist.toLowerCase().includes(lq) || album.title.toLowerCase().includes(lq)) {
+        trackMatches.push({ track: t, album, origIdx });
       }
     });
   });
-  const artistSet=new Set();
-  ALBUMS.forEach(a=>{[a.artist,a.primaryArtist,...(a.featuredArtists||[])].forEach(n=>{if(n&&n.toLowerCase().includes(lq))artistSet.add(n);});});
-  const accounts=getAccounts();
-  const userMatches=Object.values(accounts).filter(u=>{
-    if(isInactive(u))return false;
-    const uid=u.id.toLowerCase(),uname=(u.username||'').toLowerCase();
-    return uid.includes(lq)||uname.includes(lq);
-  });
-  if(!albumMatches.length&&!trackMatches.length&&!artistSet.size&&!userMatches.length){res.innerHTML='<div class="empty-state"><i class="fas fa-search"></i>No results found</div>';return;}
-  if(userMatches.length){
-    const sec=document.createElement('div');sec.className='results-section';sec.innerHTML='<h3>Users</h3>';
-    userMatches.slice(0,5).forEach(u=>{
-      const card=document.createElement('div');card.className='user-card';
-      card.innerHTML=`<div class="user-card-pfp">${u.pfp?`<img src="${u.pfp}" alt=""/>`:'👤'}</div><div><div class="user-card-name">${u.displayName||u.username}</div><div class="user-card-sub">@${u.username} · ${u.id}</div></div>`;
-      card.addEventListener('click',()=>openUserProfile(u.id));
-      sec.appendChild(card);
-    });
-    res.appendChild(sec);
+  const artistSet = new Set();
+  ALBUMS.forEach(a => { [a.artist, a.primaryArtist, ...(a.featuredArtists || [])].forEach(n => { if (n && n.toLowerCase().includes(lq)) artistSet.add(n); }); });
+  const accounts = getAccounts();
+  const userMatches = Object.values(accounts).filter(u => { if (isInactive(u)) return false; const uid = u.id.toLowerCase(), uname = (u.username || '').toLowerCase(); return uid.includes(lq) || uname.includes(lq); });
+  if (!albumMatches.length && !trackMatches.length && !artistSet.size && !userMatches.length) { res.innerHTML = '<div class="empty-state"><i class="fas fa-search"></i>No results found</div>'; return; }
+  if (userMatches.length) {
+    const sec = document.createElement('div'); sec.className = 'results-section'; sec.innerHTML = '<h3>Users</h3>';
+    userMatches.slice(0, 5).forEach(u => {
+      const card = document.createElement('div'); card.className = 'user-card';
+      card.innerHTML = `<div class="user-card-pfp">${u.pfp ? `<img src="${u.pfp}" alt=""/>` : '<img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"/>'}</div><div><div class="user-card-name">${u.displayName || u.username}</div><div class="user-card-sub">@${u.username} · ${u.id}</div></div>`;
+      card.addEventListener('click', () => openUserProfile(u.id)); sec.appendChild(card);
+    }); res.appendChild(sec);
   }
-  if(artistSet.size){
-    const sec=document.createElement('div');sec.className='results-section';sec.innerHTML='<h3>Artists</h3>';
-    const artistGrid=document.createElement('div');artistGrid.style.cssText='display:grid;grid-template-columns:repeat(3,1fr);gap:8px;';
-    [...artistSet].slice(0,9).forEach(artist=>{
-      const profile=getArtistProfile(artist);
-      const card=document.createElement('div');
-      card.style.cssText='display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;transition:background .15s;';
-      card.onmouseover=()=>card.style.background='var(--surface2)';card.onmouseout=()=>card.style.background='transparent';
-      const pfpHtml=profile.pfp?`<img src="${profile.pfp}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;">`:`<div style="width:44px;height:44px;border-radius:50%;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🎤</div>`;
-      card.innerHTML=`${pfpHtml}<div><div style="font-size:13px;font-weight:500;">${artist}</div><div style="font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;margin-top:2px;">Artist</div></div>`;
-      card.addEventListener('click',()=>openArtist(artist));
-      artistGrid.appendChild(card);
-    });
-    sec.appendChild(artistGrid);res.appendChild(sec);
+  if (artistSet.size) {
+    const sec = document.createElement('div'); sec.className = 'results-section'; sec.innerHTML = '<h3>Artists</h3>';
+    const artistGrid = document.createElement('div'); artistGrid.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:8px;';
+    [...artistSet].slice(0, 9).forEach(artist => {
+      const profile = getArtistProfile(artist);
+      const card = document.createElement('div');
+      card.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;transition:background .15s;';
+      card.onmouseover = () => card.style.background = 'var(--surface2)';
+      card.onmouseout = () => card.style.background = 'transparent';
+      const pfpHtml = profile.pfp
+        ? `<img src="${profile.pfp}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`
+        : `<div style="width:44px;height:44px;border-radius:50%;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;"><img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png" style="width:100%;height:100%;border-radius:50%;"/></div>`;
+      card.innerHTML = `${pfpHtml}<div><div style="font-size:13px;font-weight:500;">${artist}</div><div style="font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;margin-top:2px;">Artist</div></div>`;
+      card.addEventListener('click', () => openArtist(artist)); artistGrid.appendChild(card);
+    }); sec.appendChild(artistGrid); res.appendChild(sec);
   }
-  if(albumMatches.length){
-    const sec=document.createElement('div');sec.className='results-section';sec.innerHTML='<h3>Albums</h3>';
-    const grid=document.createElement('div');grid.className='album-grid';
-    albumMatches.slice(0,8).forEach(album=>{
-      const card=document.createElement('div');card.className='album-card';
-      card.innerHTML=`<img class="album-card-art" src="${album.cover}" onerror="this.style.background='#222'"/><div class="album-card-title">${album.title}</div><div class="album-card-sub">${album.artist} · ${album.year}</div>`;
-      card.addEventListener('click',()=>openAlbum(album.id));
-      grid.appendChild(card);
-    });
-    sec.appendChild(grid);res.appendChild(sec);
+  if (albumMatches.length) {
+    const sec = document.createElement('div'); sec.className = 'results-section'; sec.innerHTML = '<h3>Albums</h3>';
+    const grid = document.createElement('div'); grid.className = 'album-grid'; grid.style.padding = '0';
+    albumMatches.slice(0, 8).forEach(album => grid.appendChild(makeAlbumCard(album)));
+    sec.appendChild(grid); res.appendChild(sec);
   }
-  if(trackMatches.length){
-    const sec=document.createElement('div');sec.className='results-section';sec.innerHTML='<h3>Tracks</h3>';
-    trackMatches.slice(0,10).forEach(({track,album,origIdx})=>{
-      const row=document.createElement('div');row.className='result-track-row';
-      row.innerHTML=`<img class="result-track-art" src="${album.cover}" onerror="this.style.background='#222'"/><div><div class="result-track-name">${track.name}</div><div class="result-track-album">${album.artist} · ${album.title}</div></div>`;
-      row.addEventListener('click',()=>playAlbumFromTrack(album.id,origIdx));
-      sec.appendChild(row);
-    });
-    res.appendChild(sec);
+  if (trackMatches.length) {
+    const sec = document.createElement('div'); sec.className = 'results-section'; sec.innerHTML = '<h3>Tracks</h3>';
+    trackMatches.slice(0, 10).forEach(({ track, album, origIdx }) => {
+      const row = document.createElement('div'); row.className = 'result-track-row';
+      row.innerHTML = `<img class="result-track-art" src="${album.cover}" onerror="this.style.background='#222'"/><div class="result-track-info"><div class="result-track-name">${track.name}</div><div class="result-track-album">${album.artist} · ${album.title}</div></div>`;
+      row.addEventListener('click', () => playAlbumFromTrack(album.id, origIdx)); sec.appendChild(row);
+    }); res.appendChild(sec);
   }
 }
 
 // ══════════════════════════════════════════════════════
 //  SAVE ALBUM / FOLLOW ARTIST
 // ══════════════════════════════════════════════════════
-function toggleSaveAlbum(albumId){
-  const u=getCurrentUser();if(!u){openModal('modalAuth');return;}
-  const a=getAccounts();const acc=a[u.id];
-  if(!acc.savedAlbums)acc.savedAlbums=[];
-  const i=acc.savedAlbums.indexOf(albumId);
-  if(i===-1){
-    acc.savedAlbums.push(albumId);
-    showToast('Album saved to library');
-    // +1 save for all tracks in this album
-    recordAlbumSaveChange(albumId, 1);
-  } else {
-    acc.savedAlbums.splice(i,1);
-    showToast('Removed from library');
-    // -1 save for all tracks in this album
-    recordAlbumSaveChange(albumId, -1);
-  }
+function toggleSaveAlbum(albumId) {
+  const u = getCurrentUser(); if (!u) { openModal('modalAuth'); return; }
+  const a = getAccounts(); const acc = a[u.id];
+  if (!acc.savedAlbums) acc.savedAlbums = [];
+  const i = acc.savedAlbums.indexOf(albumId);
+  if (i === -1) { acc.savedAlbums.push(albumId); showToast('Album saved to library'); }
+  else { acc.savedAlbums.splice(i, 1); showToast('Removed from library'); }
   saveAccounts(a);
-  const btn=document.getElementById('btnSaveAlbum');
-  if(btn){const saved2=acc.savedAlbums.includes(albumId);btn.textContent=saved2?'✓ Saved':'+ Save';btn.classList.toggle('saved',saved2);}
+  const btn = document.getElementById('btnSaveAlbum');
+  if (btn) { const saved2 = acc.savedAlbums.includes(albumId); btn.textContent = saved2 ? '✓ Saved' : '+ Save'; btn.classList.toggle('saved', saved2); }
   renderSidebarLibrary();
 }
 
-function toggleFollowArtist(artistName){
-  const u=getCurrentUser();if(!u){openModal('modalAuth');return;}
-  const a=getAccounts();const acc=a[u.id];
-  if(!acc.following)acc.following=[];
-  const i=acc.following.indexOf(artistName);
-  if(i===-1){acc.following.push(artistName);showToast('Following '+artistName);}
-  else{acc.following.splice(i,1);showToast('Unfollowed '+artistName);}
+function toggleFollowArtist(artistName) {
+  const u = getCurrentUser(); if (!u) { openModal('modalAuth'); return; }
+  const a = getAccounts(); const acc = a[u.id];
+  if (!acc.following) acc.following = [];
+  const i = acc.following.indexOf(artistName);
+  if (i === -1) { acc.following.push(artistName); showToast('Following ' + artistName); }
+  else { acc.following.splice(i, 1); showToast('Unfollowed ' + artistName); }
   saveAccounts(a);
-  const btn=document.getElementById('btnFollowArtist');
-  if(btn){const f2=acc.following.includes(artistName);btn.textContent=f2?'Following':'Follow';btn.classList.toggle('following',f2);}
+  const btn = document.getElementById('btnFollowArtist');
+  if (btn) { const f2 = acc.following.includes(artistName); btn.textContent = f2 ? 'Following' : 'Follow'; btn.classList.toggle('following', f2); }
 }
 
 // ══════════════════════════════════════════════════════
 //  PLAYLISTS
 // ══════════════════════════════════════════════════════
-function getUserPlaylists(){const u=getCurrentUser();if(!u)return[];return u.playlists||[];}
-
-function openCreatePlaylist(){const u=getCurrentUser();if(!u){openModal('modalAuth');return;}document.getElementById('newPlaylistName').value='';document.getElementById('newPlaylistDesc').value='';openModal('modalCreatePlaylist');}
-let pendingAddTrack=null;
-function openCreatePlaylistFromAdd(){closeModal('modalAddToPlaylist');document.getElementById('newPlaylistName').value='';document.getElementById('newPlaylistDesc').value='';openModal('modalCreatePlaylist');}
-
-function doCreatePlaylist(){
-  const name=document.getElementById('newPlaylistName').value.trim();
-  if(!name){showToast('Enter a playlist name');return;}
-  const u=getCurrentUser();if(!u)return;
-  const a=getAccounts();const acc=a[u.id];
-  if(!acc.playlists)acc.playlists=[];
-  const pid='pl_'+Date.now();
-  acc.playlists.push({id:pid,name,desc:document.getElementById('newPlaylistDesc').value.trim(),tracks:[]});
-  saveAccounts(a);closeModal('modalCreatePlaylist');showToast('Playlist created');
-  if(pendingAddTrack){doAddToPlaylist(pid,pendingAddTrack.albumId,pendingAddTrack.origIdx);pendingAddTrack=null;}
+function getUserPlaylists() { const u = getCurrentUser(); if (!u) return []; return u.playlists || []; }
+function openCreatePlaylist() { const u = getCurrentUser(); if (!u) { openModal('modalAuth'); return; } document.getElementById('newPlaylistName').value = ''; document.getElementById('newPlaylistDesc').value = ''; openModal('modalCreatePlaylist'); }
+let pendingAddTrack = null;
+function openCreatePlaylistFromAdd() { closeModal('modalAddToPlaylist'); document.getElementById('newPlaylistName').value = ''; document.getElementById('newPlaylistDesc').value = ''; openModal('modalCreatePlaylist'); }
+function doCreatePlaylist() {
+  const name = document.getElementById('newPlaylistName').value.trim();
+  if (!name) { showToast('Enter a playlist name'); return; }
+  const u = getCurrentUser(); if (!u) return;
+  const a = getAccounts(); const acc = a[u.id];
+  if (!acc.playlists) acc.playlists = [];
+  const pid = 'pl_' + Date.now();
+  acc.playlists.push({ id: pid, name, desc: document.getElementById('newPlaylistDesc').value.trim(), tracks: [] });
+  saveAccounts(a); closeModal('modalCreatePlaylist'); showToast('Playlist created');
+  if (pendingAddTrack) { doAddToPlaylist(pid, pendingAddTrack.albumId, pendingAddTrack.origIdx); pendingAddTrack = null; }
   renderSidebarLibrary();
 }
-
-function openTrackCtx(e,albumId,origIdx){
+function openTrackCtx(e, albumId, origIdx) {
   e.stopPropagation();
-  const album=ALBUMS.find(a=>a.id===albumId);
-  const track=album?.tracks[origIdx];
-  if(!track)return;
-  showCtxMenu(e.clientX,e.clientY,[
-    {icon:'fa-plus',label:'Add to Playlist',action:()=>openAddToPlaylist(albumId,origIdx)},
-    {icon:'fa-download',label:'Download Track',action:()=>downloadTrack(albumId,origIdx)},
-    {icon:'fa-compact-disc',label:'Go to Album',action:()=>openAlbum(albumId)},
-    {icon:'fa-user',label:'Go to Artist',action:()=>openArtist(album.primaryArtist||album.artist)},
-    track.url?{icon:'fa-spotify',label:'Open on Spotify',action:()=>window.open(track.url,'_blank')}:null
+  const album = ALBUMS.find(a => a.id === albumId); const track = album?.tracks[origIdx]; if (!track) return;
+  showCtxMenu(e.clientX, e.clientY, [
+    { icon: 'fa-plus', label: 'Add to Playlist', action: () => openAddToPlaylist(albumId, origIdx) },
+    { icon: 'fa-compact-disc', label: 'Go to Album', action: () => openAlbum(albumId) },
+    { icon: 'fa-user', label: 'Go to Artist', action: () => openArtist(album.primaryArtist || album.artist) },
+    track.url ? { icon: 'fa-spotify', label: 'Open on Spotify', action: () => window.open(track.url, '_blank') } : null
   ].filter(Boolean));
 }
-
-function openAddToPlaylist(albumId,origIdx){
-  const u=getCurrentUser();if(!u){openModal('modalAuth');return;}
-  const album=ALBUMS.find(a=>a.id===albumId);
-  const track=album?.tracks[origIdx];if(!track)return;
-  pendingAddTrack={albumId,origIdx};
-  document.getElementById('addToPlaylistTrackName').textContent='"'+track.name+'"';
-  const list=document.getElementById('addToPlaylistList');list.innerHTML='';
-  const playlists=getUserPlaylists();
-  if(!playlists.length){list.innerHTML='<div style="color:var(--muted);font-family:\'Space Mono\',monospace;font-size:12px;padding:10px 0;">No playlists yet</div>';openModal('modalAddToPlaylist');return;}
-  playlists.forEach(pl=>{
-    const already=pl.tracks.some(t=>t.albumId===albumId&&t.origIdx===origIdx);
-    const row=document.createElement('div');row.className='saved-item';row.style.cursor='pointer';
-    row.innerHTML=`<div class="saved-item-art playlist-icon" style="font-size:18px;">♪</div><div class="saved-item-info"><div class="saved-item-name">${pl.name}</div><div class="saved-item-sub">${pl.tracks.length} tracks${already?' · Already added':''}</div></div>`;
-    if(!already)row.addEventListener('click',()=>{doAddToPlaylist(pl.id,albumId,origIdx);closeModal('modalAddToPlaylist');});
-    else row.style.opacity='0.5';
+function openAddToPlaylist(albumId, origIdx) {
+  const u = getCurrentUser(); if (!u) { openModal('modalAuth'); return; }
+  const album = ALBUMS.find(a => a.id === albumId); const track = album?.tracks[origIdx]; if (!track) return;
+  pendingAddTrack = { albumId, origIdx };
+  document.getElementById('addToPlaylistTrackName').textContent = '"' + track.name + '"';
+  const list = document.getElementById('addToPlaylistList'); list.innerHTML = '';
+  const playlists = getUserPlaylists();
+  if (!playlists.length) { list.innerHTML = '<div style="color:var(--muted);font-family:\'Space Mono\',monospace;font-size:12px;padding:10px 0;">No playlists yet</div>'; openModal('modalAddToPlaylist'); return; }
+  playlists.forEach(pl => {
+    const already = pl.tracks.some(t => t.albumId === albumId && t.origIdx === origIdx);
+    const row = document.createElement('div'); row.className = 'saved-item'; row.style.cursor = 'pointer';
+    row.innerHTML = `<div class="saved-item-art playlist-icon" style="font-size:18px;">♪</div><div class="saved-item-info"><div class="saved-item-name">${pl.name}</div><div class="saved-item-sub">${pl.tracks.length} tracks${already ? ' · Already added' : ''}</div></div>`;
+    if (!already) row.addEventListener('click', () => { doAddToPlaylist(pl.id, albumId, origIdx); closeModal('modalAddToPlaylist'); });
+    else row.style.opacity = '0.5';
     list.appendChild(row);
-  });
-  openModal('modalAddToPlaylist');
+  }); openModal('modalAddToPlaylist');
 }
-
-function doAddToPlaylist(playlistId,albumId,origIdx){
-  const u=getCurrentUser();if(!u)return;
-  const album=ALBUMS.find(a=>a.id===albumId);const track=album?.tracks[origIdx];if(!track)return;
-  const a=getAccounts();const acc=a[u.id];
-  const pl=acc.playlists.find(p=>p.id===playlistId);if(!pl)return;
-  pl.tracks.push({albumId,origIdx,name:track.name,cover:album.cover,artist:album.artist,albumTitle:album.title});
-  saveAccounts(a);showToast(`Added to "${pl.name}"`);
-  // +1 save for this track
-  recordTrackSaveChange(albumId, origIdx, 1);
-  renderSidebarLibrary();
+function doAddToPlaylist(playlistId, albumId, origIdx) {
+  const u = getCurrentUser(); if (!u) return;
+  const album = ALBUMS.find(a => a.id === albumId); const track = album?.tracks[origIdx]; if (!track) return;
+  const a = getAccounts(); const acc = a[u.id];
+  const pl = acc.playlists.find(p => p.id === playlistId); if (!pl) return;
+  pl.tracks.push({ albumId, origIdx, name: track.name, cover: album.cover, artist: album.artist, albumTitle: album.title });
+  saveAccounts(a); showToast(`Added to "${pl.name}"`); renderSidebarLibrary();
 }
-
-function openPlaylistView(playlistId,push=true){
-  const u=getCurrentUser();if(!u)return;
-  const pl=(u.playlists||[]).find(p=>p.id===playlistId);if(!pl)return;
-  currentPlaylistId=playlistId;
+function openPlaylistView(playlistId, push = true) {
+  const u = getCurrentUser(); if (!u) return;
+  const pl = (u.playlists || []).find(p => p.id === playlistId); if (!pl) return;
+  currentPlaylistId = playlistId;
   renderPlaylistView(playlistId);
   showView('playlist');
-  if(push)pushNav(()=>openPlaylistView(playlistId,false));
+  if (push) pushNav(() => openPlaylistView(playlistId, false));
 }
-
-function renderPlaylistView(playlistId){
-  const u=getCurrentUser();if(!u)return;
-  const pl=(u.playlists||[]).find(p=>p.id===playlistId);if(!pl)return;
-  const hero=document.getElementById('playlistHero');
-  hero.innerHTML=`<div class="playlist-hero-icon">♪</div><div><div style="font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">Playlist</div><div class="playlist-hero-name">${pl.name}</div><div class="playlist-hero-owner">${u.displayName||u.username}</div><div class="playlist-hero-count">${pl.tracks.length} tracks</div>${pl.desc?`<div style="font-size:12px;color:var(--muted);margin-top:4px;">${pl.desc}</div>`:''}</div>`;
-  const actionRow=document.getElementById('playlistActionRow');
-  actionRow.innerHTML=`<button class="btn-play-all" onclick="playPlaylist('${playlistId}')"><i class="fas fa-play"></i></button><button class="btn-save" onclick="openAddTrackToPlaylistSearch('${playlistId}')">+ Add Songs</button>`;
-  const rows=document.getElementById('playlistTrackRows');rows.innerHTML='';
-  if(!pl.tracks.length){rows.innerHTML='<div class="empty-state" style="padding:20px 0;"><i class="fas fa-music"></i>No tracks yet — add some from any album</div>';return;}
-  pl.tracks.forEach((t,i)=>{
-    const row=document.createElement('div');row.className='playlist-track-row';
-    row.innerHTML=`<div style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;text-align:center;">${i+1}</div><img class="playlist-track-art" src="${t.cover}" onerror="this.style.background='#222'"/><div><div class="playlist-track-name">${t.name}</div><div class="playlist-track-album">${t.artist} · ${t.albumTitle}</div></div><div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;text-align:right;">—</div><button style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;" onclick="openPlaylistTrackCtx(event,'${playlistId}',${i})"><i class="fas fa-ellipsis-h"></i></button>`;
-    row.addEventListener('click',e=>{if(e.target.closest('button'))return;playPlaylistFromIndex(playlistId,i);});
+function renderPlaylistView(playlistId) {
+  const u = getCurrentUser(); if (!u) return;
+  const pl = (u.playlists || []).find(p => p.id === playlistId); if (!pl) return;
+  const hero = document.getElementById('playlistHero');
+  hero.innerHTML = `<div class="playlist-hero-icon">♪</div><div><div style="font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">Playlist</div><div class="playlist-hero-name">${pl.name}</div><div class="playlist-hero-owner">${u.displayName || u.username}</div><div class="playlist-hero-count">${pl.tracks.length} tracks</div>${pl.desc ? `<div style="font-size:12px;color:var(--muted);margin-top:4px;">${pl.desc}</div>` : ''}</div>`;
+  document.getElementById('playlistActionRow').innerHTML = `<button class="btn-play-all" onclick="playPlaylist('${playlistId}')"><i class="fas fa-play"></i></button><button class="btn-save" onclick="openAddTrackToPlaylistSearch('${playlistId}')">+ Add Songs</button>`;
+  const rows = document.getElementById('playlistTrackRows'); rows.innerHTML = '';
+  if (!pl.tracks.length) { rows.innerHTML = '<div class="empty-state" style="padding:20px 0;"><i class="fas fa-music"></i>No tracks yet — add some from any album</div>'; return; }
+  pl.tracks.forEach((t, i) => {
+    const row = document.createElement('div'); row.className = 'playlist-track-row';
+    row.innerHTML = `<div style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;text-align:center;">${i + 1}</div><img class="playlist-track-art" src="${t.cover}" onerror="this.style.background='#222'"/><div class="playlist-track-info"><div class="playlist-track-name">${t.name}</div><div class="playlist-track-album">${t.artist} · ${t.albumTitle}</div></div><div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;text-align:right;">—</div><button style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;" onclick="openPlaylistTrackCtx(event,'${playlistId}',${i})"><i class="fas fa-ellipsis-h"></i></button>`;
+    row.addEventListener('click', e => { if (e.target.closest('button')) return; playPlaylistFromIndex(playlistId, i); });
     rows.appendChild(row);
   });
 }
-
-function openPlaylistTrackCtx(e,playlistId,trackIndex2){
+function openPlaylistTrackCtx(e, playlistId, trackIndex2) {
   e.stopPropagation();
-  showCtxMenu(e.clientX,e.clientY,[
-    {icon:'fa-trash',label:'Remove from Playlist',action:()=>{removePlaylistTrack(playlistId,trackIndex2);},class:'danger'},
-    {icon:'fa-compact-disc',label:'Go to Album',action:()=>{
-      const u=getCurrentUser();const pl=(u.playlists||[]).find(p=>p.id===playlistId);
-      if(pl&&pl.tracks[trackIndex2])openAlbum(pl.tracks[trackIndex2].albumId);
-    }}
+  showCtxMenu(e.clientX, e.clientY, [
+    { icon: 'fa-trash', label: 'Remove from Playlist', action: () => { removePlaylistTrack(playlistId, trackIndex2); }, class: 'danger' },
+    { icon: 'fa-compact-disc', label: 'Go to Album', action: () => { const u = getCurrentUser(); const pl = (u.playlists || []).find(p => p.id === playlistId); if (pl && pl.tracks[trackIndex2]) openAlbum(pl.tracks[trackIndex2].albumId); } }
   ]);
 }
-
-function removePlaylistTrack(playlistId,index){
-  const u=getCurrentUser();if(!u)return;
-  const a=getAccounts();const pl=a[u.id].playlists.find(p=>p.id===playlistId);if(!pl)return;
-  const removed=pl.tracks[index];
-  pl.tracks.splice(index,1);
-  saveAccounts(a);
-  // -1 save for removed track
-  if(removed) recordTrackSaveChange(removed.albumId, removed.origIdx, -1);
-  renderPlaylistView(playlistId);showToast('Track removed');renderSidebarLibrary();
+function removePlaylistTrack(playlistId, index) {
+  const u = getCurrentUser(); if (!u) return;
+  const a = getAccounts(); const pl = a[u.id].playlists.find(p => p.id === playlistId); if (!pl) return;
+  pl.tracks.splice(index, 1); saveAccounts(a); renderPlaylistView(playlistId); showToast('Track removed'); renderSidebarLibrary();
 }
-
-function playPlaylist(playlistId){
-  const u=getCurrentUser();if(!u)return;
-  const pl=(u.playlists||[]).find(p=>p.id===playlistId);if(!pl||!pl.tracks.length)return;
-  flatList=pl.tracks.map(t=>{
-    const album=ALBUMS.find(a=>a.id===t.albumId);if(!album)return null;
-    const files=Array.isArray(album.tracks[t.origIdx]?.file)?album.tracks[t.origIdx].file:[album.tracks[t.origIdx]?.file];
-    return{name:t.name,src:files[0],albumId:t.albumId,albumTitle:t.albumTitle,cover:t.cover,artist:t.artist,origIdx:t.origIdx,pIdx:0,lastPIdx:0,isMulti:false,statId:album.tracks[t.origIdx]?.statId||null};
+function playPlaylist(playlistId) {
+  const u = getCurrentUser(); if (!u) return;
+  const pl = (u.playlists || []).find(p => p.id === playlistId); if (!pl || !pl.tracks.length) return;
+  flatList = pl.tracks.map(t => {
+    const album = ALBUMS.find(a => a.id === t.albumId); if (!album) return null;
+    const files = Array.isArray(album.tracks[t.origIdx]?.file) ? album.tracks[t.origIdx].file : [album.tracks[t.origIdx]?.file];
+    return { name: t.name, src: album.basePath + files[0], albumId: t.albumId, albumTitle: t.albumTitle, cover: t.cover, artist: t.artist, origIdx: t.origIdx, pIdx: 0, lastPIdx: 0, isMulti: false };
   }).filter(Boolean);
   loadTrack(0);
+  playTrack();
 }
-
-function playPlaylistFromIndex(playlistId,startIdx){
-  const u=getCurrentUser();if(!u)return;
-  const pl=(u.playlists||[]).find(p=>p.id===playlistId);if(!pl)return;
-  flatList=pl.tracks.map(t=>{
-    const album=ALBUMS.find(a=>a.id===t.albumId);if(!album)return null;
-    const files=Array.isArray(album.tracks[t.origIdx]?.file)?album.tracks[t.origIdx].file:[album.tracks[t.origIdx]?.file];
-    return{name:t.name,src:files[0],albumId:t.albumId,albumTitle:t.albumTitle,cover:t.cover,artist:t.artist,origIdx:t.origIdx,pIdx:0,lastPIdx:0,isMulti:false,statId:album.tracks[t.origIdx]?.statId||null};
+function playPlaylistFromIndex(playlistId, startIdx) {
+  const u = getCurrentUser(); if (!u) return;
+  const pl = (u.playlists || []).find(p => p.id === playlistId); if (!pl) return;
+  flatList = pl.tracks.map(t => {
+    const album = ALBUMS.find(a => a.id === t.albumId); if (!album) return null;
+    const files = Array.isArray(album.tracks[t.origIdx]?.file) ? album.tracks[t.origIdx].file : [album.tracks[t.origIdx]?.file];
+    return { name: t.name, src: album.basePath + files[0], albumId: t.albumId, albumTitle: t.albumTitle, cover: t.cover, artist: t.artist, origIdx: t.origIdx, pIdx: 0, lastPIdx: 0, isMulti: false };
   }).filter(Boolean);
   loadTrack(startIdx);
+  playTrack();
 }
 
 // ══════════════════════════════════════════════════════
 //  PLAYLIST EDITOR
 // ══════════════════════════════════════════════════════
-function openPlaylistEditor(playlistId){
-  const u=getCurrentUser();if(!u)return;
-  const pl=(u.playlists||[]).find(p=>p.id===playlistId);if(!pl)return;
-  document.getElementById('editorPlaylistName').textContent=pl.name+' · '+pl.tracks.length+' tracks';
+function openPlaylistEditor(playlistId) {
+  const u = getCurrentUser(); if (!u) return;
+  const pl = (u.playlists || []).find(p => p.id === playlistId); if (!pl) return;
+  document.getElementById('editorPlaylistName').textContent = pl.name + ' · ' + pl.tracks.length + ' tracks';
   renderEditorTracks(playlistId);
-  const artists=[...new Set(pl.tracks.map(t=>t.artist))];
-  document.getElementById('editorRemoveArtistBtn').onclick=()=>{
-    document.getElementById('removeGroupTitle').textContent='REMOVE ARTIST';
-    const list=document.getElementById('removeGroupList');list.innerHTML='';
-    artists.forEach(ar=>{
-      const cnt=pl.tracks.filter(t=>t.artist===ar).length;
-      const row=document.createElement('div');row.className='editor-track';
-      row.innerHTML=`<div style="flex:1;font-family:'Space Mono',monospace;font-size:12px;">${ar} <span style="color:var(--muted);">(${cnt} tracks)</span></div><button class="btn btn-danger" style="padding:5px 12px;font-size:11px;">Remove</button>`;
-      row.querySelector('button').addEventListener('click',()=>{removeArtistFromPlaylist(playlistId,ar);closeModal('modalRemoveGroup');});
+  const artists = [...new Set(pl.tracks.map(t => t.artist))];
+  document.getElementById('editorRemoveArtistBtn').onclick = () => {
+    document.getElementById('removeGroupTitle').textContent = 'REMOVE ARTIST';
+    const list = document.getElementById('removeGroupList'); list.innerHTML = '';
+    artists.forEach(ar => {
+      const cnt = pl.tracks.filter(t => t.artist === ar).length;
+      const row = document.createElement('div'); row.className = 'editor-track';
+      row.innerHTML = `<div style="flex:1;font-family:'Space Mono',monospace;font-size:12px;">${ar} <span style="color:var(--muted);">(${cnt} tracks)</span></div><button class="btn btn-danger" style="padding:5px 12px;font-size:11px;">Remove</button>`;
+      row.querySelector('button').addEventListener('click', () => { removeArtistFromPlaylist(playlistId, ar); closeModal('modalRemoveGroup'); });
       list.appendChild(row);
-    });
-    openModal('modalRemoveGroup');
+    }); openModal('modalRemoveGroup');
   };
-  const albumTitles=[...new Set(pl.tracks.map(t=>t.albumTitle))];
-  document.getElementById('editorRemoveAlbumBtn').onclick=()=>{
-    document.getElementById('removeGroupTitle').textContent='REMOVE ALBUM';
-    const list=document.getElementById('removeGroupList');list.innerHTML='';
-    albumTitles.forEach(at=>{
-      const cnt=pl.tracks.filter(t=>t.albumTitle===at).length;
-      const row=document.createElement('div');row.className='editor-track';
-      row.innerHTML=`<div style="flex:1;font-family:'Space Mono',monospace;font-size:12px;">${at} <span style="color:var(--muted);">(${cnt} tracks)</span></div><button class="btn btn-danger" style="padding:5px 12px;font-size:11px;">Remove</button>`;
-      row.querySelector('button').addEventListener('click',()=>{removeAlbumFromPlaylist(playlistId,at);closeModal('modalRemoveGroup');});
+  const albumTitles = [...new Set(pl.tracks.map(t => t.albumTitle))];
+  document.getElementById('editorRemoveAlbumBtn').onclick = () => {
+    document.getElementById('removeGroupTitle').textContent = 'REMOVE ALBUM';
+    const list = document.getElementById('removeGroupList'); list.innerHTML = '';
+    albumTitles.forEach(at => {
+      const cnt = pl.tracks.filter(t => t.albumTitle === at).length;
+      const row = document.createElement('div'); row.className = 'editor-track';
+      row.innerHTML = `<div style="flex:1;font-family:'Space Mono',monospace;font-size:12px;">${at} <span style="color:var(--muted);">(${cnt} tracks)</span></div><button class="btn btn-danger" style="padding:5px 12px;font-size:11px;">Remove</button>`;
+      row.querySelector('button').addEventListener('click', () => { removeAlbumFromPlaylist(playlistId, at); closeModal('modalRemoveGroup'); });
       list.appendChild(row);
-    });
-    openModal('modalRemoveGroup');
+    }); openModal('modalRemoveGroup');
   };
   openModal('modalPlaylistEditor');
 }
-
-function renderEditorTracks(playlistId){
-  const u=getCurrentUser();if(!u)return;
-  const pl=(u.playlists||[]).find(p=>p.id===playlistId);if(!pl)return;
-  const list=document.getElementById('editorTrackList');list.innerHTML='';
-  if(!pl.tracks.length){list.innerHTML='<div style="color:var(--muted);font-family:\'Space Mono\',monospace;font-size:12px;padding:10px;">No tracks</div>';return;}
-  pl.tracks.forEach((t,i)=>{
-    const row=document.createElement('div');row.className='editor-track';
-    row.innerHTML=`<img class="editor-track-art" src="${t.cover}" onerror="this.style.background='#222'"/><div class="editor-track-info"><div class="editor-track-name">${t.name}</div><div class="editor-track-album">${t.albumTitle}</div></div><button class="editor-remove" onclick="removePlaylistTrack('${playlistId}',${i});renderEditorTracks('${playlistId}');"><i class="fas fa-times"></i></button>`;
+function renderEditorTracks(playlistId) {
+  const u = getCurrentUser(); if (!u) return;
+  const pl = (u.playlists || []).find(p => p.id === playlistId); if (!pl) return;
+  const list = document.getElementById('editorTrackList'); list.innerHTML = '';
+  if (!pl.tracks.length) { list.innerHTML = '<div style="color:var(--muted);font-family:\'Space Mono\',monospace;font-size:12px;padding:10px;">No tracks</div>'; return; }
+  pl.tracks.forEach((t, i) => {
+    const row = document.createElement('div'); row.className = 'editor-track';
+    row.innerHTML = `<img class="editor-track-art" src="${t.cover}" onerror="this.style.background='#222'"/><div class="editor-track-info"><div class="editor-track-name">${t.name}</div><div class="editor-track-album">${t.albumTitle}</div></div><button class="editor-remove" onclick="removePlaylistTrack('${playlistId}',${i});renderEditorTracks('${playlistId}')"><i class="fas fa-times"></i></button>`;
     list.appendChild(row);
   });
 }
-
-function editorRemoveAll(){
-  const u=getCurrentUser();if(!u||!currentPlaylistId)return;
-  if(!confirm('Remove all tracks from this playlist?'))return;
-  const a=getAccounts();const pl=a[u.id].playlists.find(p=>p.id===currentPlaylistId);if(!pl)return;
-  // -1 save for all removed tracks
-  pl.tracks.forEach(t => recordTrackSaveChange(t.albumId, t.origIdx, -1));
-  pl.tracks=[];saveAccounts(a);renderEditorTracks(currentPlaylistId);document.getElementById('editorPlaylistName').textContent=pl.name+' · 0 tracks';showToast('Playlist cleared');
+function editorRemoveAll() {
+  const u = getCurrentUser(); if (!u || !currentPlaylistId) return;
+  if (!confirm('Remove all tracks from this playlist?')) return;
+  const a = getAccounts(); const pl = a[u.id].playlists.find(p => p.id === currentPlaylistId); if (!pl) return;
+  pl.tracks = []; saveAccounts(a); renderEditorTracks(currentPlaylistId); document.getElementById('editorPlaylistName').textContent = pl.name + ' · 0 tracks'; showToast('Playlist cleared');
 }
-
-function removeArtistFromPlaylist(playlistId,artistName){
-  const u=getCurrentUser();if(!u)return;
-  const a=getAccounts();const pl=a[u.id].playlists.find(p=>p.id===playlistId);if(!pl)return;
-  const before=pl.tracks.length;
-  pl.tracks.filter(t=>t.artist===artistName).forEach(t=>recordTrackSaveChange(t.albumId,t.origIdx,-1));
-  pl.tracks=pl.tracks.filter(t=>t.artist!==artistName);
-  saveAccounts(a);showToast(`Removed ${before-pl.tracks.length} tracks by ${artistName}`);renderEditorTracks(playlistId);renderPlaylistView(playlistId);
+function removeArtistFromPlaylist(playlistId, artistName) {
+  const u = getCurrentUser(); if (!u) return;
+  const a = getAccounts(); const pl = a[u.id].playlists.find(p => p.id === playlistId); if (!pl) return;
+  const before = pl.tracks.length; pl.tracks = pl.tracks.filter(t => t.artist !== artistName);
+  saveAccounts(a); showToast(`Removed ${before - pl.tracks.length} tracks by ${artistName}`); renderEditorTracks(playlistId); renderPlaylistView(playlistId);
 }
-
-function removeAlbumFromPlaylist(playlistId,albumTitle){
-  const u=getCurrentUser();if(!u)return;
-  const a=getAccounts();const pl=a[u.id].playlists.find(p=>p.id===playlistId);if(!pl)return;
-  const before=pl.tracks.length;
-  pl.tracks.filter(t=>t.albumTitle===albumTitle).forEach(t=>recordTrackSaveChange(t.albumId,t.origIdx,-1));
-  pl.tracks=pl.tracks.filter(t=>t.albumTitle!==albumTitle);
-  saveAccounts(a);showToast(`Removed ${before-pl.tracks.length} tracks from ${albumTitle}`);renderEditorTracks(playlistId);renderPlaylistView(playlistId);
+function removeAlbumFromPlaylist(playlistId, albumTitle) {
+  const u = getCurrentUser(); if (!u) return;
+  const a = getAccounts(); const pl = a[u.id].playlists.find(p => p.id === playlistId); if (!pl) return;
+  const before = pl.tracks.length; pl.tracks = pl.tracks.filter(t => t.albumTitle !== albumTitle);
+  saveAccounts(a); showToast(`Removed ${before - pl.tracks.length} tracks from ${albumTitle}`); renderEditorTracks(playlistId); renderPlaylistView(playlistId);
 }
 
 // ══════════════════════════════════════════════════════
 //  SIDEBAR LIBRARY
 // ══════════════════════════════════════════════════════
-function renderSidebarLibrary(){
-  const lib=document.getElementById('sidebarLibrary');lib.innerHTML='';
-  const u=getCurrentUser();
-  if(!u){lib.innerHTML='<div style="padding:12px 10px;font-family:\'Space Mono\',monospace;font-size:11px;color:var(--muted);">Sign in to save albums & create playlists</div>';return;}
-  (u.playlists||[]).forEach(pl=>{
-    const item=document.createElement('div');item.className='saved-item'+(currentPlaylistId===pl.id?' active':'');
-    item.innerHTML=`<div class="saved-item-art playlist-icon" style="background:linear-gradient(135deg,var(--surface3),var(--surface2));font-size:18px;border-radius:5px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;color:var(--accent2);">♪</div><div class="saved-item-info"><div class="saved-item-name">${pl.name}</div><div class="saved-item-sub">Playlist · ${pl.tracks.length}</div></div>`;
-    item.addEventListener('click',()=>openPlaylistView(pl.id));
-    lib.appendChild(item);
+function renderSidebarLibrary() {
+  const lib = document.getElementById('sidebarLibrary');
+  lib.innerHTML = '';
+  const u = getCurrentUser();
+  if (!u) { lib.innerHTML = '<div style="padding:12px 10px;font-family:\'Space Mono\',monospace;font-size:11px;color:var(--muted);">Sign in to save albums & create playlists</div>'; return; }
+  (u.playlists || []).forEach(pl => {
+    const item = document.createElement('div'); item.className = 'saved-item' + (currentPlaylistId === pl.id ? ' active' : '');
+    item.innerHTML = `<div class="saved-item-art playlist-icon" style="background:linear-gradient(135deg,var(--surface3),var(--surface2));font-size:18px;border-radius:5px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;color:var(--accent2);">♪</div><div class="saved-item-info"><div class="saved-item-name">${pl.name}</div><div class="saved-item-sub">Playlist · ${pl.tracks.length}</div></div>`;
+    item.addEventListener('click', () => openPlaylistView(pl.id)); lib.appendChild(item);
   });
-  (u.savedAlbums||[]).forEach(aid=>{
-    const album=ALBUMS.find(a=>a.id===aid);if(!album)return;
-    const item=document.createElement('div');item.className='saved-item'+(currentAlbumId===aid?' active':'');
-    item.innerHTML=`<img class="saved-item-art" src="${album.cover}" onerror="this.style.background='#222'"/><div class="saved-item-info"><div class="saved-item-name">${album.title}</div><div class="saved-item-sub">${album.artist}</div></div>`;
-    item.addEventListener('click',()=>openAlbum(aid));
-    lib.appendChild(item);
+  (u.savedAlbums || []).forEach(aid => {
+    const album = ALBUMS.find(a => a.id === aid); if (!album) return;
+    const item = document.createElement('div'); item.className = 'saved-item' + (currentAlbumId === aid ? ' active' : '');
+    item.innerHTML = `<img class="saved-item-art" src="${album.cover}" onerror="this.style.background='#222'"/><div class="saved-item-info"><div class="saved-item-name">${album.title}</div><div class="saved-item-sub">${album.artist}</div></div>`;
+    item.addEventListener('click', () => openAlbum(aid)); lib.appendChild(item);
   });
-  if(!u.playlists?.length&&!u.savedAlbums?.length){lib.innerHTML+='<div style="padding:8px 10px;font-family:\'Space Mono\',monospace;font-size:11px;color:var(--muted);">Save albums & create playlists to see them here</div>';}
+  if (!u.playlists?.length && !u.savedAlbums?.length) lib.innerHTML += '<div style="padding:8px 10px;font-family:\'Space Mono\',monospace;font-size:11px;color:var(--muted);">Save albums & create playlists to see them here</div>';
 }
 
 // ══════════════════════════════════════════════════════
 //  PROFILE
 // ══════════════════════════════════════════════════════
-function openOwnProfile(){const u=getCurrentUser();if(!u){openModal('modalAuth');return;}renderOwnProfile();showView('profile');pushNav(()=>{renderOwnProfile();showView('profile');});}
-
-function renderOwnProfile(){
-  const u=getCurrentUser();if(!u)return;
-  const content=document.getElementById('profileContent');
-  const stats=[
-    {num:(u.savedAlbums||[]).length,label:'SAVED'},
-    {num:(u.playlists||[]).length,label:'PLAYLISTS'},
-    {num:(u.following||[]).length,label:'FOLLOWING'}
-  ];
-  content.innerHTML=`
-    <div class="profile-hero">
-      <div class="profile-avatar" onclick="promptPfpChange()">
-        ${u.pfp?`<img src="${u.pfp}" alt=""/>`:'<span style="font-size:50px;">👤</span>'}
-        <div class="profile-avatar-edit"><i class="fas fa-camera"></i></div>
-      </div>
-      <div>
-        <div class="profile-displayname">${u.displayName||u.username}</div>
-        <div class="profile-username">@${u.username}</div>
-        <div class="profile-id">${u.id}</div>
-        <div class="profile-stats">${stats.map(s=>`<div class="profile-stat"><div class="profile-stat-num">${s.num}</div><div class="profile-stat-label">${s.label}</div></div>`).join('')}</div>
-        <div class="profile-actions">
-          <button class="btn btn-secondary" onclick="openModal('modalEditProfile');loadEditProfile()"><i class="fas fa-edit"></i> Edit</button>
-          <button class="btn btn-secondary" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
-        </div>
-      </div>
-    </div>
-    <div class="profile-section"><h3>Playlists</h3><div id="profilePlaylists" style="display:flex;flex-wrap:wrap;gap:8px;"></div></div>
-    <div class="profile-section"><h3>Saved Albums</h3><div class="album-grid" id="profileAlbums" style="padding:0;"></div></div>`;
-  const ppEl=document.getElementById('profilePlaylists');
-  (u.playlists||[]).forEach(pl=>{
-    const card=document.createElement('div');card.className='playlist-card';
-    card.innerHTML=`<div class="playlist-card-icon">♪</div><div class="playlist-card-name">${pl.name}</div><div class="playlist-card-count">${pl.tracks.length} tracks</div>`;
-    card.addEventListener('click',()=>openPlaylistView(pl.id));
-    ppEl.appendChild(card);
-  });
-  if(!(u.playlists||[]).length)ppEl.innerHTML='<div style="font-family:\'Space Mono\',monospace;font-size:12px;color:var(--muted);">No playlists yet</div>';
-  const paEl=document.getElementById('profileAlbums');
-  (u.savedAlbums||[]).forEach(aid=>{
-    const album=ALBUMS.find(a=>a.id===aid);if(!album)return;
-    const card=document.createElement('div');card.className='album-card';
-    card.innerHTML=`<img class="album-card-art" src="${album.cover}" onerror="this.style.background='#222'"/><div class="album-card-title">${album.title}</div><div class="album-card-sub">${album.year}</div>`;
-    card.addEventListener('click',()=>openAlbum(aid));
-    paEl.appendChild(card);
-  });
-  if(!(u.savedAlbums||[]).length)paEl.innerHTML='<div style="font-family:\'Space Mono\',monospace;font-size:12px;color:var(--muted);">No saved albums yet</div>';
+function openOwnProfile() { const u = getCurrentUser(); if (!u) { openModal('modalAuth'); return; } renderOwnProfile(); showView('profile'); pushNav(() => { renderOwnProfile(); showView('profile'); }); }
+function renderOwnProfile() {
+  const u = getCurrentUser(); if (!u) return;
+  const content = document.getElementById('profileContent');
+  const stats = [{ num: (u.savedAlbums || []).length, label: 'SAVED' }, { num: (u.playlists || []).length, label: 'PLAYLISTS' }, { num: (u.following || []).length, label: 'FOLLOWING' }];
+  content.innerHTML = `<div class="profile-hero"><div class="profile-avatar" onclick="promptPfpChange()">${u.pfp ? `<img src="${u.pfp}" alt=""/>` : '<span style="font-size:50px;"><img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"/></span>'}<div class="profile-avatar-edit"><i class="fas fa-camera"></i></div></div><div><div class="profile-displayname">${u.displayName || u.username}</div><div class="profile-username">@${u.username}</div><div class="profile-id">${u.id}</div><div class="profile-stats">${stats.map(s => `<div class="profile-stat"><div class="profile-stat-num">${s.num}</div><div class="profile-stat-label">${s.label}</div></div>`).join('')}</div><div class="profile-actions"><button class="btn btn-secondary" onclick="openModal('modalEditProfile');loadEditProfile()"><i class="fas fa-edit"></i> Edit</button><button class="btn btn-secondary" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Sign Out</button></div></div></div><div class="profile-section"><h3>Playlists</h3><div id="profilePlaylists" style="display:flex;flex-wrap:wrap;gap:8px;"></div></div><div class="profile-section"><h3>Saved Albums</h3><div class="album-grid" id="profileAlbums" style="padding:0;"></div></div>`;
+  const ppEl = document.getElementById('profilePlaylists');
+  (u.playlists || []).forEach(pl => { const card = document.createElement('div'); card.className = 'playlist-card'; card.innerHTML = `<div class="playlist-card-icon">♪</div><div class="playlist-card-name">${pl.name}</div><div class="playlist-card-count">${pl.tracks.length} tracks</div>`; card.addEventListener('click', () => openPlaylistView(pl.id)); ppEl.appendChild(card); });
+  if (!(u.playlists || []).length) ppEl.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:12px;color:var(--muted);">No playlists yet</div>';
+  const paEl = document.getElementById('profileAlbums');
+  (u.savedAlbums || []).forEach(aid => { const album = ALBUMS.find(a => a.id === aid); if (!album) return; paEl.appendChild(makeAlbumCard(album)); });
+  if (!(u.savedAlbums || []).length) paEl.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:12px;color:var(--muted);">No saved albums yet</div>';
 }
-
-function openUserProfile(userId){
-  const accounts=getAccounts();const u=accounts[userId];if(!u)return;
-  if(isInactive(u)){showToast('This account is inactive');return;}
-  const me=getCurrentUser();const isMe=me&&me.id===userId;if(isMe){openOwnProfile();return;}
-  const content=document.getElementById('userContent');
-  content.innerHTML=`
-    <div class="profile-hero">
-      <div class="profile-avatar" style="cursor:default;">${u.pfp?`<img src="${u.pfp}" alt=""/>`:'<span style="font-size:50px;">👤</span>'}</div>
-      <div>
-        <div class="profile-displayname">${u.displayName||u.username}</div>
-        <div class="profile-username">@${u.username}</div>
-        <div class="profile-id">${u.id}</div>
-        <div class="profile-stats">
-          <div class="profile-stat"><div class="profile-stat-num">${(u.savedAlbums||[]).length}</div><div class="profile-stat-label">SAVED</div></div>
-          <div class="profile-stat"><div class="profile-stat-num">${(u.playlists||[]).length}</div><div class="profile-stat-label">PLAYLISTS</div></div>
-        </div>
-      </div>
-    </div>
-    <div class="profile-section"><h3>Playlists</h3><div id="userPlaylists" style="display:flex;flex-wrap:wrap;gap:8px;"></div></div>`;
-  const ppEl=document.getElementById('userPlaylists');
-  (u.playlists||[]).forEach(pl=>{
-    const card=document.createElement('div');card.className='playlist-card';
-    card.innerHTML=`<div class="playlist-card-icon">♪</div><div class="playlist-card-name">${pl.name}</div><div class="playlist-card-count">${pl.tracks.length} tracks</div>`;
-    ppEl.appendChild(card);
-  });
-  if(!(u.playlists||[]).length)ppEl.innerHTML='<div style="font-family:\'Space Mono\',monospace;font-size:12px;color:var(--muted);">No public playlists</div>';
-  showView('user');pushNav(()=>openUserProfile(userId));
+function openUserProfile(userId) {
+  const accounts = getAccounts(); const u = accounts[userId]; if (!u) return;
+  if (isInactive(u)) { showToast('This account is inactive'); return; }
+  const me = getCurrentUser(); const isMe = me && me.id === userId; if (isMe) { openOwnProfile(); return; }
+  const content = document.getElementById('userContent');
+  content.innerHTML = `<div class="profile-hero"><div class="profile-avatar" style="cursor:default;">${u.pfp ? `<img src="${u.pfp}" alt=""/>` : '<span style="font-size:50px;"><img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"/></span>'}</div><div><div class="profile-displayname">${u.displayName || u.username}</div><div class="profile-username">@${u.username}</div><div class="profile-id">${u.id}</div><div class="profile-stats"><div class="profile-stat"><div class="profile-stat-num">${(u.savedAlbums || []).length}</div><div class="profile-stat-label">SAVED</div></div><div class="profile-stat"><div class="profile-stat-num">${(u.playlists || []).length}</div><div class="profile-stat-label">PLAYLISTS</div></div></div></div></div><div class="profile-section"><h3>Playlists</h3><div id="userPlaylists" style="display:flex;flex-wrap:wrap;gap:8px;"></div></div>`;
+  const ppEl = document.getElementById('userPlaylists');
+  (u.playlists || []).forEach(pl => { const card = document.createElement('div'); card.className = 'playlist-card'; card.innerHTML = `<div class="playlist-card-icon">♪</div><div class="playlist-card-name">${pl.name}</div><div class="playlist-card-count">${pl.tracks.length} tracks</div>`; ppEl.appendChild(card); });
+  if (!(u.playlists || []).length) ppEl.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:12px;color:var(--muted);">No public playlists</div>';
+  showView('user'); pushNav(() => openUserProfile(userId));
 }
-
-function promptPfpChange(){
-  const url=prompt('Enter image URL for profile picture:','');
-  if(url===null)return;
-  const u=getCurrentUser();if(!u)return;
-  const a=getAccounts();a[u.id].pfp=url.trim();saveAccounts(a);renderOwnProfile();renderTopbarRight();showToast('Profile picture updated');
+function promptPfpChange() {
+  const url = prompt('Enter image URL for profile picture:', ''); if (url === null) return;
+  const u = getCurrentUser(); if (!u) return;
+  const a = getAccounts(); a[u.id].pfp = url.trim(); saveAccounts(a); renderOwnProfile(); renderTopbarRight(); showToast('Profile picture updated');
 }
-
-function loadEditProfile(){
-  const u=getCurrentUser();if(!u)return;
-  document.getElementById('editDisplayName').value=u.displayName||'';
-  document.getElementById('editPfpUrl').value=u.pfp||'';
-  document.getElementById('editOldPass').value='';document.getElementById('editNewPass').value='';
-  document.getElementById('editPassError').style.display='none';
+function loadEditProfile() {
+  const u = getCurrentUser(); if (!u) return;
+  document.getElementById('editDisplayName').value = u.displayName || '';
+  document.getElementById('editPfpUrl').value = u.pfp || '';
+  document.getElementById('editOldPass').value = '';
+  document.getElementById('editNewPass').value = '';
+  document.getElementById('editPassError').style.display = 'none';
 }
-
-function saveProfileEdit(){
-  const u=getCurrentUser();if(!u)return;
-  const a=getAccounts();const acc=a[u.id];
-  acc.displayName=document.getElementById('editDisplayName').value.trim()||acc.displayName;
-  const newPfp=document.getElementById('editPfpUrl').value.trim();
-  if(newPfp)acc.pfp=newPfp;
-  const oldP=document.getElementById('editOldPass').value;const newP=document.getElementById('editNewPass').value;
-  if(oldP||newP){
-    if(oldP!==acc.password){document.getElementById('editPassError').textContent='Current password incorrect';document.getElementById('editPassError').style.display='block';return;}
-    if(newP.length<6){document.getElementById('editPassError').textContent='New password too short';document.getElementById('editPassError').style.display='block';return;}
-    acc.password=newP;
+function saveProfileEdit() {
+  const u = getCurrentUser(); if (!u) return;
+  const a = getAccounts(); const acc = a[u.id];
+  acc.displayName = document.getElementById('editDisplayName').value.trim() || acc.displayName;
+  const newPfp = document.getElementById('editPfpUrl').value.trim(); if (newPfp) acc.pfp = newPfp;
+  const oldP = document.getElementById('editOldPass').value; const newP = document.getElementById('editNewPass').value;
+  if (oldP || newP) {
+    if (oldP !== acc.password) { document.getElementById('editPassError').textContent = 'Current password incorrect'; document.getElementById('editPassError').style.display = 'block'; return; }
+    if (newP.length < 6) { document.getElementById('editPassError').textContent = 'New password too short'; document.getElementById('editPassError').style.display = 'block'; return; }
+    acc.password = newP;
   }
-  saveAccounts(a);closeModal('modalEditProfile');renderOwnProfile();renderTopbarRight();showToast('Profile updated');
+  saveAccounts(a); closeModal('modalEditProfile'); renderOwnProfile(); renderTopbarRight(); showToast('Profile updated');
 }
 
 // ══════════════════════════════════════════════════════
 //  AUTH
 // ══════════════════════════════════════════════════════
-function switchAuthTab(tab){
-  document.querySelectorAll('#modalAuth .tab').forEach((t,i)=>t.classList.toggle('active',i===(tab==='login'?0:1)));
-  document.getElementById('authLogin').style.display=tab==='login'?'block':'none';
-  document.getElementById('authRegister').style.display=tab==='register'?'block':'none';
-  document.getElementById('authSuccess').style.display='none';
+function switchAuthTab(tab) {
+  document.querySelectorAll('#modalAuth .tab').forEach((t, i) => t.classList.toggle('active', i === (tab === 'login' ? 0 : 1)));
+  document.getElementById('authLogin').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('authRegister').style.display = tab === 'register' ? 'block' : 'none';
+  document.getElementById('authSuccess').style.display = 'none';
 }
-
-function doLogin(){
-  const raw=document.getElementById('loginUser').value.trim();
-  const pass=document.getElementById('loginPass').value;
-  const accounts=getAccounts();
-  const err=document.getElementById('loginError');err.style.display='none';
-  const match=Object.values(accounts).find(u=>(u.id.toLowerCase()===raw.toLowerCase()||u.username.toLowerCase()===raw.toLowerCase().replace('@',''))&&u.password===pass);
-  if(!match){err.style.display='block';return;}
-  if(isInactive(match)){err.textContent='Account inactive (>160 days). Contact support.';err.style.display='block';return;}
-  setSession(match.id);
-  const a=getAccounts();a[match.id].lastActive=Date.now();saveAccounts(a);
-  closeModal('modalAuth');renderTopbarRight();renderSidebarLibrary();showToast('Welcome back, '+(match.displayName||match.username)+'!');
+function doLogin() {
+  const raw = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  const accounts = getAccounts();
+  const err = document.getElementById('loginError'); err.style.display = 'none';
+  const match = Object.values(accounts).find(u => (u.id.toLowerCase() === raw.toLowerCase() || u.username.toLowerCase() === raw.toLowerCase().replace('@', '')) && u.password === pass);
+  if (!match) { err.style.display = 'block'; return; }
+  if (isInactive(match)) { err.textContent = 'Account inactive (>160 days).'; err.style.display = 'block'; return; }
+  setSession(match.id); const a = getAccounts(); a[match.id].lastActive = Date.now(); saveAccounts(a);
+  closeModal('modalAuth'); renderTopbarRight(); renderSidebarLibrary(); showToast('Welcome back, ' + (match.displayName || match.username) + '!');
 }
-
-function doRegister(){
-  const username=document.getElementById('regUser').value.trim().toLowerCase();
-  const display=document.getElementById('regDisplay').value.trim();
-  const pass=document.getElementById('regPass').value;
-  const fallback=document.getElementById('regFallback').value.trim();
-  const ue=document.getElementById('regUserError'),re=document.getElementById('regError');
-  ue.style.display='none';re.style.display='none';
-  if(!/^[a-z0-9_]{3,20}$/.test(username)){ue.textContent='3–20 chars, letters/numbers/underscores';ue.style.display='block';return;}
-  if(pass.length<6){re.textContent='Password must be at least 6 characters';re.style.display='block';return;}
-  if(!fallback){re.textContent='Recovery answer is required';re.style.display='block';return;}
-  const accounts=getAccounts();
-  if(Object.values(accounts).some(u=>u.username===username)){ue.textContent='Username taken';ue.style.display='block';return;}
-  let id;do{id=genId();}while(accounts[id]);
-  const now=Date.now();
-  accounts[id]={id,username,displayName:display||username,password:pass,fallback,pfp:'',playlists:[],savedAlbums:[],following:[],createdAt:now,lastActive:now};
-  saveAccounts(accounts);setSession(id);
-  document.getElementById('newIdBadge').textContent=id;
-  document.getElementById('authLogin').style.display='none';
-  document.getElementById('authRegister').style.display='none';
-  document.getElementById('authSuccess').style.display='block';
-  renderTopbarRight();renderSidebarLibrary();
+function doRegister() {
+  const username = document.getElementById('regUser').value.trim().toLowerCase();
+  const display = document.getElementById('regDisplay').value.trim();
+  const pass = document.getElementById('regPass').value;
+  const fallback = document.getElementById('regFallback').value.trim();
+  const ue = document.getElementById('regUserError'), re = document.getElementById('regError');
+  ue.style.display = 'none'; re.style.display = 'none';
+  if (!/^[a-z0-9_]{3,20}$/.test(username)) { ue.textContent = '3–20 chars, letters/numbers/underscores'; ue.style.display = 'block'; return; }
+  if (pass.length < 6) { re.textContent = 'Password must be at least 6 characters'; re.style.display = 'block'; return; }
+  if (!fallback) { re.textContent = 'Recovery answer is required'; re.style.display = 'block'; return; }
+  const accounts = getAccounts();
+  if (Object.values(accounts).some(u => u.username === username)) { ue.textContent = 'Username taken'; ue.style.display = 'block'; return; }
+  let id; do { id = genId(); } while (accounts[id]);
+  const now = Date.now();
+  accounts[id] = { id, username, displayName: display || username, password: pass, fallback, pfp: '', playlists: [], savedAlbums: [], following: [], createdAt: now, lastActive: now };
+  saveAccounts(accounts); setSession(id);
+  document.getElementById('newIdBadge').textContent = id;
+  document.getElementById('authLogin').style.display = 'none';
+  document.getElementById('authRegister').style.display = 'none';
+  document.getElementById('authSuccess').style.display = 'block';
+  renderTopbarRight(); renderSidebarLibrary();
 }
-
-function doLogout(){setSession(null);renderTopbarRight();renderSidebarLibrary();showView('discover');showToast('Signed out');}
+function doLogout() { setSession(null); renderTopbarRight(); renderSidebarLibrary(); showView('home'); showToast('Signed out'); }
 
 // ══════════════════════════════════════════════════════
 //  TOPBAR RIGHT
 // ══════════════════════════════════════════════════════
-function renderTopbarRight(){
-  const right=document.getElementById('topbarRight');
-  const u=getCurrentUser();
-  if(u){
-    right.innerHTML=`<button class="pfp-btn" id="pfpBtn" onclick="openOwnProfile()" title="${u.displayName||u.username}">${u.pfp?`<img src="${u.pfp}" alt=""/>`:'👤'}</button>`;
+function renderTopbarRight() {
+  const right = document.getElementById('topbarRight');
+  const u = getCurrentUser();
+  if (u) {
+    right.innerHTML = `<button class="pfp-btn" id="pfpBtn" onclick="openOwnProfile()" title="${u.displayName || u.username}">${u.pfp ? `<img src="${u.pfp}" alt=""/>` : '<img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"/>'}</button>`;
   } else {
-    right.innerHTML=`<button class="topbar-btn" onclick="switchAuthTab('login');openModal('modalAuth')">Sign In</button><button class="topbar-btn primary" onclick="switchAuthTab('register');openModal('modalAuth')">Create Account</button>`;
+    right.innerHTML = `<button class="topbar-btn" onclick="switchAuthTab('login');openModal('modalAuth')">Sign In</button><button class="topbar-btn primary" onclick="switchAuthTab('register');openModal('modalAuth')">Create Account</button>`;
   }
 }
 
 // ══════════════════════════════════════════════════════
 //  MODAL / TOAST / CTX MENU
 // ══════════════════════════════════════════════════════
-function openModal(id){document.getElementById(id).classList.add('open');}
-function closeModal(id){document.getElementById(id).classList.remove('open');}
-document.querySelectorAll('.modal-overlay').forEach(el=>{el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');});});
-
-function showToast(msg,dur=2200){
-  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),dur);
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(el => { el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); }); });
+function showToast(msg, dur = 2200) {
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
 }
-
-let ctxCleanup=null;
-function showCtxMenu(x,y,items){
-  const menu=document.getElementById('ctxMenu');menu.innerHTML='';
-  items.forEach(item=>{
-    if(!item)return;
-    const el=document.createElement('div');el.className='ctx-item'+(item.class?' '+item.class:'');
-    el.innerHTML=`<i class="fas ${item.icon}"></i>${item.label}`;
-    el.addEventListener('click',()=>{menu.classList.remove('open');item.action();});
-    menu.appendChild(el);
+let ctxCleanup = null;
+function showCtxMenu(x, y, items) {
+  const menu = document.getElementById('ctxMenu'); menu.innerHTML = '';
+  items.forEach(item => {
+    if (!item) return;
+    const el = document.createElement('div'); el.className = 'ctx-item' + (item.class ? ' ' + item.class : '');
+    el.innerHTML = `<i class="fas ${item.icon}"></i>${item.label}`;
+    el.addEventListener('click', () => { menu.classList.remove('open'); item.action(); }); menu.appendChild(el);
   });
-  const vw=window.innerWidth,vh=window.innerHeight;
-  let mx=x,my=y;
-  menu.style.visibility='hidden';menu.style.display='block';menu.classList.add('open');
-  const r=menu.getBoundingClientRect();menu.style.display='';
-  if(mx+r.width>vw)mx=vw-r.width-8;if(my+r.height>vh)my=vh-r.height-8;
-  menu.style.left=mx+'px';menu.style.top=my+'px';
-  if(ctxCleanup)ctxCleanup();
-  const close=e=>{if(!menu.contains(e.target)){menu.classList.remove('open');document.removeEventListener('click',close);}};
-  setTimeout(()=>document.addEventListener('click',close),10);ctxCleanup=close;
+  const vw = window.innerWidth, vh = window.innerHeight;
+  let mx = x, my = y;
+  menu.style.visibility = 'hidden'; menu.style.display = 'block'; menu.classList.add('open');
+  const r = menu.getBoundingClientRect(); menu.style.display = '';
+  if (mx + r.width > vw) mx = vw - r.width - 8; if (my + r.height > vh) my = vh - r.height - 8;
+  menu.style.left = mx + 'px'; menu.style.top = my + 'px';
+  if (ctxCleanup) ctxCleanup();
+  const close = e => { if (!menu.contains(e.target)) { menu.classList.remove('open'); document.removeEventListener('click', close); } };
+  setTimeout(() => document.addEventListener('click', close), 10); ctxCleanup = close;
 }
 
 // ══════════════════════════════════════════════════════
@@ -2591,10 +2182,8 @@ cleanInactive();
 renderDiscover();
 renderTopbarRight();
 renderSidebarLibrary();
-pushNav(()=>{showView('discover');});
-
-// Load stats after render (non-blocking)
-loadAndRenderStats().catch(e=>console.warn('Stats load error:',e));
+pushNav(() => { showView('home'); });
+loadAndRenderStats().catch(e => console.warn('Stats load error:', e));
 </script>
 </body>
 </html>
