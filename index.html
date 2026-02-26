@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>SoundScape Online.</title>
+<title>Sound Scape Online.</title>
 <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/bguhm/bguhm.github.io/main/images/favicons/soundscape/Untitled161_20260220092642.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"/>
 <style>
@@ -17,6 +17,7 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow:hidden;}
 .app{display:grid;grid-template-rows:1fr 88px;grid-template-columns:var(--sidebar-w) 1fr;grid-template-areas:"sidebar main" "player player";height:100vh;}
+.app.no-player{grid-template-rows:1fr 0px;}
 .sidebar{grid-area:sidebar;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
 .sidebar-logo-row{padding:18px 16px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
 .sidebar-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;flex:1;}
@@ -263,8 +264,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 .editor-track-album{font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;}
 .editor-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
 .editor-remove:hover{background:rgba(255,0,0,.15);color:var(--accent);}
+
 /* ── PLAYER BAR ── */
-.player-bar{grid-area:player;background:var(--surface);border-top:1px solid var(--border);display:grid;grid-template-columns:260px 1fr 260px;align-items:center;padding:0 20px;gap:10px;}
+.player-bar{grid-area:player;background:var(--surface);border-top:1px solid var(--border);display:grid;grid-template-columns:260px 1fr 260px;align-items:center;padding:0 20px;gap:10px;transition:all .3s;}
+.player-bar.hidden{opacity:0;pointer-events:none;height:0;overflow:hidden;}
 .now-info{display:flex;align-items:center;gap:10px;min-width:0;}
 .now-art{width:52px;height:52px;border-radius:6px;object-fit:cover;background:var(--surface2);flex-shrink:0;transition:opacity .3s;}
 .now-art.hidden{display:none;}
@@ -287,10 +290,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 .seek-wrap:hover .seek-fill{background:var(--accent2);}
 .seek-input{position:absolute;inset:-8px 0;width:100%;opacity:0;cursor:pointer;margin:0;}
 .right-ctrl{display:flex;align-items:center;gap:10px;justify-content:flex-end;}
+
 /* ── VISUALIZER ── */
 .wave-viz{display:flex;align-items:center;gap:2px;height:18px;opacity:0;transition:opacity .3s;}
 .wave-viz.visible{opacity:1;}
-.wave-viz .stroke{display:block;width:3px;height:100%;background:linear-gradient(to top,var(--accent),var(--accent2));border-radius:2px;transform:scaleY(.2);transform-origin:center;transition:transform 0.05s ease;}
+.wave-viz .stroke{display:block;width:3px;background:linear-gradient(to top,var(--accent),var(--accent2));border-radius:2px;transform-origin:center;transition:height 0.05s ease;}
+
 .vol-wrap{display:flex;align-items:center;gap:6px;}
 .vol-wrap i{color:var(--muted);font-size:12px;}
 .vol-slider{position:relative;width:80px;height:4px;background:var(--surface3);border-radius:2px;}
@@ -308,15 +313,27 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 .create-playlist-btn:hover{border-color:var(--accent2);color:var(--accent2);}
 .stats-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent2);margin-right:5px;animation:blink 2s infinite;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
-/* Full list view */
 .full-list-hero{padding:24px 24px 16px;background:linear-gradient(180deg,rgba(0,229,255,.07) 0%,transparent 100%);border-bottom:1px solid var(--border);}
 .full-list-hero h1{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3px;}
 .full-list-hero p{color:var(--muted);font-size:12px;font-family:'Space Mono',monospace;margin-top:4px;}
+
+/* Settings view */
+.settings-view{padding:24px;}
+.settings-section{margin-bottom:28px;}
+.settings-section h2{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin-bottom:14px;color:var(--accent2);}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);}
+.settings-label{font-family:'Space Mono',monospace;font-size:12px;color:var(--text);}
+.settings-sub{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);margin-top:3px;}
+.settings-control{display:flex;align-items:center;gap:8px;}
+.settings-slider-wrap{display:flex;align-items:center;gap:10px;}
+.settings-slider{-webkit-appearance:none;appearance:none;width:140px;height:4px;border-radius:2px;background:var(--surface3);outline:none;cursor:pointer;}
+.settings-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent2);cursor:pointer;}
+.settings-val{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--accent2);min-width:40px;text-align:right;}
 </style>
 </head>
 <body>
 
-<div class="app">
+<div class="app" id="app">
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
@@ -341,7 +358,6 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 
 <!-- MAIN -->
 <main class="main">
-  <!-- Topbar -->
   <div class="topbar">
     <button class="topbar-back" id="btnBack" onclick="navBack()"><i class="fas fa-chevron-left"></i></button>
     <button class="topbar-fwd" id="btnFwd" onclick="navFwd()"><i class="fas fa-chevron-right"></i></button>
@@ -366,7 +382,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   <div class="view" id="viewDiscover">
     <div class="discovery-hero">
       <h1>DISCOVERY</h1>
-      <p>Find the Best Music available! <br>adding more albums soon! recommend an album at <a href="https://example.com" style="color:var(--accent2);">Recommendations</a></p>
+      <p>Find the Best Music available! <br>adding more albums soon! recommend an album at<button class="see-all-btn" onclick="window.open('https://padlet.com/rhap5ody/recommendations-page-recommend-tracks-albums-and-leaks-qe5fbxdw17ngtwed', '_blank')" style="margin-left:8px;">Recommendations</button>
     </div>
     <div class="podium-section">
       <div class="podium-title"><i class="fas fa-trophy"></i>BEST</div>
@@ -471,10 +487,71 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
       <div id="playlistTrackRows"></div>
     </div>
   </div>
+
+  <!-- SETTINGS VIEW -->
+  <div class="view" id="viewSettings">
+    <div class="settings-view">
+      <div class="discovery-hero" style="padding:0 0 20px;">
+        <h1>SETTINGS</h1>
+        <p>Customize your player experience.</p>
+      </div>
+      <div class="settings-section">
+        <h2>Audio</h2>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Max Volume</div>
+            <div class="settings-sub">Set the maximum volume cap (100% = normal, 300% = boosted)</div>
+          </div>
+          <div class="settings-control settings-slider-wrap">
+            <input type="range" class="settings-slider" id="settingsMaxVol" min="100" max="300" step="10" value="300"/>
+            <div class="settings-val" id="settingsMaxVolVal">300%</div>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Default Volume</div>
+            <div class="settings-sub">Volume level when player starts</div>
+          </div>
+          <div class="settings-control settings-slider-wrap">
+            <input type="range" class="settings-slider" id="settingsDefaultVol" min="0" max="100" step="1" value="100"/>
+            <div class="settings-val" id="settingsDefaultVolVal">100%</div>
+          </div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <h2>Playback</h2>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Shuffle by Default</div>
+            <div class="settings-sub">Enable shuffle mode when a new album plays</div>
+          </div>
+          <div class="settings-control">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+              <input type="checkbox" id="settingsShuffle" style="width:16px;height:16px;accent-color:var(--accent2);cursor:pointer;"/>
+              <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);">Enabled</span>
+            </label>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Repeat Mode Default</div>
+            <div class="settings-sub">Default repeat behavior</div>
+          </div>
+          <div class="settings-control">
+            <select id="settingsRepeat" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Space Mono',monospace;font-size:11px;padding:6px 10px;border-radius:6px;cursor:pointer;outline:none;">
+              <option value="0">Off</option>
+              <option value="1">Repeat All</option>
+              <option value="2">Repeat One</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 
 <!-- PLAYER BAR -->
-<div class="player-bar">
+<div class="player-bar hidden" id="playerBar">
   <div class="now-info">
     <img class="now-art hidden" id="nowArt" src="" alt=""/>
     <div class="now-text">
@@ -484,11 +561,11 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   </div>
   <div class="controls">
     <div class="ctrl-btns">
-      <button class="ctrl-btn" id="btnRandom" title="Shuffle"><i class="fas fa-random"></i></button>
-      <button class="ctrl-btn" id="btnPrev"><i class="fas fa-step-backward"></i></button>
-      <button class="ctrl-btn ctrl-play" id="btnPlay"><i class="fas fa-play"></i></button>
-      <button class="ctrl-btn" id="btnNext"><i class="fas fa-step-forward"></i></button>
-      <button class="ctrl-btn" id="btnRepeat" title="Repeat"><i class="fas fa-redo"></i></button>
+      <button class="ctrl-btn" id="btnRandom" title="Shuffle" onclick="toggleShuffle()"><i class="fas fa-random"></i></button>
+      <button class="ctrl-btn" id="btnPrev" onclick="prevTrack()"><i class="fas fa-step-backward"></i></button>
+      <button class="ctrl-btn ctrl-play" id="btnPlay" onclick="togglePlay()"><i class="fas fa-play" id="playIcon"></i></button>
+      <button class="ctrl-btn" id="btnNext" onclick="nextTrack()"><i class="fas fa-step-forward"></i></button>
+      <button class="ctrl-btn" id="btnRepeat" title="Repeat" onclick="cycleRepeat()"><i class="fas fa-redo" id="repeatIcon"></i></button>
     </div>
     <div class="progress-row">
       <span class="time-label" id="currTime">0:00</span>
@@ -503,7 +580,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
     </div>
     <div class="vol-wrap">
       <i class="fas fa-volume-down"></i>
-      <div class="vol-slider"><div class="vol-fill" id="volFill"></div><input type="range" class="vol-input" id="volSlider" min="0" max="100" value="99"/></div>
+      <div class="vol-slider"><div class="vol-fill" id="volFill"></div><input type="range" class="vol-input" id="volSlider" min="0" max="300" value="100"/></div>
       <i class="fas fa-volume-up"></i>
     </div>
   </div>
@@ -530,8 +607,6 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 </div>
 
 <!-- MODALS -->
-
-<!-- Auth Modal -->
 <div class="modal-overlay" id="modalAuth">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modalAuth')"><i class="fas fa-times"></i></button>
@@ -595,7 +670,6 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   </div>
 </div>
 
-<!-- Profile Edit Modal -->
 <div class="modal-overlay" id="modalEditProfile">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modalEditProfile')"><i class="fas fa-times"></i></button>
@@ -627,7 +701,6 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   </div>
 </div>
 
-<!-- Create Playlist Modal -->
 <div class="modal-overlay" id="modalCreatePlaylist">
   <div class="modal" style="max-width:360px;">
     <button class="modal-close" onclick="closeModal('modalCreatePlaylist')"><i class="fas fa-times"></i></button>
@@ -647,7 +720,6 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   </div>
 </div>
 
-<!-- Add to Playlist Modal -->
 <div class="modal-overlay" id="modalAddToPlaylist">
   <div class="modal" style="max-width:360px;">
     <button class="modal-close" onclick="closeModal('modalAddToPlaylist')"><i class="fas fa-times"></i></button>
@@ -659,7 +731,6 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   </div>
 </div>
 
-<!-- Playlist Editor Modal -->
 <div class="modal-overlay" id="modalPlaylistEditor">
   <div class="modal" style="max-width:500px;">
     <button class="modal-close" onclick="closeModal('modalPlaylistEditor')"><i class="fas fa-times"></i></button>
@@ -677,7 +748,6 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   </div>
 </div>
 
-<!-- Remove Artist/Album Modal -->
 <div class="modal-overlay" id="modalRemoveGroup">
   <div class="modal" style="max-width:360px;">
     <button class="modal-close" onclick="closeModal('modalRemoveGroup')"><i class="fas fa-times"></i></button>
@@ -686,10 +756,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   </div>
 </div>
 
-<!-- Context Menu -->
 <div class="ctx-menu" id="ctxMenu"></div>
-
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
@@ -841,9 +908,6 @@ function countTrackIds() {
   return { released: released.size, unreleased: unreleased.size };
 }
 
-// ══════════════════════════════════════════════════════
-//  LOCAL STATS TRACKING
-// ══════════════════════════════════════════════════════
 const STATS_POST_API = "https://script.google.com/macros/s/AKfycbwbOjxHcujPPF2GKZuMmq5-fisDnVkwsZCpUpGaEFPnHiJ-LVy8biGo5OUg9hYVaag4/exec";
 
 function localStatGet(type, statId) { if (!statId) return true; return localStorage.getItem(`ss_${type}_${statId}`) === '1'; }
@@ -885,26 +949,20 @@ function recordTrackDownload(statId) {
 }
 function hasDownloaded(statId) { if (!statId) return false; return localStatGet('d', statId); }
 
-// ══════════════════════════════════════════════════════
-//  RENDER STATS UI
-// ══════════════════════════════════════════════════════
 async function loadAndRenderStats() {
   const rows = await fetchSheetData();
   const parsed = parseSheet(rows);
   const lookup = buildStatsLookup(parsed.trackRows);
   const counts = countTrackIds();
-
   let releasedMatches = new Set(), unreleasedMatches = new Set();
   Object.keys(lookup).forEach(id => {
     if (id.startsWith('#')) releasedMatches.add(id);
     else if (id.startsWith('$')) unreleasedMatches.add(id);
   });
-
   const relSpan = document.getElementById('releasedCountSpan');
   const unrelSpan = document.getElementById('unreleasedCountSpan');
   if (relSpan) relSpan.textContent = `(${releasedMatches.size || counts.released} tracks)`;
   if (unrelSpan) unrelSpan.textContent = `(${unreleasedMatches.size || counts.unreleased} tracks)`;
-
   renderPodium(parsed.podium);
   renderTop100Preview(parsed);
 }
@@ -913,10 +971,7 @@ function renderPodium(podiumRows) {
   const podiumRow = document.getElementById('podiumRow');
   if (!podiumRow) return;
   const top3 = [...podiumRows].sort((a, b) => b.score - a.score).slice(0, 3);
-  if (!top3.length) {
-    podiumRow.innerHTML = '<div style="color:var(--muted);font-family:\'Space Mono\',monospace;font-size:12px;">No score data available yet</div>';
-    return;
-  }
+  if (!top3.length) { podiumRow.innerHTML = '<div style="color:var(--muted);font-family:\'Space Mono\',monospace;font-size:12px;">No score data available yet</div>'; return; }
   const classes = ['gold', 'silver', 'bronze'];
   const labels = ['BEST SCORE', '2nd PLACE', '3rd PLACE'];
   const order = top3.length >= 3 ? [1, 0, 2] : top3.map((_, i) => i);
@@ -1020,193 +1075,747 @@ function renderFSRow(container, item, i, key, displayVal) {
   if (info) row.addEventListener('click', () => { closeFullStats(); openAlbum(info.album.id); });
   container.appendChild(row);
 }
+</script>
 
+<script>
 // ══════════════════════════════════════════════════════
 //  DATA: ALBUMS
 // ══════════════════════════════════════════════════════
-const CD_TRACKS=[
-  {name:"Intro (Skit)",file:"intro.mp3",url:"https://open.spotify.com/track/7lIr3vVhpDkU5mQEDcnA0S",statId:"#CD_INTRO"},
-  {name:"We Don't Care",file:"we-dont-care.mp3",url:"https://open.spotify.com/track/0IW0qaeyxL5Et4UG2MrJKB",statId:"#CD_WDC"},
-  {name:"Graduation Day",file:"graduation-day.mp3",url:"https://open.spotify.com/track/7wL7Lb8Q3aYyq6gmRL0PZqQ",statId:"#CD_GRAD"},
-  {name:"All Falls Down",file:"all-falls-down.mp3",url:"https://open.spotify.com/track/5SkRLpaGtvYPhw02vZhQQ9",statId:"#CD_AFD"},
-  {name:"I'll Fly Away",file:"fly-away.mp3",url:"https://open.spotify.com/track/6MgGapP3EPFm9kYUvYBTZR",statId:"#CD_IFA"},
-  {name:"Spaceship",file:"spaceship.mp3",url:"https://open.spotify.com/track/1ko2NuvWlQdxtNRc8QQzmT",statId:"#CD_SPACE"},
-  {name:"Jesus Walks",file:"jesuswalks.mp3",url:"https://open.spotify.com/track/5g1vtHqi9uV7xtYeCcFOBx",statId:"#CD_JW"},
-  {name:"Never Let Me Down",file:"never-let-me-down.mp3",url:"https://open.spotify.com/track/34j4OxJxKznBs88cjSL2j9",statId:"#CD_NLMD"},
-  {name:"Get Em High",file:"get-em-high.mp3",url:"https://open.spotify.com/track/1PS1QMdUqOal0ai3Gt7sDQ",statId:"#CD_GEH"},
-  {name:"Workout Plan (Skit)",file:"workout-plan.mp3",url:"https://open.spotify.com/track/2a1JSfTePKhysdIif2bzut",statId:"#CD_WPS"},
-  {name:"The New Workout Plan",file:"new-workout-plan.mp3",url:"https://open.spotify.com/track/1Vp4St7JcXaUoJcIahtf3L",statId:"#CD_TNWP"},
-  {name:"Slow Jamz",file:"slow-jamz.mp3",url:"https://open.spotify.com/track/3A4cpTBPaIQdtPFb5JxtaX",statId:"#CD_SJ"},
-  {name:"Breathe In Breathe Out",file:"bibo.mp3",url:"https://open.spotify.com/track/4KFY4EEv9CN6ivrzD6vEvg",statId:"#CD_BIBO"},
-  {name:"School Spirit (Skit 1)",file:"ss-s1.mp3",url:"https://open.spotify.com/track/25mwJPzWVmS2yronBNQJF1",statId:"#CD_SSS1"},
-  {name:"School Spirit",file:"school-spirit.mp3",url:"https://open.spotify.com/track/1th3G3okofWlvGWAAR7Y4V",statId:"#CD_SS"},
-  {name:"School Spirit (Skit 2)",file:"ss-s2.mp3",url:"https://open.spotify.com/track/5MAY7XyW322jMwLDtBQgsZ",statId:"#CD_SSS2"},
-  {name:"Lil Jimmy (Skit)",file:"#",url:"https://open.spotify.com/track/4BhwlQ9mTwhFGXpQvP9JTV"},
-  {name:"Two Words",file:"2words.mp3",url:"https://open.spotify.com/track/62wtttQzoIA9HnNmGVd9Yq",statId:"#CD_2W"},
-  {name:"Through the Wire",file:"through-the-wire.mp3",url:"https://open.spotify.com/track/4mmkhcEm1Ljy1U9nwtsxUo",statId:"#CD_TTW"},
-  {name:"Family Business",file:"family-business.mp3",url:"https://open.spotify.com/track/5DBmXF7QO43Cuy9yqva116",statId:"#CD_FB"},
-  {name:"Last Call",file:["lastcall1.mp3","lastcall2.mp3","lastcall3.mp3"],url:"https://open.spotify.com/track/7iOhWWYjhhQiXzF4o4HhXN",statId:"#CD_LC"}
-];
-
 const ALBUMS=[
-  {id:"the-college-dropout",title:"The College Dropout",artist:"Kanye West",year:"2004",type:"official",tags:["kanye","west","college","dropout","rap","hip hop","2004"],cover:"https://i.scdn.co/image/ab67616d0000b27325b055377757b3cdd6f26b78",basePath:"../audio/",tracks:CD_TRACKS},
-  {id:"late-registration",title:"Late Registration",artist:"Kanye West",year:"2005",type:"official",tags:["kanye","west","late","registration","gold digger","diamonds","rap","hip hop","2005"],cover:"https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/Late_registration_cd_cover.jpg/250px-Late_registration_cd_cover.jpg",basePath:"../audio/",tracks:[
-    {name:"Wake Up Mr. West (Skit)",file:"#"},{name:"Heard 'Em Say",file:"heard-em-say.mp3",statId:"#LR_HES"},{name:"Touch the Sky",file:"touch-the-sky.mp3",statId:"#LR_TTS"},
-    {name:"Gold Digger",file:"gold-digger.mp3",statId:"#LR_GD"},{name:"Drive Slow",file:"drive-slow.mp3",statId:"#LR_DS"},{name:"My Way Home (Skit)",file:"#"},
-    {name:"Crack Music",file:"crack-music.mp3",statId:"#LR_CM"},{name:"Roses",file:"roses.mp3",statId:"#LR_ROSES"},{name:"Bring Me Down",file:"bring-me-down.mp3",statId:"#LR_BMD"},
-    {name:"Addiction",file:"addiction.mp3",statId:"#LR_ADD"},{name:"Diamonds from Sierra Leone (Remix)",file:"diamonds.mp3",statId:"#LR_DIAM"},
-    {name:"We Major",file:"we-major.mp3",statId:"#LR_WM"},{name:"Hey Mama",file:"hey-mama.mp3",statId:"#LR_HM"},{name:"Celebration",file:"celebration.mp3",statId:"#LR_CEL"},
-    {name:"Gone",file:"gone.mp3",statId:"#LR_GONE"},{name:"Late",file:"late.mp3",statId:"#LR_LATE"},{name:"Number One",file:"number-one.mp3",statId:"#LR_N1"},{name:"We Can Make It Better",file:"we-can-make-it.mp3",statId:"#LR_WCMIB"}
-  ]},
-  {id:"graduation",title:"Graduation",artist:"Kanye West",year:"2007",type:"official",tags:["kanye","west","graduation","stronger","good morning","rap","hip hop","2007"],cover:"https://m.media-amazon.com/images/I/71pxGj4RoVS._AC_UF894,1000_QL80_.jpg",basePath:"../audio/",tracks:[
-    {name:"Good Morning",file:"good-morning.mp3",statId:"#GR_GM"},{name:"Champion",file:"champion.mp3",statId:"#GR_CHAMP"},{name:"Stronger",file:"stronger.mp3",statId:"#GR_STR"},
-    {name:"I Wonder",file:"i-wonder.mp3",statId:"#GR_IW"},{name:"Good Life",file:"good-life.mp3",statId:"#GR_GL"},{name:"Can't Tell Me Nothing",file:"cant-tell-me-nothing.mp3",statId:"#GR_CTMN"},
-    {name:"Barry Bonds",file:"barry-bonds.mp3",statId:"#GR_BB"},{name:"Drunk and Hot Girls",file:"drunk-hot-girls.mp3",statId:"#GR_DHG"},{name:"Flashing Lights",file:"flashing-lights.mp3",statId:"#GR_FL"},
-    {name:"Everything I Am",file:"everything-i-am.mp3",statId:"#GR_EIA"},{name:"The Glory",file:"the-glory.mp3",statId:"#GR_TG"},{name:"Homecoming",file:"homecoming.mp3",statId:"#GR_HC"},{name:"Big Brother",file:"big-brother.mp3",statId:"#GR_BIG"}
-  ]},
-  {id:"808s",title:"808s & Heartbreak",artist:"Kanye West",year:"2008",type:"official",tags:["kanye","west","808s","heartbreak","heartless","love lockdown","autotune","rap","pop","2008"],cover:"https://m.media-amazon.com/images/I/51-HCBAsFRL._UF1000,1000_QL80_.jpg",basePath:"../audio/",tracks:[
-    {name:"Say You Will",file:"say-you-will.mp3",statId:"#808_SYW"},{name:"Welcome to Heartbreak",file:"welcome-to-heartbreak.mp3",statId:"#808_WTH"},{name:"Heartless",file:"heartless.mp3",statId:"#808_HL"},
-    {name:"Amazing",file:"amazing.mp3",statId:"#808_AMAZ"},{name:"Love Lockdown",file:"love-lockdown.mp3",statId:"#808_LL"},{name:"Paranoid",file:"paranoid.mp3",statId:"#808_PAR"},
-    {name:"RoboCop",file:"robocop.mp3",statId:"#808_RC"},{name:"Street Lights",file:"street-lights.mp3",statId:"#808_SL"},{name:"Bad News",file:"bad-news.mp3",statId:"#808_BN"},
-    {name:"See You in My Nightmares",file:"see-you-in-my-nightmares.mp3",statId:"#808_SYMN"},{name:"Coldest Winter",file:"coldest-winter.mp3",statId:"#808_CW"},{name:"Pinocchio Story (Live)",file:"pinocchio-story.mp3",statId:"#808_PS"}
-  ]},
-  {id:"mbdtf",title:"My Beautiful Dark Twisted Fantasy",artist:"Kanye West",year:"2010",type:"official",tags:["kanye","west","mbdtf","beautiful","dark","twisted","fantasy","runaway","power","rap","hip hop","2010"],cover:"https://i.scdn.co/image/ab67616d0000b273d9194aa18fa4c9362b47464f",basePath:"../audio/",tracks:[
-    {name:"Dark Fantasy",file:"dark-fantasy.mp3",statId:"#MBDTF_DF"},{name:"Gorgeous",file:"gorgeous.mp3",statId:"#MBDTF_GOR"},{name:"POWER",file:"power.mp3",statId:"#MBDTF_PWR"},
-    {name:"All of the Lights (Interlude)",file:"all-of-lights-interlude.mp3",statId:"#MBDTF_AOLI"},{name:"All of the Lights",file:"all-of-lights.mp3",statId:"#MBDTF_AOL"},
-    {name:"Monster",file:"monster.mp3",statId:"#MBDTF_MON"},{name:"So Appalled",file:"so-appalled.mp3",statId:"#MBDTF_SA"},{name:"Devil in a New Dress",file:"devil-new-dress.mp3",statId:"#MBDTF_DIAND"},
-    {name:"Runaway",file:"runaway.mp3",statId:"#MBDTF_RUN"},{name:"Hell of a Life",file:"hell-of-a-life.mp3",statId:"#MBDTF_HOAL"},{name:"Blame Game",file:"blame-game.mp3",statId:"#MBDTF_BG"},
-    {name:"Lost in the World",file:"lost-in-the-world.mp3",statId:"#MBDTF_LITW"},{name:"Who Will Survive in America",file:"who-will-survive.mp3",statId:"#MBDTF_WWSIA"}
-  ]},
-  {id:"watch-throne",title:"Watch the Throne",artist:"Jay-Z",primaryArtist:"Kanye West",featuredArtists:["Jay-Z"],year:"2011",type:"official",tags:["kanye","west","jayz","watch","throne","niggas in paris","rap","hip hop","2011"],cover:"https://upload.wikimedia.org/wikipedia/en/thumb/e/ee/Watch_The_Throne.jpg/250px-Watch_The_Throne.jpg",basePath:"../audio/",tracks:[
-    {name:"No Church in the Wild",file:"no-church.mp3",statId:"#WTT_NCITW"},{name:"Lift Off",file:"lift-off.mp3",statId:"#WTT_LO"},{name:"Niggas in Paris",file:"niggas-in-paris.mp3",statId:"#WTT_NIP"},
-    {name:"Otis",file:"otis.mp3",statId:"#WTT_OTIS"},{name:"Gotta Have It",file:"gotta-have-it.mp3",statId:"#WTT_GHI"},{name:"New Day",file:"new-day.mp3",statId:"#WTT_ND"},
-    {name:"That's My Bitch",file:"thats-my-bitch.mp3",statId:"#WTT_TMB"},{name:"Welcome to the Jungle",file:"welcome-jungle.mp3",statId:"#WTT_WTTJ"},{name:"Who Gon Stop Me",file:"who-gon-stop-me.mp3",statId:"#WTT_WGSM"},
-    {name:"Murder to Excellence",file:"murder-excellence.mp3",statId:"#WTT_MTE"},{name:"Sweet Baby Jesus",file:"#"},{name:"Why I Love You",file:"why-i-love-you.mp3",statId:"#WTT_WILY"},
-    {name:"H•A•M",file:"ham.mp3",statId:"#WTT_HAM"},{name:"Primetime",file:"primetime.mp3",statId:"#WTT_PT"},{name:"The Joy",file:"the-joy.mp3",statId:"#WTT_TJ"}
-  ]},
-  {id:"cruel-summer",title:"Cruel Summer",artist:"GOOD Music",primaryArtist:"Kanye West",featuredArtists:["Big Sean","2 Chainz","John Legend","Teyana Taylor"],year:"2012",type:"official",tags:["kanye","west","good","music","cruel","summer","mercy","clique","rap","hip hop","2012"],cover:"https://upload.wikimedia.org/wikipedia/en/thumb/a/ab/CruelSummercover.jpg/250px-CruelSummercover.jpg",basePath:"../audio/",tracks:[
-    {name:"To the World",file:"to-the-world.mp3",statId:"#CS_TTW"},{name:"Mercy",file:"mercy.mp3",statId:"#CS_MERCY"},{name:"New God Flow",file:"new-god-flow.mp3",statId:"#CS_NGF"},
-    {name:"Clique",file:"clique.mp3",statId:"#CS_CLIQUE"},{name:"Bliss",file:"bliss.mp3",statId:"#CS_BLISS"},{name:"Cruel Summer",file:"cruel-summer.mp3",statId:"#CS_CS"},
-    {name:"Higher",file:"higher.mp3",statId:"#CS_HIGH"},{name:"Don't Like (Remix)",file:"dont-like.mp3",statId:"#CS_DL"},{name:"The Morning",file:"the-morning.mp3",statId:"#CS_TM"},
-    {name:"Cold",file:"cold.mp3",statId:"#CS_COLD"},{name:"Sweet Baby Jesus",file:"sweet-baby-jesus.mp3",statId:"#CS_SBJ"},{name:"Sin City",file:"sin-city.mp3",statId:"#CS_SC"},
-    {name:"Way Too Cold",file:"way-too-cold.mp3",statId:"#CS_WTC"},{name:"Creepers",file:"creepers.mp3",statId:"#CS_CREEP"}
-  ]},
-  {id:"yeezus",title:"Yeezus",artist:"Kanye West",year:"2013",type:"official",tags:["kanye","west","yeezus","bound 2","new slaves","black skinhead","rap","industrial","2013"],cover:"https://m.media-amazon.com/images/I/516qybuOZhL._UF1000,1000_QL80_.jpg",basePath:"../audio/",tracks:[
-    {name:"On Sight",file:"on-sight.mp3",statId:"#YZ_OS"},{name:"Black Skinhead",file:"black-skinhead.mp3",statId:"#YZ_BSH"},{name:"I Am a God",file:"i-am-a-god.mp3",statId:"#YZ_IAAG"},
-    {name:"New Slaves",file:"new-slaves.mp3",statId:"#YZ_NS"},{name:"Hold My Liquor",file:"hold-my-liquor.mp3",statId:"#YZ_HML"},{name:"I'm in It",file:"im-in-it.mp3",statId:"#YZ_III"},
-    {name:"Blood on the Leaves",file:"blood-on-leaves.mp3",statId:"#YZ_BOTL"},{name:"Guilt Trip",file:"guilt-trip.mp3",statId:"#YZ_GT"},{name:"Send It Up",file:"send-it-up.mp3",statId:"#YZ_SIU"},
-    {name:"Bound 2",file:"bound-2.mp3",statId:"#YZ_B2"}
-  ]},
-  {id:"tlop",title:"The Life of Pablo",artist:"Kanye West",year:"2016",type:"official",tags:["kanye","west","pablo","tlop","ultralight beam","famous","fade","rap","gospel","2016"],cover:"https://preview.redd.it/puu7vsw10fb01.png?width=640&crop=smart&auto=webp&s=cef42bec02f7a6064349d8cfd34df097bfe12ade",basePath:"../audio/",tracks:[
-    {name:"Ultralight Beam",file:"ultralight-beam.mp3",statId:"#TLOP_UB"},{name:"Father Stretch My Hands Pt. 1",file:"fsmh-pt1.mp3",statId:"#TLOP_FSMH1"},
-    {name:"Pt. 2",file:"fsmh-pt2.mp3",statId:"#TLOP_FSMH2"},{name:"Famous",file:"famous.mp3",statId:"#TLOP_FAM"},{name:"Feedback",file:"feedback.mp3",statId:"#TLOP_FB"},
-    {name:"Low Lights",file:"low-lights.mp3",statId:"#TLOP_LL"},{name:"Highlights",file:"highlights.mp3",statId:"#TLOP_HL"},{name:"Freestyle 4",file:"freestyle-4.mp3",statId:"#TLOP_F4"},
-    {name:"I Love Kanye",file:"i-love-kanye.mp3",statId:"#TLOP_ILK"},{name:"Waves",file:"waves.mp3",statId:"#TLOP_WAV"},{name:"FML",file:"fml.mp3",statId:"#TLOP_FML"},
-    {name:"Real Friends",file:"real-friends.mp3",statId:"#TLOP_RF"},{name:"Wolves",file:"wolves.mp3",statId:"#TLOP_WLV"},{name:"Frank's Track",file:"#"},
-    {name:"Siiiiiiiiilver Surfffter Surffffff",file:"silver-surfer.mp3",statId:"#TLOP_SS"},{name:"30 Hours",file:"30-hours.mp3",statId:"#TLOP_30H"},
-    {name:"No More Parties in LA",file:"no-more-parties.mp3",statId:"#TLOP_NMPLA"},{name:"Facts (Charlie Heat Version)",file:"facts.mp3",statId:"#TLOP_FACTS"},
-    {name:"Fade",file:"fade.mp3",statId:"#TLOP_FADE"},{name:"Saint Pablo",file:"saint-pablo.mp3",statId:"#TLOP_SP"}
-  ]},
-  {id:"ye",title:"ye",artist:"Kanye West",year:"2018",type:"official",tags:["kanye","west","ye","yikes","ghost town","violent crimes","rap","2018"],cover:"https://upload.wikimedia.org/wikipedia/en/7/74/Ye_album_cover.jpg",basePath:"../audio/",tracks:[
-    {name:"I Thought About Killing You",file:"i-thought-about.mp3",statId:"#YE_ITAKY"},{name:"Yikes",file:"yikes.mp3",statId:"#YE_YK"},{name:"All Mine",file:"all-mine.mp3",statId:"#YE_AM"},
-    {name:"Wouldn't Leave",file:"wouldnt-leave.mp3",statId:"#YE_WL"},{name:"No Mistakes",file:"no-mistakes.mp3",statId:"#YE_NM"},{name:"Ghost Town",file:"ghost-town.mp3",statId:"#YE_GT"},
-    {name:"Violent Crimes",file:"violent-crimes.mp3",statId:"#YE_VC"}
-  ]},
-  {id:"kids-see-ghosts",title:"Kids See Ghosts",artist:"Kids See Ghosts",primaryArtist:"Kanye West",featuredArtists:["Kid Cudi"],year:"2018",type:"official",tags:["kanye","west","cudi","kids","see","ghosts","reborn","rap","2018"],cover:"https://upload.wikimedia.org/wikipedia/en/4/44/Kids_See_Ghosts_Cover.png",basePath:"../audio/",tracks:[
-    {name:"Feel the Love",file:"feel-the-love.mp3",statId:"#KSG_FTL"},{name:"Fire",file:"fire.mp3",statId:"#KSG_FIRE"},{name:"4th Dimension",file:"4th-dimension.mp3",statId:"#KSG_4D"},
-    {name:"Freeee (Ghost Town Pt. 2)",file:"freeee.mp3",statId:"#KSG_FREE"},{name:"Reborn",file:"reborn.mp3",statId:"#KSG_REB"},{name:"Kids See Ghosts",file:"kids-see-ghosts.mp3",statId:"#KSG_KSG"},
-    {name:"0 to 100 / The Catch Up",file:"#"},{name:"Cudi Montage",file:"cudi-montage.mp3",statId:"#KSG_CM"}
-  ]},
-  {id:"jesus-is-king",title:"Jesus Is King",artist:"Kanye West",year:"2019",type:"official",tags:["kanye","west","jesus","king","gospel","follow god","closed on sunday","rap","2019"],cover:"https://media.pitchfork.com/photos/5db73da8fd8a1f0009ad5c80/master/pass/jesusisking_kanye.jpg",basePath:"../audio/",tracks:[
-    {name:"Every Hour",file:"every-hour.mp3",statId:"#JIK_EH"},{name:"Follow God",file:"follow-god.mp3",statId:"#JIK_FG"},{name:"Closed on Sunday",file:"closed-on-sunday.mp3",statId:"#JIK_COS"},
-    {name:"On God",file:"on-god.mp3",statId:"#JIK_OG"},{name:"Everything We Need",file:"everything-we-need.mp3",statId:"#JIK_EWN"},{name:"Water",file:"water.mp3",statId:"#JIK_WAT"},
-    {name:"God Is",file:"god-is.mp3",statId:"#JIK_GI"},{name:"Hands On",file:"hands-on.mp3",statId:"#JIK_HO"},{name:"Use This Gospel",file:"use-this-gospel.mp3",statId:"#JIK_UTG"},
-    {name:"Jesus Is Lord",file:"jesus-is-lord.mp3",statId:"#JIK_JIL"}
-  ]},
-  {id:"donda",title:"Donda",artist:"Kanye West",year:"2021",type:"official",tags:["kanye","west","donda","off the grid","hurricane","praise god","jail","rap","gospel","2021"],cover:"https://i.redd.it/jvst2ity53d51.jpg",basePath:"../audio/",tracks:[
-    {name:"Donda Chant",file:"donda-chant.mp3",statId:"#DON_DC"},{name:"Jail",file:"jail.mp3",statId:"#DON_JAIL"},{name:"God Breathed",file:"god-breathed.mp3",statId:"#DON_GB"},
-    {name:"Off the Grid",file:"off-the-grid.mp3",statId:"#DON_OTG"},{name:"Hurricane",file:"hurricane.mp3",statId:"#DON_HUR"},{name:"Praise God",file:"praise-god.mp3",statId:"#DON_PG"},
-    {name:"Jonah",file:"jonah.mp3",statId:"#DON_JON"},{name:"Ok Ok",file:"ok-ok.mp3",statId:"#DON_OO"},{name:"Junya",file:"junya.mp3",statId:"#DON_JUN"},
-    {name:"Believe What I Say",file:"believe-what-i-say.mp3",statId:"#DON_BWIS"},{name:"24",file:"24.mp3",statId:"#DON_24"},{name:"Remote Control",file:"remote-control.mp3",statId:"#DON_RC"},
-    {name:"Moon",file:"moon.mp3",statId:"#DON_MOON"},{name:"Heaven and Hell",file:"heaven-and-hell.mp3",statId:"#DON_HAH"},{name:"Donda",file:"donda-title.mp3",statId:"#DON_DON"},
-    {name:"Pure Souls",file:"pure-souls.mp3",statId:"#DON_PS"},{name:"Come to Life",file:"come-to-life.mp3",statId:"#DON_CTL"},{name:"No Child Left Behind",file:"no-child.mp3",statId:"#DON_NCLB"},
-    {name:"Jail pt 2",file:"jail-pt2.mp3",statId:"#DON_JAIL2"},{name:"Jesus Lord",file:"jesus-lord.mp3",statId:"#DON_JL"},{name:"New Again",file:"new-again.mp3",statId:"#DON_NA"},
-    {name:"Tell the Vision",file:"tell-the-vision.mp3",statId:"#DON_TTV"},{name:"Lord I Need You",file:"lord-i-need-you.mp3",statId:"#DON_LINY"},{name:"Jail pt 3",file:"#"}
-  ]},
-  {id:"donda-2",title:"Donda 2",artist:"Kanye West",year:"2022",type:"official",tags:["kanye","west","donda","2","stem player","rap","2022"],cover:"https://i.scdn.co/image/ab67616d0000b2736dc675e2b4f4d86b762f3bfa",basePath:"../audio/",tracks:[
-    {name:"Sci Fi",file:"sci-fi.mp3",statId:"#D2_SF"},{name:"True Love",file:"true-love.mp3",statId:"#D2_TL"},{name:"Security",file:"security.mp3",statId:"#D2_SEC"},
-    {name:"Too Easy",file:"too-easy.mp3",statId:"#D2_TE"},{name:"Louie Bags",file:"louie-bags.mp3",statId:"#D2_LB"},{name:"Pablo",file:"pablo.mp3",statId:"#D2_PAB"},
-    {name:"Rich Flex",file:"rich-flex.mp3",statId:"#D2_RF"},{name:"Happy",file:"happy.mp3",statId:"#D2_HAP"},{name:"We Did It Kid",file:"we-did-it-kid.mp3",statId:"#D2_WDIK"},{name:"Flowers",file:"flowers.mp3",statId:"#D2_FLW"}
-  ]},
-  {id:"vultures-1",title:"Vultures 1",artist:"¥$",primaryArtist:"Kanye West",featuredArtists:["Ty Dolla $ign"],year:"2024",type:"official",tags:["kanye","west","ty dolla sign","vultures","carnival","hoodrat","rap","2024"],cover:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Kanye_West_and_Ty_Dolla_Sign_-_Vultures_Vol._1_%28Cover%29.png/250px-Kanye_West_and_Ty_Dolla_Sign_-_Vultures_Vol._1_%28Cover%29.png",basePath:"../audio/",tracks:[
-    {name:"Vultures",file:"vultures-title.mp3",statId:"#V1_VUL"},{name:"Paid",file:"paid.mp3",statId:"#V1_PAID"},{name:"Hoodrat",file:"hoodrat.mp3",statId:"#V1_HR"},
-    {name:"Talking",file:"talking.mp3",statId:"#V1_TALK"},{name:"Carnival",file:"carnival.mp3",statId:"#V1_CARN"},{name:"Burn",file:"burn.mp3",statId:"#V1_BURN"},
-    {name:"King",file:"king.mp3",statId:"#V1_KING"},{name:"Keys to My Life",file:"keys-to-my-life.mp3",statId:"#V1_KTML"},{name:"FML (feat. The Weeknd)",file:"#"},
-    {name:"Problematic",file:"problematic.mp3",statId:"#V1_PROB"},{name:"Good (Don't Die)",file:"good-dont-die.mp3",statId:"#V1_GDD"},{name:"Do It",file:"do-it.mp3",statId:"#V1_DI"},
-    {name:"Beg Forgiveness",file:"beg-forgiveness.mp3",statId:"#V1_BF"},{name:"Paperwork",file:"paperwork.mp3",statId:"#V1_PW"},{name:"Back to Me",file:"back-to-me.mp3",statId:"#V1_BTM"},
-    {name:"Vultures 2",file:"vultures-2-track.mp3",statId:"#V1_V2"},{name:"Lifestyle",file:"lifestyle.mp3",statId:"#V1_LS"}
-  ]},
-  {id:"vultures-2",title:"Vultures 2",artist:"¥$",primaryArtist:"Kanye West",featuredArtists:["Ty Dolla $ign"],year:"2024",type:"official",tags:["kanye","west","ty dolla sign","vultures","2","rap","2024"],cover:"https://images.genius.com/8e2c3c0e076e066fa40966001b956663.1000x1000x1.jpg",basePath:"../audio/",tracks:[
-    {name:"Field Trip",file:"field-trip.mp3",statId:"#V2_FT"},{name:"Everybody",file:"everybody.mp3",statId:"#V2_EVB"},{name:"Bomb",file:"bomb.mp3",statId:"#V2_BOMB"},
-    {name:"River",file:"river.mp3",statId:"#V2_RIV"},{name:"Science",file:"science.mp3",statId:"#V2_SCI"},{name:"Munch",file:"munch.mp3",statId:"#V2_MUNCH"},
-    {name:"Drive",file:"drive.mp3",statId:"#V2_DRV"},{name:"Mast",file:"mast.mp3",statId:"#V2_MAST"},{name:"Beg",file:"beg.mp3",statId:"#V2_BEG"},
-    {name:"Lonely Roads",file:"lonely-roads.mp3",statId:"#V2_LR"},{name:"Gun To My Head",file:"gun-to-my-head.mp3",statId:"#V2_GTMH"},
-    {name:"Preacher Man",file:"preacher-man.mp3",statId:"#V2_PM"},{name:"Slide",file:"slide.mp3",statId:"#V2_SLD"},{name:"Fvcking Demons",file:"fvcking-demons.mp3",statId:"#V2_FD"}
-  ]},
-  {id:"bully",title:"Bully",artist:"Kanye West",year:"2025",type:"official",tags:["kanye","west","ye","bully","rap","2025"],cover:"https://news.artnet.com/app/news-upload/2024/10/kanye-west-bully-ye.jpg",basePath:"../audio/",tracks:[
-    {name:"Bully",file:"bully-title.mp3",statId:"#BUL_BUL"},{name:"Lonely",file:"lonely.mp3",statId:"#BUL_LON"},{name:"Industry",file:"industry.mp3",statId:"#BUL_IND"},
-    {name:"Witches",file:"witches.mp3",statId:"#BUL_WIT"},{name:"Field Trip",file:"#"},{name:"New Body",file:"new-body.mp3",statId:"#BUL_NB"},
-    {name:"Hard Way",file:"hard-way.mp3",statId:"#BUL_HW"},{name:"Forever",file:"forever.mp3",statId:"#BUL_FOR"},{name:"Champion 2",file:"champion-2.mp3",statId:"#BUL_C2"},{name:"Empire",file:"empire.mp3",statId:"#BUL_EMP"}
-  ]},
-  {id:"die-lit",title:"Die Lit",artist:"Playboi Carti",year:"2018",type:"official",tags:["playboi carti","rap","2018"],cover:"https://upload.wikimedia.org/wikipedia/en/c/c6/Die_Lit_by_Playboi_Carti.jpg",basePath:"../audio/",tracks:[
-    {name:"Long Time (Intro)",file:"long-time.mp3",statId:"#DL_LT"},{name:"R.I.P.",file:"rip.mp3",statId:"#DL_RIP"},{name:"Lean 4 Real (feat. Skepta)",file:"lean-4-real.mp3",statId:"#DL_L4R"},
-    {name:"Old Money",file:"old-money.mp3",statId:"#DL_OM"},{name:"Love Hurts (feat. Travis Scott)",file:"love-hurts.mp3",statId:"#DL_LH"},{name:"Shoota (feat. Lil Uzi Vert)",file:"shoota.mp3",statId:"#DL_SHOOT"},
-    {name:"Right Now (feat. Pi'erre Bourne)",file:"right-now.mp3",statId:"#DL_RN"},{name:"Poke It Out (feat. Nicki Minaj)",file:"poke-it-out.mp3",statId:"#DL_PIO"},
-    {name:"Home (KOD)",file:"home-kod.mp3",statId:"#DL_HOME"},{name:"Fell In Luv (feat. Bryson Tiller)",file:"fell-in-luv.mp3",statId:"#DL_FIL"},
-    {name:"Foreign",file:"foreign.mp3",statId:"#DL_FOR"},{name:"Pull Up",file:"pull-up.mp3",statId:"#DL_PU"},{name:"Mileage (feat. Chief Keef)",file:"mileage.mp3",statId:"#DL_MIL"},
-    {name:"FlatBed Freestyle",file:"flatbed-freestyle.mp3",statId:"#DL_FF"},{name:"No Time (feat. Gunna)",file:"no-time.mp3",statId:"#DL_NT"},
-    {name:"Middle of the Summer (feat. Red Coldhearted)",file:"middle-of-the-summer.mp3",statId:"#DL_MOTS"},
-    {name:"Choppa Won't Miss (feat. Young Thug)",file:"choppa-wont-miss.mp3",statId:"#DL_CWM"},{name:"R.I.P. Fredo (Notice Me) (feat. Young Nudy)",file:"rip-fredo.mp3",statId:"#DL_RIPF"},
-    {name:"Top (feat. Pi'erre Bourne)",file:"top.mp3",statId:"#DL_TOP"}
-  ]},
-  // UNRELEASED
-  {id:"yandhi",title:"Yandhi",artist:"Kanye West",year:"2018 (unreleased)",type:"unreleased",tags:["kanye","west","yandhi","unreleased","shelved","rap","2018"],cover:"https://upload.wikimedia.org/wikipedia/commons/1/1d/Yandhi_Cover_Art_%28Free_License%29.jpg",basePath:"../audio/",tracks:[
-    {name:"Chakras",file:"chakras.mp3",statId:"$YAN_CHAK"},{name:"Garden",file:"garden.mp3",statId:"$YAN_GARD"},{name:"New Body",file:"new-body.mp3",statId:"$YAN_NB"},
-    {name:"Vibez",file:"vibez.mp3",statId:"$YAN_VIB"},{name:"Easy",file:"easy.mp3",statId:"$YAN_EASY"},{name:"Brothers",file:"brothers.mp3",statId:"$YAN_BRO"},
-    {name:"Like God",file:"like-god.mp3",statId:"$YAN_LG"},{name:"Yandhi",file:"yandhi-title.mp3",statId:"$YAN_YAN"},{name:"Violent Crimes",file:"violent-crimes.mp3",statId:"$YAN_VC"},
-    {name:"Nah Nah Nah",file:"nah-nah-nah.mp3",statId:"$YAN_NNN"},{name:"Background Noise",file:"background-noise.mp3",statId:"$YAN_BN"},
-    {name:"True Love",file:"true-love-yandhi.mp3",statId:"$YAN_TL"},{name:"In the Fire",file:"in-the-fire.mp3",statId:"$YAN_ITF"}
-  ]},
-  {id:"turbo-grafx-16",title:"Turbo Grafx 16",artist:"Kanye West",year:"2019 (unreleased)",type:"unreleased",tags:["kanye","west","turbo","grafx","16","unreleased","shelved","rap","2019"],cover:"https://lastfm.freetls.fastly.net/i/u/ar0/68bd0237ddfa94159b35a684e5ee8be7.jpg",basePath:"../audio/",tracks:[
-    {name:"Nah Nah Nah (OG)",file:"nah-nah-nah-og.mp3",statId:"$TG_NNN"},{name:"Turbo Grafx 16",file:"turbo-title.mp3",statId:"$TG_TG"},
-    {name:"Water (Coachella)",file:"water-coachella.mp3",statId:"$TG_WAT"},{name:"Closed on Sunday (Early)",file:"closed-early.mp3",statId:"$TG_COS"},
-    {name:"Follow God (Rough)",file:"follow-god-rough.mp3",statId:"$TG_FG"},{name:"God's Country",file:"gods-country.mp3",statId:"$TG_GC"},
-    {name:"Everything We Need (Demo)",file:"ewen-demo.mp3",statId:"$TG_EWN"},{name:"Hands On (Early)",file:"hands-on-early.mp3",statId:"$TG_HO"},
-    {name:"Use This Gospel (Demo)",file:"utg-demo.mp3",statId:"$TG_UTG"},{name:"Jesus Is Lord (Rough)",file:"jil-rough.mp3",statId:"$TG_JIL"}
-  ]},
-  {id:"maybe-maybe",title:"maybe (Maybe).",artist:"Rhap5ody",year:"2029 (soon)",type:"unreleased",tags:["rhap5dy","maybe","2029"],cover:"https://raw.githubusercontent.com/bguhm/bguhm.github.io/main/music/albums/maybe-maybe/maybe-maybe-cover-art.png",basePath:"../audio/",tracks:[
-    {name:"slackrr.",file:"slackrr.mp3",statId:"$MM_SLK"},{name:"Caramel eyes.",file:"caramel-eyes.mp3",statId:"$MM_CE"},
-    {name:"PUNK HAZARD.",file:"punk-hazard.mp3",statId:"$MM_PH"},{name:"HOUND.",file:"hound.mp3",statId:"$MM_HND"},
-    {name:"Arizona Girl",file:"arizona-girl.mp3",statId:"$MM_AZ"},{name:"MARIGOLD.",file:"marigold.mp3",statId:"$MM_MG"},
-    {name:"Besto Friendo",file:"besto-friendo.mp3",statId:"$MM_BF"},{name:"HippoCript.",file:"hippocript.mp3",statId:"$MM_HC"},
-    {name:"AloneAgain",file:"alone-again.mp3",statId:"$MM_AA"},{name:"RoofTop",file:"rooftop.mp3",statId:"$MM_RT"},
-    {name:"November.",file:"november.mp3",statId:"$MM_NOV"},{name:"Street",file:"street.mp3",statId:"$MM_STR"},
-    {name:"Self Conscious.",file:"self-conscious.mp3",statId:"$MM_SC"},{name:"Scribble.",file:"scribble.mp3",statId:"$MM_SCR"},
-    {name:"Feelings In A Bottle.",file:"feelings-in-a-bottle.mp3",statId:"$MM_FIAB"},{name:"SoloCup.",file:"solocup.mp3",statId:"$MM_SOL"},
-    {name:"Bg.uhm",file:"bg-uhm.mp3",statId:"$MM_BG"},{name:"6:27",file:"6-27.mp3",statId:"$MM_627"},
-    {name:"Daisy.",file:"daisy.mp3",statId:"$MM_DAISY"},{name:"Maybe (Maybe).",file:"maybe-maybe.m4a",statId:"$MM_MM"}
-  ]},
-  {id:"syndicate",title:"Syndicate",artist:"Rhap5ody",year:"2029 (soon)",type:"unreleased",tags:["syndicate","rhap5ody","2029"],cover:"https://raw.githubusercontent.com/bguhm/bguhm.github.io/main/music/albums/syndicate/Untitled157_20260219144858.png",basePath:"../audio/",tracks:[
-    {name:"BOHEMETH.",file:"bohemeth.mp3",statId:"$SYN_BOH"}
-  ]},
-  {id:"nuralistics",title:"NURALISTICS",artist:"Rhap5ody",year:"2029 (soon)",type:"unreleased",tags:["NURALISTICS","rhap5ody","insomnia","2029"],cover:"https://raw.githubusercontent.com/bguhm/bguhm.github.io/main/music/albums/NURALISTICS/IMG_6099.png",basePath:"../audio/",tracks:[
-    {name:"Insomnia.",file:"insomnia.mp3",statId:"$NUR_INS"}
-  ]},
-  {id:"r5",title:"rhapsody",artist:"Rhap5ody",year:"2029 (soon)",type:"unreleased",tags:["rhap5ody","r5","2029"],cover:"https://raw.githubusercontent.com/bguhm/bguhm.github.io/main/music/albums/r5/IMG_6100.png",basePath:"../audio/",tracks:[
-    {name:"R5.",file:"r5.mp3",statId:"$R5_R5"}
-  ]}
+{id:"the-college-dropout",title:"The College Dropout",artist:"Kanye West",year:"2004",type:"official",tags:["kanye","west","college","dropout","rap","hip hop","2004"],cover:"https://i.scdn.co/image/ab67616d0000b27325b055377757b3cdd6f26b78",tracks:[
+    {name:"Intro (Skit)",file:"../audio/the-college-dropout/tracks/intro.mp3",url:"https://open.spotify.com/track/7lIr3vVhpDkU5mQEDcnA0S",statId:"#CD_INTRO"},
+    {name:"We Don't Care",file:"../audio/the-college-dropout/tracks/we-dont-care.mp3",url:"https://open.spotify.com/track/0IW0qaeyxL5Et4UG2MrJKB",statId:"#CD_WDC"},
+    {name:"Graduation Day",file:"../audio/the-college-dropout/tracks/graduation-day.mp3",url:"https://open.spotify.com/track/7wL7Lb8Q3aYyq6gmRL0PZqQ",statId:"#CD_GRAD"},
+    {name:"All Falls Down",file:"../audio/the-college-dropout/tracks/all-falls-down.mp3",url:"https://open.spotify.com/track/5SkRLpaGtvYPhw02vZhQQ9",statId:"#CD_AFD"},
+    {name:"I'll Fly Away",file:"../audio/the-college-dropout/tracks/fly-away.mp3",url:"https://open.spotify.com/track/6MgGapP3EPFm9kYUvYBTZR",statId:"#CD_IFA"},
+    {name:"Spaceship",file:"../audio/the-college-dropout/tracks/spaceship.mp3",url:"https://open.spotify.com/track/1ko2NuvWlQdxtNRc8QQzmT",statId:"#CD_SPACE"},
+    {name:"Jesus Walks",file:"../audio/the-college-dropout/tracks/jesuswalks.mp3",url:"https://open.spotify.com/track/5g1vtHqi9uV7xtYeCcFOBx",statId:"#CD_JW"},
+    {name:"Never Let Me Down",file:"../audio/the-college-dropout/tracks/never-let-me-down.mp3",url:"https://open.spotify.com/track/34j4OxJxKznBs88cjSL2j9",statId:"#CD_NLMD"},
+    {name:"Get Em High",file:"../audio/the-college-dropout/tracks/get-em-high.mp3",url:"https://open.spotify.com/track/1PS1QMdUqOal0ai3Gt7sDQ",statId:"#CD_GEH"},
+    {name:"Workout Plan (Skit)",file:"../audio/the-college-dropout/tracks/workout-plan.mp3",url:"https://open.spotify.com/track/2a1JSfTePKhysdIif2bzut",statId:"#CD_WPS"},
+    {name:"The New Workout Plan",file:"../audio/the-college-dropout/tracks/new-workout-plan.mp3",url:"https://open.spotify.com/track/1Vp4St7JcXaUoJcIahtf3L",statId:"#CD_TNWP"},
+    {name:"Slow Jamz",file:"../audio/the-college-dropout/tracks/slow-jamz.mp3",url:"https://open.spotify.com/track/3A4cpTBPaIQdtPFb5JxtaX",statId:"#CD_SJ"},
+    {name:"Breathe In Breathe Out",file:"../audio/the-college-dropout/tracks/bibo.mp3",url:"https://open.spotify.com/track/4KFY4EEv9CN6ivrzD6vEvg",statId:"#CD_BIBO"},
+    {name:"School Spirit (Skit 1)",file:"../audio/the-college-dropout/tracks/school-spirit-skit-1.mp3",url:"https://open.spotify.com/track/25mwJPzWVmS2yronBNQJF1",statId:"#CD_SSS1"},
+    {name:"School Spirit",file:"../audio/the-college-dropout/tracks/school-spirit.mp3",url:"https://open.spotify.com/track/1th3G3okofWlvGWAAR7Y4V",statId:"#CD_SS"},
+    {name:"School Spirit (Skit 2)",file:"../audio/the-college-dropout/tracks/school-spirit-skit-2.mp3",url:"https://open.spotify.com/track/5MAY7XyW322jMwLDtBQgsZ",statId:"#CD_SSS2"},
+    {name:"Lil Jimmy (Skit)",file:"../audio/the-college-dropout/tracks/lil-jimmy-skit.mp3",url:"https://open.spotify.com/track/4BhwlQ9mTwhFGXpQvP9JTV"},
+    {name:"Two Words",file:"../audio/the-college-dropout/tracks/2words.mp3",url:"https://open.spotify.com/track/62wtttQzoIA9HnNmGVd9Yq",statId:"#CD_2W"},
+    {name:"Through the Wire",file:"../audio/the-college-dropout/tracks/through-the-wire.mp3",url:"https://open.spotify.com/track/4mmkhcEm1Ljy1U9nwtsxUo",statId:"#CD_TTW"},
+    {name:"Family Business",file:"../audio/the-college-dropout/tracks/family-business.mp3",url:"https://open.spotify.com/track/5DBmXF7QO43Cuy9yqva116",statId:"#CD_FB"},
+    {name:"Last Call",file:"../audio/the-college-dropout/tracks/lastcall.mp3",url:"https://open.spotify.com/track/7iOhWWYjhhQiXzF4o4HhXN",statId:"#CD_LC"}
+]},
+{id:"late-registration",title:"Late Registration",artist:"Kanye West",year:"2005",type:"official",tags:["kanye","west","late","registration","gold digger","diamonds","rap","hip hop","2005"],cover:"https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/Late_registration_cd_cover.jpg/250px-Late_registration_cd_cover.jpg",tracks:[
+    {name:"Wake Up Mr. West (Skit)",file:"../audio/late-registration/tracks/wake-up-mr_west.mp3"},{name:"Heard 'Em Say",file:"../audio/late-registration/tracks/heard-em-say.mp3",statId:"#LR_HES"},{name:"Touch the Sky",file:"../audio/late-registration/tracks/touch-the-sky.mp3",statId:"#LR_TTS"},
+    {name:"Gold Digger",file:"../audio/late-registration/tracks/gold-digger.mp3",statId:"#LR_GD"},{name:"Drive Slow",file:"../audio/late-registration/tracks/drive-slow.mp3",statId:"#LR_DS"},{name:"My Way Home (Skit)",file:"../audio/late-registration/tracks/my-way-home-skit.mp3"},
+    {name:"Crack Music",file:"../audio/late-registration/tracks/crack-music.mp3",statId:"#LR_CM"},{name:"Roses",file:"../audio/late-registration/tracks/roses.mp3",statId:"#LR_ROSES"},{name:"Bring Me Down",file:"../audio/late-registration/tracks/bring-me-down.mp3",statId:"#LR_BMD"},
+    {name:"Addiction",file:"../audio/late-registration/tracks/addiction.mp3",statId:"#LR_ADD"},{name:"Diamonds from Sierra Leone (Remix)",file:"../audio/late-registration/tracks/diamonds.mp3",statId:"#LR_DIAM"},
+    {name:"We Major",file:"../audio/late-registration/tracks/we-major.mp3",statId:"#LR_WM"},{name:"Hey Mama",file:"../audio/late-registration/tracks/hey-mama.mp3",statId:"#LR_HM"},{name:"Celebration",file:"../audio/late-registration/tracks/celebration.mp3",statId:"#LR_CEL"},
+    {name:"Gone",file:"../audio/late-registration/tracks/gone.mp3",statId:"#LR_GONE"},{name:"Late",file:"../audio/late-registration/tracks/late.mp3",statId:"#LR_LATE"},{name:"Number One",file:"../audio/late-registration/tracks/number-one.mp3",statId:"#LR_N1"},{name:"We Can Make It Better",file:"../audio/late-registration/tracks/we-can-make-it.mp3",statId:"#LR_WCMIB"}
+]},
+{id:"graduation",title:"Graduation",artist:"Kanye West",year:"2007",type:"official",tags:["kanye","west","graduation","stronger","good morning","rap","hip hop","2007"],cover:"https://m.media-amazon.com/images/I/71pxGj4RoVS._AC_UF894,1000_QL80_.jpg",tracks:[
+    {name:"Good Morning",file:"../audio/graduation/tracks/good-morning.mp3",statId:"#GR_GM"},{name:"Champion",file:"../audio/graduation/tracks/champion.mp3",statId:"#GR_CHAMP"},{name:"Stronger",file:"../audio/graduation/tracks/stronger.mp3",statId:"#GR_STR"},
+    {name:"I Wonder",file:"../audio/graduation/tracks/i-wonder.mp3",statId:"#GR_IW"},{name:"Good Life",file:"../audio/graduation/tracks/good-life.mp3",statId:"#GR_GL"},{name:"Can't Tell Me Nothing",file:"../audio/graduation/tracks/cant-tell-me-nothing.mp3",statId:"#GR_CTMN"},
+    {name:"Barry Bonds",file:"../audio/graduation/tracks/barry-bonds.mp3",statId:"#GR_BB"},{name:"Drunk and Hot Girls",file:"../audio/graduation/tracks/drunk-hot-girls.mp3",statId:"#GR_DHG"},{name:"Flashing Lights",file:"../audio/graduation/tracks/flashing-lights.mp3",statId:"#GR_FL"},
+    {name:"Everything I Am",file:"../audio/graduation/tracks/everything-i-am.mp3",statId:"#GR_EIA"},{name:"The Glory",file:"../audio/graduation/tracks/the-glory.mp3",statId:"#GR_TG"},{name:"Homecoming",file:"../audio/graduation/tracks/homecoming.mp3",statId:"#GR_HC"},{name:"Big Brother",file:"../audio/graduation/tracks/big-brother.mp3",statId:"#GR_BIG"}
+]},
+{id:"808s",title:"808s & Heartbreak",artist:"Kanye West",year:"2008",type:"official",tags:["kanye","west","808s","heartbreak","heartless","love lockdown","autotune","rap","pop","2008"],cover:"https://m.media-amazon.com/images/I/51-HCBAsFRL._UF1000,1000_QL80_.jpg",tracks:[
+    {name:"Say You Will",file:"../audio/808s-n-heartbreak/tracks/say-you-will.mp3",statId:"#808_SYW"},{name:"Welcome to Heartbreak",file:"../audio/808s-n-heartbreak/tracks/welcome-to-heartbreak.mp3",statId:"#808_WTH"},{name:"Heartless",file:"../audio/808s-n-heartbreak/tracks/heartless.mp3",statId:"#808_HL"},
+    {name:"Amazing",file:"../audio/808s-n-heartbreak/tracks/amazing.mp3",statId:"#808_AMAZ"},{name:"Love Lockdown",file:"../audio/808s-n-heartbreak/tracks/love-lockdown.mp3",statId:"#808_LL"},{name:"Paranoid",file:"../audio/808s-n-heartbreak/tracks/paranoid.mp3",statId:"#808_PAR"},
+    {name:"RoboCop",file:"../audio/808s-n-heartbreak/tracks/robocop.mp3",statId:"#808_RC"},{name:"Street Lights",file:"../audio/808s-n-heartbreak/tracks/street-lights.mp3",statId:"#808_SL"},{name:"Bad News",file:"../audio/808s-n-heartbreak/tracks/bad-news.mp3",statId:"#808_BN"},
+    {name:"See You in My Nightmares",file:"../audio/808s-n-heartbreak/tracks/see-you-in-my-nightmares.mp3",statId:"#808_SYMN"},{name:"Coldest Winter",file:"../audio/808s-n-heartbreak/tracks/coldest-winter.mp3",statId:"#808_CW"},{name:"Pinocchio Story (Live)",file:"../audio/808s-n-heartbreak/tracks/pinocchio-story.mp3",statId:"#808_PS"}
+]},
+{id:"mbdtf",title:"My Beautiful Dark Twisted Fantasy",artist:"Kanye West",year:"2010",type:"official",tags:["kanye","west","mbdtf","beautiful","dark","twisted","fantasy","runaway","power","rap","hip hop","2010"],cover:"https://i.scdn.co/image/ab67616d0000b273d9194aa18fa4c9362b47464f",tracks:[
+    {name:"Dark Fantasy",file:"../audio/mbdtf/tracks/dark-fantasy.mp3",statId:"#MBDTF_DF"},{name:"Gorgeous",file:"../audio/mbdtf/tracks/gorgeous.mp3",statId:"#MBDTF_GOR"},{name:"POWER",file:"../audio/mbdtf/tracks/power.mp3",statId:"#MBDTF_PWR"},
+    {name:"All of the Lights (Interlude)",file:"../audio/mbdtf/tracks/all-of-lights-interlude.mp3",statId:"#MBDTF_AOLI"},{name:"All of the Lights",file:"../audio/mbdtf/tracks/all-of-lights.mp3",statId:"#MBDTF_AOL"},
+    {name:"Monster",file:"../audio/mbdtf/tracks/monster.mp3",statId:"#MBDTF_MON"},{name:"So Appalled",file:"../audio/mbdtf/tracks/so-appalled.mp3",statId:"#MBDTF_SA"},{name:"Devil in a New Dress",file:"../audio/mbdtf/tracks/devil-new-dress.mp3",statId:"#MBDTF_DIAND"},
+    {name:"Runaway",file:"../audio/mbdtf/tracks/runaway.mp3",statId:"#MBDTF_RUN"},{name:"Hell of a Life",file:"../audio/mbdtf/tracks/hell-of-a-life.mp3",statId:"#MBDTF_HOAL"},{name:"Blame Game",file:"../audio/mbdtf/tracks/blame-game.mp3",statId:"#MBDTF_BG"},
+    {name:"Lost in the World",file:"../audio/mbdtf/tracks/lost-in-the-world.mp3",statId:"#MBDTF_LITW"},{name:"Who Will Survive in America",file:"../audio/mbdtf/tracks/who-will-survive.mp3",statId:"#MBDTF_WWSIA"}
+]},
+{id:"watch-throne",title:"Watch the Throne",artist:"Jay-Z",primaryArtist:"Kanye West",featuredArtists:["Jay-Z"],year:"2011",type:"official",tags:["kanye","west","jayz","watch","throne","niggas in paris","rap","hip hop","2011"],cover:"https://upload.wikimedia.org/wikipedia/en/thumb/e/ee/Watch_The_Throne.jpg/250px-Watch_The_Throne.jpg",tracks:[
+    {name:"No Church in the Wild",file:"../audio/watch-the-thrown/tracks/no-church.mp3",statId:"#WTT_NCITW"},{name:"Lift Off",file:"../audio/watch-the-thrown/tracks/lift-off.mp3",statId:"#WTT_LO"},{name:"Niggas in Paris",file:"../audio/watch-the-thrown/tracks/niggas-in-paris.mp3",statId:"#WTT_NIP"},
+    {name:"Otis",file:"../audio/watch-the-thrown/tracks/otis.mp3",statId:"#WTT_OTIS"},{name:"Gotta Have It",file:"../audio/watch-the-thrown/tracks/gotta-have-it.mp3",statId:"#WTT_GHI"},{name:"New Day",file:"../audio/watch-the-thrown/tracks/new-day.mp3",statId:"#WTT_ND"},
+    {name:"That's My Bitch",file:"../audio/watch-the-thrown/tracks/thats-my-bitch.mp3",statId:"#WTT_TMB"},{name:"Welcome to the Jungle",file:"../audio/watch-the-thrown/tracks/welcome-jungle.mp3",statId:"#WTT_WTTJ"},{name:"Who Gon Stop Me",file:"../audio/watch-the-thrown/tracks/who-gon-stop-me.mp3",statId:"#WTT_WGSM"},
+    {name:"Murder to Excellence",file:"../audio/watch-the-thrown/tracks/murder-excellence.mp3",statId:"#WTT_MTE"},{name:"Sweet Baby Jesus",file:"../audio/watch-the-thrown/tracks/sweet-baby-jesus.mp3"},{name:"Why I Love You",file:"../audio/watch-the-thrown/tracks/why-i-love-you.mp3",statId:"#WTT_WILY"},
+    {name:"H•A•M",file:"../audio/watch-the-thrown/tracks/ham.mp3",statId:"#WTT_HAM"},{name:"Primetime",file:"../audio/watch-the-thrown/tracks/primetime.mp3",statId:"#WTT_PT"},{name:"The Joy",file:"../audio/watch-the-thrown/tracks/the-joy.mp3",statId:"#WTT_TJ"}
+]},
+{id:"cruel-summer",title:"Cruel Summer",artist:"GOOD Music",primaryArtist:"Kanye West",featuredArtists:["Big Sean","2 Chainz","John Legend","Teyana Taylor"],year:"2012",type:"official",tags:["kanye","west","good","music","cruel","summer","mercy","clique","rap","hip hop","2012"],cover:"https://upload.wikimedia.org/wikipedia/en/thumb/a/ab/CruelSummercover.jpg/250px-CruelSummercover.jpg",tracks:[
+    {name:"To the World",file:"../audio/cruel-summer/tracks/to-the-world.mp3",statId:"#CS_TTW"},{name:"Mercy",file:"../audio/cruel-summer/tracks/mercy.mp3",statId:"#CS_MERCY"},{name:"New God Flow",file:"../audio/cruel-summer/tracks/new-god-flow.mp3",statId:"#CS_NGF"},
+    {name:"Clique",file:"../audio/cruel-summer/tracks/clique.mp3",statId:"#CS_CLIQUE"},{name:"Bliss",file:"../audio/cruel-summer/tracks/bliss.mp3",statId:"#CS_BLISS"},{name:"Cruel Summer",file:"../audio/cruel-summer/tracks/cruel-summer.mp3",statId:"#CS_CS"},
+    {name:"Higher",file:"../audio/cruel-summer/tracks/higher.mp3",statId:"#CS_HIGH"},{name:"Don't Like (Remix)",file:"../audio/cruel-summer/tracks/dont-like.mp3",statId:"#CS_DL"},{name:"The Morning",file:"../audio/cruel-summer/tracks/the-morning.mp3",statId:"#CS_TM"},
+    {name:"Cold",file:"../audio/cruel-summer/tracks/cold.mp3",statId:"#CS_COLD"},{name:"Sweet Baby Jesus",file:"../audio/cruel-summer/tracks/sweet-baby-jesus.mp3",statId:"#CS_SBJ"},{name:"Sin City",file:"../audio/cruel-summer/tracks/sin-city.mp3",statId:"#CS_SC"},
+    {name:"Way Too Cold",file:"../audio/cruel-summer/tracks/way-too-cold.mp3",statId:"#CS_WTC"},{name:"Creepers",file:"../audio/cruel-summer/tracks/creepers.mp3",statId:"#CS_CREEP"}
+]},
+{id:"yeezus",title:"Yeezus",artist:"Kanye West",year:"2013",type:"official",tags:["kanye","west","yeezus","bound 2","new slaves","black skinhead","rap","industrial","2013"],cover:"https://m.media-amazon.com/images/I/516qybuOZhL._UF1000,1000_QL80_.jpg",tracks:[
+    {name:"On Sight",file:"../audio/YEEZUS/tracks/on-sight.mp3",statId:"#YZ_OS"},{name:"Black Skinhead",file:"../audio/YEEZUS/tracks/black-skinhead.mp3",statId:"#YZ_BSH"},{name:"I Am a God",file:"../audio/YEEZUS/tracks/i-am-a-god.mp3",statId:"#YZ_IAAG"},
+    {name:"New Slaves",file:"../audio/YEEZUS/tracks/new-slaves.mp3",statId:"#YZ_NS"},{name:"Hold My Liquor",file:"../audio/YEEZUS/tracks/hold-my-liquor.mp3",statId:"#YZ_HML"},{name:"I'm in It",file:"../audio/YEEZUS/tracks/im-in-it.mp3",statId:"#YZ_III"},
+    {name:"Blood on the Leaves",file:"../audio/YEEZUS/tracks/blood-on-leaves.mp3",statId:"#YZ_BOTL"},{name:"Guilt Trip",file:"../audio/YEEZUS/tracks/guilt-trip.mp3",statId:"#YZ_GT"},{name:"Send It Up",file:"../audio/YEEZUS/tracks/send-it-up.mp3",statId:"#YZ_SIU"},
+    {name:"Bound 2",file:"../audio/YEEZUS/tracks/bound-2.mp3",statId:"#YZ_B2"}
+]},
+{id:"tlop",title:"The Life of Pablo",artist:"Kanye West",year:"2016",type:"official",tags:["kanye","west","pablo","tlop","ultralight beam","famous","fade","rap","gospel","2016"],cover:"https://preview.redd.it/puu7vsw10fb01.png?width=640&crop=smart&auto=webp&s=cef42bec02f7a6064349d8cfd34df097bfe12ade",tracks:[
+    {name:"Ultralight Beam",file:"../audio/the-life-of-pablo/tracks/ultralight-beam.mp3",statId:"#TLOP_UB"},{name:"Father Stretch My Hands Pt. 1",file:"../audio/the-life-of-pablo/tracks/fsmh-pt1.mp3",statId:"#TLOP_FSMH1"},
+    {name:"Pt. 2",file:"../audio/the-life-of-pablo/tracks/fsmh-pt2.mp3",statId:"#TLOP_FSMH2"},{name:"Famous",file:"../audio/the-life-of-pablo/tracks/famous.mp3",statId:"#TLOP_FAM"},{name:"Feedback",file:"../audio/the-life-of-pablo/tracks/feedback.mp3",statId:"#TLOP_FB"},
+    {name:"Low Lights",file:"../audio/the-life-of-pablo/tracks/low-lights.mp3",statId:"#TLOP_LL"},{name:"Highlights",file:"../audio/the-life-of-pablo/tracks/highlights.mp3",statId:"#TLOP_HL"},{name:"Freestyle 4",file:"../audio/the-life-of-pablo/tracks/freestyle-4.mp3",statId:"#TLOP_F4"},
+    {name:"I Love Kanye",file:"../audio/the-life-of-pablo/tracks/i-love-kanye.mp3",statId:"#TLOP_ILK"},{name:"Waves",file:"../audio/the-life-of-pablo/tracks/waves.mp3",statId:"#TLOP_WAV"},{name:"FML",file:"../audio/the-life-of-pablo/tracks/fml.mp3",statId:"#TLOP_FML"},
+    {name:"Real Friends",file:"../audio/the-life-of-pablo/tracks/real-friends.mp3",statId:"#TLOP_RF"},{name:"Wolves",file:"../audio/the-life-of-pablo/tracks/wolves.mp3",statId:"#TLOP_WLV"},{name:"Frank's Track",file:"../audio/the-life-of-pablo/tracks/franks-track,mp3"},
+    {name:"Siiiiiiiiilver Surfffter Surffffff",file:"../audio/the-life-of-pablo/tracks/silver-surfer.mp3",statId:"#TLOP_SS"},{name:"30 Hours",file:"../audio/the-life-of-pablo/tracks/30-hours.mp3",statId:"#TLOP_30H"},
+    {name:"No More Parties in LA",file:"../audio/the-life-of-pablo/tracks/no-more-parties.mp3",statId:"#TLOP_NMPLA"},{name:"Facts (Charlie Heat Version)",file:"../audio/the-life-of-pablo/tracks/facts.mp3",statId:"#TLOP_FACTS"},
+    {name:"Fade",file:"../audio/the-life-of-pablo/tracks/fade.mp3",statId:"#TLOP_FADE"},{name:"Saint Pablo",file:"../audio/the-life-of-pablo/tracks/saint-pablo.mp3",statId:"#TLOP_SP"}
+]},
+{id:"ye",title:"ye",artist:"Kanye West",year:"2018",type:"official",tags:["kanye","west","ye","yikes","ghost town","violent crimes","rap","2018"],cover:"https://upload.wikimedia.org/wikipedia/en/7/74/Ye_album_cover.jpg",tracks:[
+    {name:"I Thought About Killing You",file:"../audio/ye/tracks/i-thought-about.mp3",statId:"#YE_ITAKY"},{name:"Yikes",file:"../audio/ye/tracks/yikes.mp3",statId:"#YE_YK"},{name:"All Mine",file:"../audio/ye/tracks/all-mine.mp3",statId:"#YE_AM"},
+    {name:"Wouldn't Leave",file:"../audio/ye/tracks/wouldnt-leave.mp3",statId:"#YE_WL"},{name:"No Mistakes",file:"../audio/ye/tracks/no-mistakes.mp3",statId:"#YE_NM"},{name:"Ghost Town",file:"../audio/ye/tracks/ghost-town.mp3",statId:"#YE_GT"},
+    {name:"Violent Crimes",file:"../audio/ye/tracks/violent-crimes.mp3",statId:"#YE_VC"}
+]},
+{id:"kids-see-ghosts",title:"Kids See Ghosts",artist:"Kids See Ghosts",primaryArtist:"Kanye West",featuredArtists:["Kid Cudi"],year:"2018",type:"official",tags:["kanye","west","cudi","kids","see","ghosts","reborn","rap","2018"],cover:"https://upload.wikimedia.org/wikipedia/en/4/44/Kids_See_Ghosts_Cover.png",tracks:[
+    {name:"Feel the Love",file:"../audio/kids-see-ghosts/tracks/feel-the-love.mp3",statId:"#KSG_FTL"},
+    {name:"Fire",file:"../audio/kids-see-ghosts/tracks/fire.mp3",statId:"#KSG_FIRE"},
+    {name:"4th Dimension",file:"../audio/kids-see-ghosts/tracks/4th-dimension.mp3",statId:"#KSG_4D"},
+    {name:"Freeee (Ghost Town Pt. 2)",file:"../audio/kids-see-ghosts/tracks/freeee.mp3",statId:"#KSG_FREE"},
+    {name:"Reborn",file:"../audio/kids-see-ghosts/tracks/reborn.mp3",statId:"#KSG_REB"},
+    {name:"Kids See Ghosts",file:"../audio/kids-see-ghosts/tracks/kids-see-ghosts.mp3",statId:"#KSG_KSG"},
+    {name:"Cudi Montage",file:"../audio/kids-see-ghosts/tracks/cudi-montage.mp3",statId:"#KSG_CM"}
+]},
+{id:"jesus-is-king",title:"Jesus Is King",artist:"Kanye West",year:"2019",type:"official",tags:["kanye","west","jesus","king","gospel","follow god","closed on sunday","rap","2019"],cover:"https://media.pitchfork.com/photos/5db73da8fd8a1f0009ad5c80/master/pass/jesusisking_kanye.jpg",tracks:[
+    {name:"Every Hour",file:"../audio/jesus-is-king/tracks/every-hour.mp3",statId:"#JIK_EH"},
+    {name:"Follow God",file:"../audio/jesus-is-king/tracks/follow-god.mp3",statId:"#JIK_FG"},
+    {name:"Closed on Sunday",file:"../audio/jesus-is-king/tracks/closed-on-sunday.mp3",statId:"#JIK_COS"},
+    {name:"On God",file:"../audio/jesus-is-king/tracks/on-god.mp3",statId:"#JIK_OG"},
+    {name:"Everything We Need",file:"../audio/jesus-is-king/tracks/everything-we-need.mp3",statId:"#JIK_EWN"},
+    {name:"Water",file:"../audio/jesus-is-king/tracks/water.mp3",statId:"#JIK_WAT"},
+    {name:"God Is",file:"../audio/jesus-is-king/tracks/god-is.mp3",statId:"#JIK_GI"},
+    {name:"Hands On",file:"../audio/jesus-is-king/tracks/hands-on.mp3",statId:"#JIK_HO"},
+    {name:"Use This Gospel",file:"../audio/jesus-is-king/tracks/use-this-gospel.mp3",statId:"#JIK_UTG"},
+    {name:"Jesus Is Lord",file:"../audio/jesus-is-king/tracks/jesus-is-lord.mp3",statId:"#JIK_JIL"}
+]},
+{id:"donda",title:"Donda",artist:"Kanye West",year:"2021",type:"official",tags:["kanye","west","donda","off the grid","hurricane","praise god","jail","rap","gospel","2021"],cover:"https://i.redd.it/jvst2ity53d51.jpg",tracks:[
+    {name:"Donda Chant",file:"../audio/donda/tracks/donda-chant.mp3",statId:"#DON_DC"},{name:"Jail",file:"../audio/donda/tracks/jail.mp3",statId:"#DON_JAIL"},{name:"God Breathed",file:"../audio/donda/tracks/god-breathed.mp3",statId:"#DON_GB"},
+    {name:"Off the Grid",file:"../audio/donda/tracks/off-the-grid.mp3",statId:"#DON_OTG"},{name:"Hurricane",file:"../audio/donda/tracks/hurricane.mp3",statId:"#DON_HUR"},{name:"Praise God",file:"../audio/donda/tracks/praise-god.mp3",statId:"#DON_PG"},
+    {name:"Jonah",file:"../audio/donda/tracks/jonah.mp3",statId:"#DON_JON"},{name:"Ok Ok",file:"../audio/donda/tracks/ok-ok.mp3",statId:"#DON_OO"},{name:"Junya",file:"../audio/donda/tracks/junya.mp3",statId:"#DON_JUN"},
+    {name:"Believe What I Say",file:"../audio/donda/tracks/believe-what-i-say.mp3",statId:"#DON_BWIS"},{name:"24",file:"../audio/donda/tracks/24.mp3",statId:"#DON_24"},{name:"Remote Control",file:"../audio/donda/tracks/remote-control.mp3",statId:"#DON_RC"},
+    {name:"Moon",file:"../audio/donda/tracks/moon.mp3",statId:"#DON_MOON"},{name:"Heaven and Hell",file:"../audio/donda/tracks/heaven-and-hell.mp3",statId:"#DON_HAH"},{name:"Donda",file:"../audio/donda/tracks/donda-title.mp3",statId:"#DON_DON"},
+    {name:"Pure Souls",file:"../audio/donda/tracks/pure-souls.mp3",statId:"#DON_PS"},{name:"Come to Life",file:"../audio/donda/tracks/come-to-life.mp3",statId:"#DON_CTL"},{name:"No Child Left Behind",file:"../audio/donda/tracks/no-child.mp3",statId:"#DON_NCLB"},
+    {name:"Jail pt 2",file:"../audio/donda/tracks/jail-pt2.mp3",statId:"#DON_JAIL2"},{name:"Jesus Lord",file:"../audio/donda/tracks/jesus-lord.mp3",statId:"#DON_JL"},{name:"New Again",file:"../audio/donda/tracks/new-again.mp3",statId:"#DON_NA"},
+    {name:"Tell the Vision",file:"../audio/donda/tracks/tell-the-vision.mp3",statId:"#DON_TTV"},{name:"Lord I Need You",file:"../audio/donda/tracks/lord-i-need-you.mp3",statId:"#DON_LINY"},{name:"Jail pt 3",file:"../audio/donda/tracks/jail-pt3.mp3"}
+]},
+{id:"donda-2",title:"Donda 2",artist:"Kanye West",year:"2022",type:"official",tags:["kanye","west","donda","2","stem player","rap","2022"],cover:"https://i.scdn.co/image/ab67616d0000b2736dc675e2b4f4d86b762f3bfa",tracks:[
+    {name:"Sci Fi",file:"../audio/donda-2/tracks/sci-fi.mp3",statId:"#D2_SF"},{name:"True Love",file:"../audio/donda-2/tracks/true-love.mp3",statId:"#D2_TL"},{name:"Security",file:"../audio/donda-2/tracks/security.mp3",statId:"#D2_SEC"},
+    {name:"Too Easy",file:"../audio/donda-2/tracks/too-easy.mp3",statId:"#D2_TE"},{name:"Louie Bags",file:"../audio/donda-2/tracks/louie-bags.mp3",statId:"#D2_LB"},{name:"Pablo",file:"../audio/donda-2/tracks/pablo.mp3",statId:"#D2_PAB"},
+    {name:"Rich Flex",file:"../audio/donda-2/tracks/rich-flex.mp3",statId:"#D2_RF"},{name:"Happy",file:"../audio/donda-2/tracks/happy.mp3",statId:"#D2_HAP"},
+    {name:"We Did It Kid",file:"../audio/donda-2/tracks/we-did-it-kid.mp3",statId:"#D2_WDIK"},{name:"Flowers",file:"../audio/donda-2/tracks/flowers.mp3",statId:"#D2_FLW"}
+]},
+{id:"vultures-1",title:"Vultures 1",artist:"¥$",primaryArtist:"Kanye West",featuredArtists:["Ty Dolla $ign"],year:"2024",type:"official",tags:["kanye","west","ty dolla sign","vultures","carnival","hoodrat","rap","2024"],cover:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Kanye_West_and_Ty_Dolla_Sign_-_Vultures_Vol._1_%28Cover%29.png/250px-Kanye_West_and_Ty_Dolla_Sign_-_Vultures_Vol._1_%28Cover%29.png",tracks:[
+    {name:"Vultures",file:"../audio/vultures-1/tracks/vultures-title.mp3",statId:"#V1_VUL"},{name:"Paid",file:"../audio/vultures-1/tracks/paid.mp3",statId:"#V1_PAID"},
+    {name:"Hoodrat",file:"../audio/vultures-1/tracks/hoodrat.mp3",statId:"#V1_HR"},{name:"Talking",file:"../audio/vultures-1/tracks/talking.mp3",statId:"#V1_TALK"},
+    {name:"Carnival",file:"../audio/vultures-1/tracks/carnival.mp3",statId:"#V1_CARN"},{name:"Burn",file:"../audio/vultures-1/tracks/burn.mp3",statId:"#V1_BURN"},
+    {name:"King",file:"../audio/vultures-1/tracks/king.mp3",statId:"#V1_KING"},{name:"Keys to My Life",file:"../audio/vultures-1/tracks/keys-to-my-life.mp3",statId:"#V1_KTML"},
+    {name:"FML (feat. The Weeknd)",file:"../audio/vultures-1/tracks/fml.mp3"},
+    {name:"Problematic",file:"../audio/vultures-1/tracks/problematic.mp3",statId:"#V1_PROB"},{name:"Good (Don't Die)",file:"../audio/vultures-1/tracks/good-dont-die.mp3",statId:"#V1_GDD"},
+    {name:"Do It",file:"../audio/vultures-1/tracks/do-it.mp3",statId:"#V1_DI"},{name:"Beg Forgiveness",file:"../audio/vultures-1/tracks/beg-forgiveness.mp3",statId:"#V1_BF"},
+    {name:"Paperwork",file:"../audio/vultures-1/tracks/paperwork.mp3",statId:"#V1_PW"},{name:"Back to Me",file:"../audio/vultures-1/tracks/back-to-me.mp3",statId:"#V1_BTM"},
+    {name:"Vultures 2",file:"../audio/vultures-1/tracks/vultures-2-track.mp3",statId:"#V1_V2"},{name:"Lifestyle",file:"../audio/vultures-1/tracks/lifestyle.mp3",statId:"#V1_LS"}
+]},
+{id:"vultures-2",title:"Vultures 2",artist:"¥$",primaryArtist:"Kanye West",featuredArtists:["Ty Dolla $ign"],year:"2024",type:"official",tags:["kanye","west","ty dolla sign","vultures","2","rap","2024"],cover:"https://images.genius.com/8e2c3c0e076e066fa40966001b956663.1000x1000x1.jpg",tracks:[
+    {name:"Field Trip",file:"../audio/vultures-2/tracks/field-trip.mp3",statId:"#V2_FT"},{name:"Everybody",file:"../audio/vultures-2/tracks/everybody.mp3",statId:"#V2_EVB"},
+    {name:"Bomb",file:"../audio/vultures-2/tracks/bomb.mp3",statId:"#V2_BOMB"},{name:"River",file:"../audio/vultures-2/tracks/river.mp3",statId:"#V2_RIV"},
+    {name:"Science",file:"../audio/vultures-2/tracks/science.mp3",statId:"#V2_SCI"},{name:"Munch",file:"../audio/vultures-2/tracks/munch.mp3",statId:"#V2_MUNCH"},
+    {name:"Drive",file:"../audio/vultures-2/tracks/drive.mp3",statId:"#V2_DRV"},{name:"Mast",file:"../audio/vultures-2/tracks/mast.mp3",statId:"#V2_MAST"},
+    {name:"Beg",file:"../audio/vultures-2/tracks/beg.mp3",statId:"#V2_BEG"},{name:"Lonely Roads",file:"../audio/vultures-2/tracks/lonely-roads.mp3",statId:"#V2_LR"},
+    {name:"Gun To My Head",file:"../audio/vultures-2/tracks/gun-to-my-head.mp3",statId:"#V2_GTMH"},
+    {name:"Preacher Man",file:"../audio/vultures-2/tracks/preacher-man.mp3",statId:"#V2_PM"},
+    {name:"Slide",file:"../audio/vultures-2/tracks/slide.mp3",statId:"#V2_SLD"},
+    {name:"Fvcking Demons",file:"../audio/vultures-2/tracks/fvcking-demons.mp3",statId:"#V2_FD"}
+]},
+{id:"bully",title:"Bully",artist:"Kanye West",year:"2025",type:"official",tags:["kanye","west","ye","bully","rap","2025"],cover:"https://news.artnet.com/app/news-upload/2024/10/kanye-west-bully-ye.jpg",tracks:[
+    {name:"Bully",file:"../audio/bully/tracks/bully-title.mp3",statId:"#BUL_BUL"},{name:"Lonely",file:"../audio/bully/tracks/lonely.mp3",statId:"#BUL_LON"},
+    {name:"Industry",file:"../audio/bully/tracks/industry.mp3",statId:"#BUL_IND"},{name:"Witches",file:"../audio/bully/tracks/witches.mp3",statId:"#BUL_WIT"},
+    {name:"Field Trip",file:"../audio/bully/tracks/field-trip.mp3"},
+    {name:"New Body",file:"../audio/bully/tracks/new-body.mp3",statId:"#BUL_NB"},
+    {name:"Hard Way",file:"../audio/bully/tracks/hard-way.mp3",statId:"#BUL_HW"},
+    {name:"Forever",file:"../audio/bully/tracks/forever.mp3",statId:"#BUL_FOR"},
+    {name:"Champion 2",file:"../audio/bully/tracks/champion-2.mp3",statId:"#BUL_C2"},
+    {name:"Empire",file:"../audio/bully/tracks/empire.mp3",statId:"#BUL_EMP"}
+]},
+{id:"die-lit",title:"Die Lit",artist:"Playboi Carti",year:"2018",type:"official",tags:["playboi carti","rap","2018"],cover:"https://upload.wikimedia.org/wikipedia/en/c/c6/Die_Lit_by_Playboi_Carti.jpg",tracks:[
+    {name:"Long Time (Intro)",file:"../audio/die-lit/tracks/long-time.mp3",statId:"#DL_LT"},
+    {name:"R.I.P.",file:"../audio/die-lit/tracks/rip.mp3",statId:"#DL_RIP"},
+    {name:"Lean 4 Real (feat. Skepta)",file:"../audio/die-lit/tracks/lean-4-real.mp3",statId:"#DL_L4R"},
+    {name:"Old Money",file:"../audio/die-lit/tracks/old-money.mp3",statId:"#DL_OM"},
+    {name:"Love Hurts (feat. Travis Scott)",file:"../audio/die-lit/tracks/love-hurts.mp3",statId:"#DL_LH"},
+    {name:"Shoota (feat. Lil Uzi Vert)",file:"../audio/die-lit/tracks/shoota.mp3",statId:"#DL_SHOOT"},
+    {name:"Right Now (feat. Pi'erre Bourne)",file:"../audio/die-lit/tracks/right-now.mp3",statId:"#DL_RN"},
+    {name:"Poke It Out (feat. Nicki Minaj)",file:"../audio/die-lit/tracks/poke-it-out.mp3",statId:"#DL_PIO"},
+    {name:"Home (KOD)",file:"../audio/die-lit/tracks/home-kod.mp3",statId:"#DL_HOME"},
+    {name:"Fell In Luv (feat. Bryson Tiller)",file:"../audio/die-lit/tracks/fell-in-luv.mp3",statId:"#DL_FIL"},
+    {name:"Foreign",file:"../audio/die-lit/tracks/foreign.mp3",statId:"#DL_FOR"},
+    {name:"Pull Up",file:"../audio/die-lit/tracks/pull-up.mp3",statId:"#DL_PU"},
+    {name:"Mileage (feat. Chief Keef)",file:"../audio/die-lit/tracks/mileage.mp3",statId:"#DL_MIL"},
+    {name:"FlatBed Freestyle",file:"../audio/die-lit/tracks/flatbed-freestyle.mp3",statId:"#DL_FF"},
+    {name:"No Time (feat. Gunna)",file:"../audio/die-lit/tracks/no-time.mp3",statId:"#DL_NT"},
+    {name:"Middle of the Summer (feat. Red Coldhearted)",file:"../audio/die-lit/tracks/middle-of-the-summer.mp3",statId:"#DL_MOTS"},
+    {name:"Choppa Won't Miss (feat. Young Thug)",file:"../audio/die-lit/tracks/choppa-wont-miss.mp3",statId:"#DL_CWM"},
+    {name:"R.I.P. Fredo (Notice Me) (feat. Young Nudy)",file:"../audio/die-lit/tracks/rip-fredo.mp3",statId:"#DL_RIPF"},
+    {name:"Top (feat. Pi'erre Bourne)",file:"../audio/die-lit/tracks/top.mp3",statId:"#DL_TOP"}
+]},
+{
+  id: "goblin",
+  title: "Goblin",
+  artist: "Tyler, the Creator",
+  year: "2011",
+  type: "official",
+  tags: ["tyler the creator","rap","2011"],
+  cover: "https://raw.githubusercontent.com/soundscapeonline/soundscapeonline.github.io/main/audio/goblin/covers/IMG_6377.jpeg",
+  tracks: [
+    {name:"Goblin",file:"../audio/goblin/tracks/goblin.mp3",statId:"#GOB_GOB"},
+    {name:"Yonkers",file:"../audio/goblin/tracks/yonkers.mp3",statId:"#GOB_YON"},
+    {name:"Radicals",file:"../audio/goblin/tracks/radicals.mp3",statId:"#GOB_RAD"},
+    {name:"She (feat. Frank Ocean)",file:"../audio/goblin/tracks/she.mp3",statId:"#GOB_SHE"},
+    {name:"Transylvania",file:"../audio/goblin/tracks/transylvania.mp3",statId:"#GOB_TRANS"},
+    {name:"Nightmare",file:"../audio/goblin/tracks/nightmare.mp3",statId:"#GOB_NIGHT"},
+    {name:"Tron Cat",file:"../audio/goblin/tracks/tron-cat.mp3",statId:"#GOB_TC"},
+    {name:"Her",file:"../audio/goblin/tracks/her.mp3",statId:"#GOB_HER"},
+    {name:"Sandwitches (feat. Hodgy)",file:"../audio/goblin/tracks/sandwitches.mp3",statId:"#GOB_SAND"},
+    {name:"Fish",file:"../audio/goblin/tracks/fish.mp3",statId:"#GOB_FISH"},
+    {name:"Analog (feat. Hodgy)",file:"../audio/goblin/tracks/analog.mp3",statId:"#GOB_ANA"},
+    {name:"B.S.D.",file:"../audio/goblin/tracks/bsd.mp3",statId:"#GOB_BSD"},
+    {name:"Window (feat. Domo Genesis, Hodgy & Mike G)",file:"../audio/goblin/tracks/window.mp3",statId:"#GOB_WIN"},
+    {name:"AU79",file:"../audio/goblin/tracks/au79.mp3",statId:"#GOB_AU79"},
+    {name:"Golden",file:"../audio/goblin/tracks/golden.mp3",statId:"#GOB_GOLD"}
+  ]
+},
+{
+  id: "wolf",
+  title: "Wolf",
+  artist: "Tyler, the Creator",
+  year: "2013",
+  type: "official",
+  tags: ["tyler the creator","rap","2013"],
+  cover: "https://raw.githubusercontent.com/soundscapeonline/soundscapeonline.github.io/main/audio/wolf/covers/IMG_6378.jpeg",
+  tracks: [
+    {name:"Wolf",file:"../audio/wolf/tracks/wolf.mp3",statId:"#WOLF_WOLF"},
+    {name:"Jamba (feat. Hodgy)",file:"../audio/wolf/tracks/jamba.mp3",statId:"#WOLF_JAM"},
+    {name:"Cowboy",file:"../audio/wolf/tracks/cowboy.mp3",statId:"#WOLF_COW"},
+    {name:"Awkward",file:"../audio/wolf/tracks/awkward.mp3",statId:"#WOLF_AWK"},
+    {name:"Domo23",file:"../audio/wolf/tracks/domo23.mp3",statId:"#WOLF_D23"},
+    {name:"Answer",file:"../audio/wolf/tracks/answer.mp3",statId:"#WOLF_ANS"},
+    {name:"Slater (feat. Frank Ocean)",file:"../audio/wolf/tracks/slater.mp3",statId:"#WOLF_SLA"},
+    {name:"48",file:"../audio/wolf/tracks/48.mp3",statId:"#WOLF_48"},
+    {name:"Colossus",file:"../audio/wolf/tracks/colossus.mp3",statId:"#WOLF_COL"},
+    {name:"PartyIsntOver/Campfire/Bimmer (feat. Frank Ocean & Lætitia Sadier)",file:"../audio/wolf/tracks/piocb.mp3",statId:"#WOLF_PCB"},
+    {name:"IFHY (feat. Pharrell)",file:"../audio/wolf/tracks/ifhy.mp3",statId:"#WOLF_IFHY"},
+    {name:"Pigs",file:"../audio/wolf/tracks/pigs.mp3",statId:"#WOLF_PIGS"},
+    {name:"Parking Lot (feat. Mike G & Casey Veggies)",file:"../audio/wolf/tracks/parking-lot.mp3",statId:"#WOLF_PL"},
+    {name:"Rusty (feat. Domo Genesis & Earl Sweatshirt)",file:"../audio/wolf/tracks/rusty.mp3",statId:"#WOLF_RUS"},
+    {name:"Trashwang (feat. Odd Future)",file:"../audio/wolf/tracks/trashwang.mp3",statId:"#WOLF_TW"},
+    {name:"Treehome95 (feat. Coco O. & Erykah Badu)",file:"../audio/wolf/tracks/treehome95.mp3",statId:"#WOLF_TH95"},
+    {name:"Tamale",file:"../audio/wolf/tracks/tamale.mp3",statId:"#WOLF_TAM"},
+    {name:"Lone",file:"../audio/wolf/tracks/lone.mp3",statId:"#WOLF_LONE"}
+  ]
+},
+{
+  id: "cherry-bomb",
+  title: "Cherry Bomb",
+  artist: "Tyler, the Creator",
+  year: "2015",
+  type: "official",
+  tags: ["tyler the creator","rap","2015"],
+  cover: "https://raw.githubusercontent.com/soundscapeonline/soundscapeonline.github.io/main/audio/cherry-bomb/covers/cherry.jpeg",
+  tracks: [
+    {name:"Deathcamp",file:"../audio/cherry-bomb/tracks/deathcamp.mp3",statId:"#CB_DC"},
+    {name:"Buffalo",file:"../audio/cherry-bomb/tracks/buffalo.mp3",statId:"#CB_BUF"},
+    {name:"Pilot",file:"../audio/cherry-bomb/tracks/pilot.mp3",statId:"#CB_PIL"},
+    {name:"Run",file:"../audio/cherry-bomb/tracks/run.mp3",statId:"#CB_RUN"},
+    {name:"Find Your Wings (feat. Kali Uchis & Roy Ayers)",file:"../audio/cherry-bomb/tracks/find-your-wings.mp3",statId:"#CB_FYW"},
+    {name:"Cherry Bomb",file:"../audio/cherry-bomb/tracks/cherry-bomb.mp3",statId:"#CB_CB"},
+    {name:"Blow My Load (feat. Wanya Morris, Dâm-Funk & Austin Feinstein)",file:"../audio/cherry-bomb/tracks/blow-my-load.mp3",statId:"#CB_BML"},
+    {name:"2SEATER (feat. Aaron Shaw & Samantha Nelson)",file:"../audio/cherry-bomb/tracks/2seater.mp3",statId:"#CB_2S"},
+    {name:"The Brown Stains of Darkeese Latifah Part 6–12 (Remix) (feat. Schoolboy Q)",file:"../audio/cherry-bomb/tracks/brown-stains.mp3",statId:"#CB_BS"},
+    {name:"Fucking Young / Perfect (feat. Charlie Wilson, Kali Uchis & Austin Feinstein)",file:"../audio/cherry-bomb/tracks/fucking-young-perfect.mp3",statId:"#CB_FYP"},
+    {name:"Smuckers (feat. Kanye West & Lil Wayne)",file:"../audio/cherry-bomb/tracks/smuckers.mp3",statId:"#CB_SMU"},
+    {name:"Keep Da O's (feat. Pharrell & Coco O.)",file:"../audio/cherry-bomb/tracks/keep-da-os.mp3",statId:"#CB_KDO"},
+    {name:"Okaga, CA",file:"../audio/cherry-bomb/tracks/okaga-ca.mp3",statId:"#CB_OKA"}
+  ]
+},
+{
+  id: "flower-boy",
+  title: "Flower Boy",
+  artist: "Tyler, the Creator",
+  year: "2017",
+  type: "official",
+  tags: ["tyler the creator","rap","2017"],
+  cover: "https://raw.githubusercontent.com/soundscapeonline/soundscapeonline.github.io/main/audio/flowerboy/covers/IMG_6382.jpeg",
+  tracks: [
+    {name:"Foreword (feat. Rex Orange County)",file:"../audio/flower-boy/tracks/foreword.mp3",statId:"#FB_FORE"},
+    {name:"Where This Flower Blooms (feat. Frank Ocean)",file:"../audio/flower-boy/tracks/where-this-flower-blooms.mp3",statId:"#FB_WTFB"},
+    {name:"Sometimes...",file:"../audio/flower-boy/tracks/sometimes.mp3",statId:"#FB_SOM"},
+    {name:"See You Again (feat. Kali Uchis)",file:"../audio/flower-boy/tracks/see-you-again.mp3",statId:"#FB_SYA"},
+    {name:"Who Dat Boy (feat. A$AP Rocky)",file:"../audio/flower-boy/tracks/who-dat-boy.mp3",statId:"#FB_WDB"},
+    {name:"Pothole (feat. Jaden Smith)",file:"../audio/flower-boy/tracks/pothole.mp3",statId:"#FB_POT"},
+    {name:"Garden Shed (feat. Estelle)",file:"../audio/flower-boy/tracks/garden-shed.mp3",statId:"#FB_GS"},
+    {name:"Boredom (feat. Rex Orange County & Anna of the North)",file:"../audio/flower-boy/tracks/boredom.mp3",statId:"#FB_BOR"},
+    {name:"I Ain't Got Time!",file:"../audio/flower-boy/tracks/i-aint-got-time.mp3",statId:"#FB_IAGT"},
+    {name:"911 / Mr. Lonely (feat. Frank Ocean & Steve Lacy)",file:"../audio/flower-boy/tracks/911-mr-lonely.mp3",statId:"#FB_911"},
+    {name:"Droppin' Seeds (feat. Lil Wayne)",file:"../audio/flower-boy/tracks/droppin-seeds.mp3",statId:"#FB_DS"},
+    {name:"November",file:"../audio/flower-boy/tracks/november.mp3",statId:"#FB_NOV"},
+    {name:"Glitter",file:"../audio/flower-boy/tracks/glitter.mp3",statId:"#FB_GLI"},
+    {name:"Enjoy Right Now, Today",file:"../audio/flower-boy/tracks/enjoy-right-now-today.mp3",statId:"#FB_ERNT"}
+  ]
+},
+{
+  id: "igor",
+  title: "IGOR",
+  artist: "Tyler, the Creator",
+  year: "2019",
+  type: "official",
+  tags: ["tyler the creator", "rap", "2019", "alternative hip hop"],
+  cover: "https://upload.wikimedia.org/wikipedia/en/5/51/Igor_-_Tyler%2C_the_Creator.jpg",
+  tracks: [
+    {name:"IGOR'S THEME",file:"../audio/igor/tracks/igors-theme.mp3",statId:"#IGOR_IT"},
+    {name:"EARFQUAKE",file:"../audio/igor/tracks/earfquake.mp3",statId:"#IGOR_EQ"},
+    {name:"I THINK",file:"../audio/igor/tracks/i-think.mp3",statId:"#IGOR_ITK"},
+    {name:"EXACTLY WHAT YOU RUN FROM YOU END UP CHASING",file:"../audio/igor/tracks/exactly-what-you-run-from.mp3",statId:"#IGOR_EWYRF"},
+    {name:"RUNNING OUT OF TIME",file:"../audio/igor/tracks/running-out-of-time.mp3",statId:"#IGOR_ROOT"},
+    {name:"NEW MAGIC WAND",file:"../audio/igor/tracks/new-magic-wand.mp3",statId:"#IGOR_NMW"},
+    {name:"A BOY IS A GUN*",file:"../audio/igor/tracks/a-boy-is-a-gun.mp3",statId:"#IGOR_ABIAG"},
+    {name:"PUPPET",file:"../audio/igor/tracks/puppet.mp3",statId:"#IGOR_PUP"},
+    {name:"WHAT'S GOOD",file:"../audio/igor/tracks/whats-good.mp3",statId:"#IGOR_WG"},
+    {name:"GONE, GONE / THANK YOU",file:"../audio/igor/tracks/gone-gone-thank-you.mp3",statId:"#IGOR_GGTY"},
+    {name:"I DON'T LOVE YOU ANYMORE",file:"../audio/igor/tracks/idlya.mp3",statId:"#IGOR_IDLYA"},
+    {name:"ARE WE STILL FRIENDS?",file:"../audio/igor/tracks/are-we-still-friends.mp3",statId:"#IGOR_AWSF"}
+  ]
+},
+{
+  id: "cmiygl",
+  title: "CALL ME IF YOU GET LOST",
+  artist: "Tyler, the Creator",
+  year: "2021",
+  type: "official",
+  tags: ["tyler the creator","rap","2021"],
+  cover: "https://raw.githubusercontent.com/soundscapeonline/soundscapeonline.github.io/main/audio/cmiygl/covers/IMG_6383.jpeg",
+  tracks: [
+    {name:"SIR BAUDELAIRE (feat. DJ Drama)",file:"../audio/cmiygl/tracks/sir-baudelaire.mp3",statId:"#CMIYGL_SB"},
+    {name:"CORSO",file:"../audio/cmiygl/tracks/corso.mp3",statId:"#CMIYGL_COR"},
+    {name:"LEMONHEAD (feat. 42 Dugg)",file:"../audio/cmiygl/tracks/lemonhead.mp3",statId:"#CMIYGL_LEM"},
+    {name:"WUSYANAME (feat. YoungBoy Never Broke Again & Ty Dolla $ign)",file:"../audio/cmiygl/tracks/wusyaname.mp3",statId:"#CMIYGL_WUS"},
+    {name:"LUMBERJACK",file:"../audio/cmiygl/tracks/lumberjack.mp3",statId:"#CMIYGL_LUM"},
+    {name:"HOT WIND BLOWS (feat. Lil Wayne)",file:"../audio/cmiygl/tracks/hot-wind-blows.mp3",statId:"#CMIYGL_HWB"},
+    {name:"MASSA",file:"../audio/cmiygl/tracks/massa.mp3",statId:"#CMIYGL_MAS"},
+    {name:"RUNITUP (feat. Teezo Touchdown)",file:"../audio/cmiygl/tracks/runitup.mp3",statId:"#CMIYGL_RUN"},
+    {name:"MANIFESTO (feat. Domo Genesis)",file:"../audio/cmiygl/tracks/manifesto.mp3",statId:"#CMIYGL_MAN"},
+    {name:"SWEET / I THOUGHT YOU WANTED TO DANCE (feat. Brent Faiyaz & Fana Hues)",file:"../audio/cmiygl/tracks/sweet-itywtd.mp3",statId:"#CMIYGL_SWE"},
+    {name:"MOMMA TALK",file:"../audio/cmiygl/tracks/momma-talk.mp3",statId:"#CMIYGL_MT"},
+    {name:"RISE! (feat. Daisy World)",file:"../audio/cmiygl/tracks/rise.mp3",statId:"#CMIYGL_RISE"},
+    {name:"BLESSED",file:"../audio/cmiygl/tracks/blessed.mp3",statId:"#CMIYGL_BLE"},
+    {name:"JUGGERNAUT (feat. Lil Uzi Vert & Pharrell Williams)",file:"../audio/cmiygl/tracks/juggernaut.mp3",statId:"#CMIYGL_JUG"},
+    {name:"WILSHIRE",file:"../audio/cmiygl/tracks/wilshire.mp3",statId:"#CMIYGL_WIL"},
+    {name:"SAFARI",file:"../audio/cmiygl/tracks/safari.mp3",statId:"#CMIYGL_SAF"}
+  ]
+},
+{
+  id: "cmiygl-deluxe",
+  title: "CALL ME IF YOU GET LOST: The Estate Sale",
+  artist: "Tyler, the Creator",
+  year: "2023",
+  type: "official",
+  tags: ["tyler the creator","rap","2023","deluxe"],
+  cover: "https://raw.githubusercontent.com/soundscapeonline/soundscapeonline.github.io/main/audio/cmiygl_the-estate-sale/covers/IMG_6384.jpeg",
+  tracks: [
+    {name:"EVERYTHING MUST GO (feat. DJ Drama)",file:"../audio/cmiygl_the-estate-sale/everything-must-go.mp3",statId:"#TES_EMG"},
+    {name:"STUNTMAN (feat. Vince Staples)",file:"../audio/cmiygl_the-estate-sale/stuntman.mp3",statId:"#TES_STU"},
+    {name:"WHAT A DAY",file:"../audio/cmiygl_the-estate-sale/what-a-day.mp3",statId:"#TES_WAD"},
+    {name:"WHARF TALK (feat. A$AP Rocky)",file:"../audio/cmiygl_the-estate-sale/wharf-talk.mp3",statId:"#TES_WT"},
+    {name:"DOGTOOTH",file:"../audio/cmiygl_the-estate-sale/dogtooth.mp3",statId:"#TES_DOG"},
+    {name:"HEAVEN TO ME",file:"../audio/cmiygl_the-estate-sale/heaven-to-me.mp3",statId:"#TES_HTM"},
+    {name:"BOYFRIEND, GIRLFRIEND (2020 Demo) (feat. YG)",file:"../audio/cmiygl_the-estate-sale/boyfriend-girlfriend.mp3",statId:"#TES_BG"}
+  ]
+},
+{
+  id: "chromakopia",
+  title: "CHROMAKOPIA",
+  artist: "Tyler, the Creator",
+  year: "2024",
+  type: "official",
+  tags: ["tyler the creator","rap","2024"],
+  cover: "https://raw.githubusercontent.com/soundscapeonline/soundscapeonline.github.io/main/audio/chromakopia/covers/IMG_6385.webp",
+  tracks: [
+    {name:"ST. CHROMA",file:"../audio/chromakopia/st-chroma.mp3",statId:"#CHK_SC"},
+    {name:"NOID",file:"../audio/chromakopia/noid.mp3",statId:"#CHK_NOID"},
+    {name:"I KILLED YOU",file:"../audio/chromakopia/i-killed-you.mp3",statId:"#CHK_IKY"},
+    {name:"THOUGHT I WAS DEAD",file:"../audio/chromakopia/thought-i-was-dead.mp3",statId:"#CHK_TWD"},
+    {name:"LIKE HIM",file:"../audio/chromakopia/like-him.mp3",statId:"#CHK_LH"},
+    {name:"DARLING, I",file:"../audio/chromakopia/darling-i.mp3",statId:"#CHK_DI"},
+    {name:"HEY JANE",file:"../audio/chromakopia/hey-jane.mp3",statId:"#CHK_HJ"},
+    {name:"BALLOON",file:"../audio/chromakopia/balloon.mp3",statId:"#CHK_BAL"},
+    {name:"LOVE, PEACE, AND LIGHT",file:"../audio/chromakopia/love-peace-light.mp3",statId:"#CHK_LPL"},
+    {name:"WELCOME TO THE DISCO",file:"../audio/chromakopia/welcome-to-the-disco.mp3",statId:"#CHK_WTD"},
+    {name:"ELECTRIC RAINBOW",file:"../audio/chromakopia/electric-rainbow.mp3",statId:"#CHK_ER"},
+    {name:"FANTASY",file:"../audio/chromakopia/fantasy.mp3",statId:"#CHK_FAN"},
+    {name:"CHROMAKOPIA (Outro)",file:"../audio/chromakopia/chromakopia-outro.mp3",statId:"#CHK_OUT"}
+  ]
+},
+{
+  id: "dont-tap-the-glass",
+  title: "DON'T TAP THE GLASS",
+  artist: "Tyler, the Creator",
+  year: "2025",
+  type: "official",
+  tags: ["tyler the creator","rap","2025"],
+  cover: "https://raw.githubusercontent.com/soundscapeonline/soundscapeonline.github.io/main/audio/dont-tap-the-glass/covers/Untitled174_20260225160356.png",
+  tracks: [
+    {name:"Big Poe (feat. Sk8brd)",file:"../audio/dont-tap-the-glass/tracks/big-poe.mp3",statId:"#DTTG_BP"},
+    {name:"Sugar On My Tongue",file:"../audio/dont-tap-the-glass/tracks/sugar-on-my-tongue.mp3",statId:"#DTTG_SOT"},
+    {name:"Sucka Free",file:"../audio/dont-tap-the-glass/tracks/sucka-free.mp3",statId:"#DTTG_SF"},
+    {name:"Mommanem",file:"../audio/dont-tap-the-glass/tracks/mommanem.mp3",statId:"#DTTG_MOM"},
+    {name:"Stop Playing With Me",file:"../audio/dont-tap-the-glass/tracks/stop-playing-with-me.mp3",statId:"#DTTG_SPWM"},
+    {name:"Ring Ring Ring",file:"../audio/dont-tap-the-glass/tracks/ring-ring-ring.mp3",statId:"#DTTG_RRR"},
+    {name:"Don't Tap That Glass / Tweakin'",file:"../audio/dont-tap-the-glass/tracks/dont-tap-that-glass-tweakin.mp3",statId:"#DTTG_DTT"},
+    {name:"Don't You Worry Baby",file:"../audio/dont-tap-the-glass/tracks/dont-you-worry-baby.mp3",statId:"#DTTG_DYWB"},
+    {name:"I'll Take Care of You",file:"../audio/dont-tap-the-glass/tracks/ill-take-care-of-you.mp3",statId:"#DTTG_ITCOY"},
+    {name:"Tell Me What It Is",file:"../audio/dont-tap-the-glass/tracks/tell-me-what-it-is.mp3",statId:"#DTTG_TMWII"}
+  ]
+},
+{
+  id: "section-80",
+  title: "Section.80",
+  artist: "Kendrick Lamar",
+  year: "2011",
+  type: "official",
+  tags: ["kendrick lamar","rap","2011","conscious hip hop"],
+  cover: "https://upload.wikimedia.org/wikipedia/en/thumb/4/48/Section.80-Cover.jpg/250px-Section.80-Cover.jpg",
+  tracks: [
+    {name:"Fuck Your Ethnicity",file:"../audio/section-80/tracks/fuck-your-ethnicity.mp3",statId:"#S80_FYE"},
+    {name:"Hol' Up",file:"../audio/section-80/tracks/hol-up.mp3",statId:"#S80_HU"},
+    {name:"A.D.H.D",file:"../audio/section-80/tracks/adhd.mp3",statId:"#S80_ADHD"},
+    {name:"No Make-Up (Her Vice) (feat. Colin Munroe)",file:"../audio/section-80/tracks/no-makeup.mp3",statId:"#S80_NMU"},
+    {name:"Tammy's Song (Her Evils)",file:"../audio/section-80/tracks/tammys-song.mp3",statId:"#S80_TS"},
+    {name:"Chapter Six",file:"../audio/section-80/tracks/chapter-six.mp3",statId:"#S80_C6"},
+    {name:"Ronald Reagan Era (His Evils)",file:"../audio/section-80/tracks/ronald-reagan-era.mp3",statId:"#S80_RRE"},
+    {name:"Poe Man's Dreams (His Vice) (feat. GLC)",file:"../audio/section-80/tracks/poe-mans-dreams.mp3",statId:"#S80_PMD"},
+    {name:"The Spiteful Chant (feat. Schoolboy Q)",file:"../audio/section-80/tracks/the-spiteful-chant.mp3",statId:"#S80_TSC"},
+    {name:"Chapter Ten",file:"../audio/section-80/tracks/chapter-ten.mp3",statId:"#S80_C10"},
+    {name:"Keisha's Song (Her Pain) (feat. Ashtrobot)",file:"../audio/section-80/tracks/keishas-song.mp3",statId:"#S80_KS"},
+    {name:"Rigamortus",file:"../audio/section-80/tracks/rigamortus.mp3",statId:"#S80_RIG"},
+    {name:"Kush & Corinthians (His Pain) (feat. BJ the Chicago Kid)",file:"../audio/section-80/tracks/kush-corinthians.mp3",statId:"#S80_KC"},
+    {name:"Blow My High (Members Only)",file:"../audio/section-80/tracks/blow-my-high.mp3",statId:"#S80_BMH"},
+    {name:"Ab-Soul's Outro (feat. Ab-Soul)",file:"../audio/section-80/tracks/ab-souls-outro.mp3",statId:"#S80_ASO"},
+    {name:"HiiiPower",file:"../audio/section-80/tracks/hiiipower.mp3",statId:"#S80_HP"}
+  ]
+},
+{
+  id: "good-kid-maad-city",
+  title: "good kid, m.A.A.d city",
+  artist: "Kendrick Lamar",
+  year: "2012",
+  type: "official",
+  tags: ["kendrick lamar","rap","2012","west coast hip hop"],
+  cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgFRLKqN8J5PnVQaBUTENfIWH9W72_qInvDA&s",
+  tracks: [
+    {name:"Sherane a.k.a Master Splinter’s Daughter",file:"../audio/good-kid-maad-city/tracks/sherane.mp3",statId:"#GKMC_S"},
+    {name:"Bitch, Don’t Kill My Vibe",file:"../audio/good-kid-maad-city/tracks/bdkmv.mp3",statId:"#GKMC_BDKMV"},
+    {name:"Backseat Freestyle",file:"../audio/good-kid-maad-city/tracks/backseat-freestyle.mp3",statId:"#GKMC_BF"},
+    {name:"The Art of Peer Pressure",file:"../audio/good-kid-maad-city/tracks/art-of-peer-pressure.mp3",statId:"#GKMC_AOPP"},
+    {name:"Money Trees (feat. Jay Rock)",file:"../audio/good-kid-maad-city/tracks/money-trees.mp3",statId:"#GKMC_MT"},
+    {name:"Poetic Justice (feat. Drake)",file:"../audio/good-kid-maad-city/tracks/poetic-justice.mp3",statId:"#GKMC_PJ"},
+    {name:"good kid",file:"../audio/good-kid-maad-city/tracks/good-kid.mp3",statId:"#GKMC_GK"},
+    {name:"m.A.A.d city (feat. MC Eiht)",file:"../audio/good-kid-maad-city/tracks/maad-city.mp3",statId:"#GKMC_MC"},
+    {name:"Swimming Pools (Drank)",file:"../audio/good-kid-maad-city/tracks/swimming-pools.mp3",statId:"#GKMC_SP"},
+    {name:"Sing About Me, I’m Dying of Thirst",file:"../audio/good-kid-maad-city/tracks/samidot.mp3",statId:"#GKMC_SAM"},
+    {name:"Real (feat. Anna Wise)",file:"../audio/good-kid-maad-city/tracks/real.mp3",statId:"#GKMC_REAL"},
+    {name:"Compton (feat. Dr. Dre)",file:"../audio/good-kid-maad-city/tracks/compton.mp3",statId:"#GKMC_COMP"}
+  ]
+},
+{
+  id: "to-pimp-a-butterfly",
+  title: "To Pimp a Butterfly",
+  artist: "Kendrick Lamar",
+  year: "2015",
+  type: "official",
+  tags: ["kendrick lamar","rap","2015","jazz rap"],
+  cover: "https://upload.wikimedia.org/wikipedia/en/f/f6/Kendrick_Lamar_-_To_Pimp_a_Butterfly.png",
+  tracks: [
+    {name:"Wesley's Theory (feat. George Clinton & Thundercat)",file:"../audio/to-pimp-a-butterfly/tracks/wesleys-theory.mp3",statId:"#TPAB_WT"},
+    {name:"For Free? (Interlude)",file:"../audio/to-pimp-a-butterfly/tracks/for-free.mp3",statId:"#TPAB_FF"},
+    {name:"King Kunta",file:"../audio/to-pimp-a-butterfly/tracks/king-kunta.mp3",statId:"#TPAB_KK"},
+    {name:"Institutionalized",file:"../audio/to-pimp-a-butterfly/tracks/institutionalized.mp3",statId:"#TPAB_INST"},
+    {name:"These Walls",file:"../audio/to-pimp-a-butterfly/tracks/these-walls.mp3",statId:"#TPAB_TW"},
+    {name:"u",file:"../audio/to-pimp-a-butterfly/tracks/u.mp3",statId:"#TPAB_U"},
+    {name:"Alright",file:"../audio/to-pimp-a-butterfly/tracks/alright.mp3",statId:"#TPAB_ALR"},
+    {name:"Mortal Man",file:"../audio/to-pimp-a-butterfly/tracks/mortal-man.mp3",statId:"#TPAB_MM"}
+  ]
+},
+{
+  id: "damn",
+  title: "DAMN.",
+  artist: "Kendrick Lamar",
+  year: "2017",
+  type: "official",
+  tags: ["kendrick lamar","rap","2017"],
+  cover: "https://external-preview.redd.it/7x4J7CpDkmARyvMW94fO6hSU2ohEztso2jzO37emeR8.jpg?auto=webp&s=cfc96f803045b54357f0824e59a3dd83aeec0389",
+  tracks: [
+    {name:"BLOOD.",file:"../audio/damn/tracks/blood.mp3",statId:"#DAMN_BLOOD"},
+    {name:"DNA.",file:"../audio/damn/tracks/dna.mp3",statId:"#DAMN_DNA"},
+    {name:"HUMBLE.",file:"../audio/damn/tracks/humble.mp3",statId:"#DAMN_HUMBLE"},
+    {name:"DUCKWORTH.",file:"../audio/damn/tracks/duckworth.mp3",statId:"#DAMN_DUCK"}
+  ]
+},
+{
+  id: "eternal_atake",
+  title: "Eternal Atake",
+  artist: "Lil Uzi Vert",
+  year: "2020",
+  type: "official",
+  tags: ["lil uzi vert","rap","2020"],
+  cover: "https://i.ebayimg.com/images/g/9ToAAOSwJB5ksb0W/s-l1200.jpg",
+  tracks: [
+    {name:"Baby Pluto",file:"../audio/eternal_atake/tracks/baby_pluto.mp3",statId:"#EA_BABY_PLUTO"},
+    {name:"Lo Mein",file:"../audio/eternal_atake/tracks/lo_mein.mp3",statId:"#EA_LO_MEIN"},
+    {name:"Silly Watch",file:"../audio/eternal_atake/tracks/silly_watch.mp3",statId:"#EA_SILLY_WATCH"},
+    {name:"POP",file:"../audio/eternal_atake/tracks/pop.mp3",statId:"#EA_POP"},
+    {name:"You Better Move",file:"../audio/eternal_atake/tracks/you_better_move.mp3",statId:"#EA_YBM"},
+    {name:"Homecoming",file:"../audio/eternal_atake/tracks/homecoming.mp3",statId:"#EA_HOMECOMING"},
+    {name:"I Can Show You",file:"../audio/eternal_atake/tracks/i_can_show_you.mp3",statId:"#EA_ICSY"},
+    {name:"Venetia",file:"../audio/eternal_atake/tracks/venetia.mp3",statId:"#EA_VENETIA"},
+    {name:"Secure the Bag",file:"../audio/eternal_atake/tracks/secure_the_bag.mp3",statId:"#EA_STB"},
+    {name:"Prices",file:"../audio/eternal_atake/tracks/prices.mp3",statId:"#EA_PRICES"},
+    {name:"Urgency (feat. Syd)",file:"../audio/eternal_atake/tracks/urgency.mp3",statId:"#EA_URGENCY"},
+    {name:"Celebration Station",file:"../audio/eternal_atake/tracks/celebration_station.mp3",statId:"#EA_CSTATION"},
+    {name:"Bigger Than Life",file:"../audio/eternal_atake/tracks/bigger_than_life.mp3",statId:"#EA_BTL"},
+    {name:"Chrome Heart Tags",file:"../audio/eternal_atake/tracks/chrome_heart_tags.mp3",statId:"#EA_CHT"},
+    {name:"Bust Me",file:"../audio/eternal_atake/tracks/bust_me.mp3",statId:"#EA_BUST_ME"},
+    {name:"That Way",file:"../audio/eternal_atake/tracks/that_way.mp3",statId:"#EA_THAT_WAY"},
+    {name:"P2",file:"../audio/eternal_atake/tracks/p2.mp3",statId:"#EA_P2"}
+  ]
+},
+{
+  id: "luv_is_rage",
+  title: "Luv Is Rage",
+  artist: "Lil Uzi Vert",
+  year: "2015",
+  type: "official",
+  tags: ["lil uzi vert","rap","2015"],
+  cover: "https://upload.wikimedia.org/wikipedia/en/thumb/5/54/Luv_Is_Rage_Cover.jpg/250px-Luv_Is_Rage_Cover.jpg",
+  tracks: [
+    {name:"Safe House",file:"../audio/luv_is_rage/tracks/safe_house.mp3",statId:"#LIR_SAFE_HOUSE"},
+    {name:"Enemies",file:"../audio/luv_is_rage/tracks/enemies.mp3",statId:"#LIR_ENEMIES"},
+    {name:"Want Some More",file:"../audio/luv_is_rage/tracks/want_some_more.mp3",statId:"#LIR_WSM"},
+    {name:"Right Now",file:"../audio/luv_is_rage/tracks/right_now.mp3",statId:"#LIR_RIGHT_NOW"},
+    {name:"All My Chains",file:"../audio/luv_is_rage/tracks/all_my_chains.mp3",statId:"#LIR_AMC"},
+    {name:"Nuyork Nights at 21",file:"../audio/luv_is_rage/tracks/nuyork_nights.mp3",statId:"#LIR_NNY21"},
+    {name:"Yamborghini Dream",file:"../audio/luv_is_rage/tracks/yamborghini_dream.mp3",statId:"#LIR_YAMB"},
+    {name:"Bleed",file:"../audio/luv_is_rage/tracks/bleed.mp3",statId:"#LIR_BLEED"},
+    {name:"Luv Is Rage",file:"../audio/luv_is_rage/tracks/luv_is_rage.mp3",statId:"#LIR_TITLE"}
+  ]
+},
+{
+  id: "luv_vs_the_world_2",
+  title: "Luv vs. The World 2",
+  artist: "Lil Uzi Vert",
+  year: "2020",
+  type: "official",
+  tags: ["lil uzi vert","rap","2020"],
+  cover: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9b/Lil_Uzi_Vert_vs_the_World_2_cover_art.jpg/250px-Lil_Uzi_Vert_vs_the_World_2_cover_art.jpg",
+  tracks: [
+    {name:"Myron",file:"../audio/luv_vs_the_world_2/tracks/myron.mp3",statId:"#LVTW2_MYRON"},
+    {name:"Lotus",file:"../audio/luv_vs_the_world_2/tracks/lotus.mp3",statId:"#LVTW2_LOTUS"},
+    {name:"Bean (Kobe)",file:"../audio/luv_vs_the_world_2/tracks/bean_kobe.mp3",statId:"#LVTW2_BEAN"},
+    {name:"Yessirskiii (feat. 21 Savage)",file:"../audio/luv_vs_the_world_2/tracks/yessirskiii.mp3",statId:"#LVTW2_YESSIR"},
+    {name:"Wassup",file:"../audio/luv_vs_the_world_2/tracks/wassup.mp3",statId:"#LVTW2_WASSUP"},
+    {name:"Strawberry Peels (feat. Young Thug & Gunna)",file:"../audio/luv_vs_the_world_2/tracks/strawberry_peels.mp3",statId:"#LVTW2_SP"},
+    {name:"Moon Relate",file:"../audio/luv_vs_the_world_2/tracks/moon_relate.mp3",statId:"#LVTW2_MOON"},
+    {name:"Come This Way",file:"../audio/luv_vs_the_world_2/tracks/come_this_way.mp3",statId:"#LVTW2_CTW"},
+    {name:"Trap This Way (This Way)",file:"../audio/luv_vs_the_world_2/tracks/trap_this_way.mp3",statId:"#LVTW2_TTW"},
+    {name:"Got the Guap (feat. Young Thug)",file:"../audio/luv_vs_the_world_2/tracks/got_the_guap.mp3",statId:"#LVTW2_GTG"},
+    {name:"Leaders (feat. NAV)",file:"../audio/luv_vs_the_world_2/tracks/leaders.mp3",statId:"#LVTW2_LEADERS"},
+    {name:"Baby Pluto",file:"../audio/luv_vs_the_world_2/tracks/baby_pluto.mp3",statId:"#LVTW2_BABY_PLUTO"},
+    {name:"P2",file:"../audio/luv_vs_the_world_2/tracks/p2.mp3",statId:"#LVTW2_P2"}
+  ]
+},
+{
+  id: "lil_uzi_vert_vs_the_world",
+  title: "Lil Uzi Vert vs. The World",
+  artist: "Lil Uzi Vert",
+  year: "2016",
+  type: "official",
+  tags: ["lil uzi vert","rap","2016"],
+  cover: "https://upload.wikimedia.org/wikipedia/en/d/d5/LilUziVertVsTheWorld.jpg",
+  tracks: [
+    {name:"Canadian Goose",file:"../audio/lil_uzi_vert_vs_the_world/tracks/canadian_goose.mp3",statId:"#LUVTW_CANADA"},
+    {name:"Hi Roller",file:"../audio/lil_uzi_vert_vs_the_world/tracks/hi_roller.mp3",statId:"#LUVTW_HIROLLER"},
+    {name:"Money Longer",file:"../audio/lil_uzi_vert_vs_the_world/tracks/money_longer.mp3",statId:"#LUVTW_ML"},
+    {name:"Ps & Qs",file:"../audio/lil_uzi_vert_vs_the_world/tracks/ps_and_qs.mp3",statId:"#LUVTW_PSQS"},
+    {name:"You Was Right",file:"../audio/lil_uzi_vert_vs_the_world/tracks/you_was_right.mp3",statId:"#LUVTW_YWR"},
+    {name:"Baby Are You Home",file:"../audio/lil_uzi_vert_vs_the_world/tracks/baby_are_you_home.mp3",statId:"#LUVTW_BAYH"},
+    {name:"Scott and Ramona",file:"../audio/lil_uzi_vert_vs_the_world/tracks/scott_and_ramona.mp3",statId:"#LUVTW_SAR"},
+    {name:"The Way Life Goes",file:"../audio/lil_uzi_vert_vs_the_world/tracks/the_way_life_goes.mp3",statId:"#LUVTW_TWLG"},
+    {name:"For Real",file:"../audio/lil_uzi_vert_vs_the_world/tracks/for_real.mp3",statId:"#LUVTW_FORREAL"}
+  ]
+},
+{
+  id: "pink-tape",
+  title: "Pink Tape",
+  artist: "Lil Uzi Vert",
+  year: "2023",
+  type: "official",
+  tags: ["lil uzi vert","rap","2023"],
+  cover: "https://m.media-amazon.com/images/I/91mf0aFkILL._UF1000,1000_QL80_.jpg",
+  tracks: [
+    {name:"Flooded the Face",file:"../audio/pink-tape/tracks/flooded_the_face.mp3",statId:"#PT_FLOODED"},
+    {name:"Suicide Doors",file:"../audio/pink-tape/tracks/suicide_doors.mp3",statId:"#PT_SUICIDE"},
+    {name:"Aye",file:"../audio/pink-tape/tracks/aye.mp3",statId:"#PT_AYE"},
+    {name:"Crush Em",file:"../audio/pink-tape/tracks/crush_em.mp3",statId:"#PT_CRUSH"},
+    {name:"Amped",file:"../audio/pink-tape/tracks/amped.mp3",statId:"#PT_AMPED"},
+    {name:"x2",file:"../audio/pink-tape/tracks/x2.mp3",statId:"#PT_X2"},
+    {name:"Died and Came Back",file:"../audio/pink-tape/tracks/died_and_came_back.mp3",statId:"#PT_DIED"},
+    {name:"Spin Again",file:"../audio/pink-tape/tracks/spin_again.mp3",statId:"#PT_SPIN"},
+    {name:"That Fiya",file:"../audio/pink-tape/tracks/that_fiya.mp3",statId:"#PT_FIYA"},
+    {name:"I Gotta",file:"../audio/pink-tape/tracks/i_gotta.mp3",statId:"#PT_IGOTTA"},
+    {name:"Endless Fashion (feat. Nicki Minaj)",file:"../audio/pink-tape/tracks/endless_fashion.mp3",statId:"#PT_ENDLESS"},
+    {name:"Mama, I'm Sorry",file:"../audio/pink-tape/tracks/mama_im_sorry.mp3",statId:"#PT_MAMA"},
+    {name:"All Alone",file:"../audio/pink-tape/tracks/all_alone.mp3",statId:"#PT_ALONE"},
+    {name:"Nakamura",file:"../audio/pink-tape/tracks/nakamura.mp3",statId:"#PT_NAKAMURA"},
+    {name:"Just Wanna Rock",file:"../audio/pink-tape/tracks/just_wanna_rock.mp3",statId:"#PT_JWR"},
+    {name:"Patience",file:"../audio/pink-tape/tracks/patience.mp3",statId:"#PT_PATIENCE"},
+    {name:"CS",file:"../audio/pink-tape/tracks/cs.mp3",statId:"#PT_CS"},
+    {name:"Werewolf",file:"../audio/pink-tape/tracks/werewolf.mp3",statId:"#PT_WEREWOLF"},
+    {name:"Pluto to Mars",file:"../audio/pink-tape/tracks/pluto_to_mars.mp3",statId:"#PT_PLUTO"},
+    {name:"Days Come and Go",file:"../audio/pink-tape/tracks/days_come_and_go.mp3",statId:"#PT_DAYS"},
+    {name:"Rehab",file:"../audio/pink-tape/tracks/rehab.mp3",statId:"#PT_REHAB"},
+    {name:"The End (feat. BABYMETAL)",file:"../audio/pink-tape/tracks/the_end.mp3",statId:"#PT_THE_END"}
+  ]
+},
+// UNRELEASED
+{id:"yandhi",title:"Yandhi",artist:"Kanye West",year:"2018 (unreleased)",type:"unreleased",tags:["kanye","west","yandhi","unreleased","shelved","rap","2018"],cover:"https://upload.wikimedia.org/wikipedia/commons/1/1d/Yandhi_Cover_Art_%28Free_License%29.jpg",tracks:[
+    {name:"Chakras",file:"../audio/yandhi/tracks/chakras.mp3",statId:"$YAN_CHAK"},{name:"Garden",file:"../audio/yandhi/tracks/garden.mp3",statId:"$YAN_GARD"},{name:"New Body",file:"../audio/yandhi/tracks/new-body.mp3",statId:"$YAN_NB"},
+    {name:"Vibez",file:"../audio/yandhi/tracks/vibez.mp3",statId:"$YAN_VIB"},{name:"Easy",file:"../audio/yandhi/tracks/easy.mp3",statId:"$YAN_EASY"},{name:"Brothers",file:"../audio/yandhi/tracks/brothers.mp3",statId:"$YAN_BRO"},
+    {name:"Like God",file:"../audio/yandhi/tracks/like-god.mp3",statId:"$YAN_LG"},{name:"Yandhi",file:"../audio/yandhi/tracks/yandhi-title.mp3",statId:"$YAN_YAN"},{name:"Violent Crimes",file:"../audio/yandhi/tracks/violent-crimes.mp3",statId:"$YAN_VC"},
+    {name:"Nah Nah Nah",file:"../audio/yandhi/tracks/nah-nah-nah.mp3",statId:"$YAN_NNN"},{name:"Background Noise",file:"../audio/yandhi/tracks/background-noise.mp3",statId:"$YAN_BN"},
+    {name:"True Love",file:"../audio/yandhi/tracks/true-love-yandhi.mp3",statId:"$YAN_TL"},{name:"In the Fire",file:"../audio/yandhi/tracks/in-the-fire.mp3",statId:"$YAN_ITF"}
+]},
+{id:"turbo-grafx-16",title:"Turbo Grafx 16",artist:"Kanye West",year:"2019 (unreleased)",type:"unreleased",tags:["kanye","west","turbo","grafx","16","unreleased","shelved","rap","2019"],cover:"https://lastfm.freetls.fastly.net/i/u/ar0/68bd0237ddfa94159b35a684e5ee8be7.jpg",tracks:[
+    {name:"Nah Nah Nah (OG)",file:"../audio/turbo-grafx-16/tracks/nah-nah-nah-og.mp3",statId:"$TG_NNN"},{name:"Turbo Grafx 16",file:"../audio/turbo-grafx-16/tracks/turbo-title.mp3",statId:"$TG_TG"},
+    {name:"Water (Coachella)",file:"../audio/turbo-grafx-16/tracks/water-coachella.mp3",statId:"$TG_WAT"},{name:"Closed on Sunday (Early)",file:"../audio/turbo-grafx-16/tracks/closed-early.mp3",statId:"$TG_COS"},
+    {name:"Follow God (Rough)",file:"../audio/turbo-grafx-16/tracks/follow-god-rough.mp3",statId:"$TG_FG"},{name:"God's Country",file:"../audio/turbo-grafx-16/tracks/gods-country.mp3",statId:"$TG_GC"},
+    {name:"Everything We Need (Demo)",file:"../audio/turbo-grafx-16/tracks/ewen-demo.mp3",statId:"$TG_EWN"},{name:"Hands On (Early)",file:"../audio/turbo-grafx-16/tracks/hands-on-early.mp3",statId:"$TG_HO"},
+    {name:"Use This Gospel (Demo)",file:"../audio/turbo-grafx-16/tracks/utg-demo.mp3",statId:"$TG_UTG"},{name:"Jesus Is Lord (Rough)",file:"../audio/turbo-grafx-16/tracks/jil-rough.mp3",statId:"$TG_JIL"}
+]},
+{id:"maybe-maybe",title:"maybe (Maybe).",artist:"Rhap5ody",year:"2029 (soon)",type:"unreleased",tags:["rhap5dy","maybe","2029"],cover:"https://raw.githubusercontent.com/bguhm/bguhm.github.io/main/music/albums/maybe-maybe/maybe-maybe-cover-art.png",tracks:[
+    {name:"slackrr.",file:"../audio/maybe-maybe/tracks/slackrr.mp3",statId:"$MM_SLK"},{name:"Caramel eyes.",file:"../audio/maybe-maybe/tracks/caramel-eyes.mp3",statId:"$MM_CE"},
+    {name:"PUNK HAZARD.",file:"../audio/maybe-maybe/tracks/punk-hazard.mp3",statId:"$MM_PH"},{name:"HOUND.",file:"../audio/maybe-maybe/tracks/hound.mp3",statId:"$MM_HND"},
+    {name:"Arizona Girl",file:"../audio/maybe-maybe/tracks/arizona-girl.mp3",statId:"$MM_AZ"},{name:"MARIGOLD.",file:"../audio/maybe-maybe/tracks/marigold.mp3",statId:"$MM_MG"},
+    {name:"Besto Friendo",file:"../audio/maybe-maybe/tracks/besto-friendo.mp3",statId:"$MM_BF"},{name:"HippoCript.",file:"../audio/maybe-maybe/tracks/hippocript.mp3",statId:"$MM_HC"},
+    {name:"AloneAgain",file:"../audio/maybe-maybe/tracks/alone-again.mp3",statId:"$MM_AA"},{name:"RoofTop",file:"../audio/maybe-maybe/tracks/rooftop.mp3",statId:"$MM_RT"},
+    {name:"November.",file:"../audio/maybe-maybe/tracks/november.mp3",statId:"$MM_NOV"},{name:"Street",file:"../audio/maybe-maybe/tracks/street.mp3",statId:"$MM_STR"},
+    {name:"Self Conscious.",file:"../audio/maybe-maybe/tracks/self-conscious.mp3",statId:"$MM_SC"},{name:"Scribble.",file:"../audio/maybe-maybe/tracks/scribble.mp3",statId:"$MM_SCR"},
+    {name:"Feelings In A Bottle.",file:"../audio/maybe-maybe/tracks/feelings-in-a-bottle.mp3",statId:"$MM_FIAB"},{name:"SoloCup.",file:"../audio/maybe-maybe/tracks/solocup.mp3",statId:"$MM_SOL"},
+    {name:"Bg.uhm",file:"../audio/maybe-maybe/tracks/bg-uhm.mp3",statId:"$MM_BG"},{name:"6:27",file:"../audio/maybe-maybe/tracks/6-27.mp3",statId:"$MM_627"},
+    {name:"Daisy.",file:"../audio/maybe-maybe/tracks/daisy.mp3",statId:"$MM_DAISY"},{name:"Maybe (Maybe).",file:"../audio/maybe-maybe/tracks/maybe-maybe.m4a",statId:"$MM_MM"}
+]},
+{id:"syndicate",title:"Syndicate",artist:"Rhap5ody",year:"2029 (soon)",type:"unreleased",tags:["syndicate","rhap5ody","2029"],cover:"https://raw.githubusercontent.com/bguhm/bguhm.github.io/main/music/albums/syndicate/Untitled157_20260219144858.png",tracks:[
+    {name:"BOHEMETH.",file:"../audio/syndicate/tracks/bohemeth.mp3",statId:"$SYN_BOH"}
+]},
+{id:"nuralistics",title:"NURALISTICS",artist:"Rhap5ody",year:"2029 (soon)",type:"unreleased",tags:["NURALISTICS","rhap5ody","insomnia","2029"],cover:"https://raw.githubusercontent.com/bguhm/bguhm.github.io/main/music/albums/NURALISTICS/IMG_6099.png",tracks:[
+    {name:"Insomnia.",file:"../audio/nuralistics/tracks/insomnia.mp3",statId:"$NUR_INS"}
+]},
+{id:"r5",title:"rhapsody",artist:"Rhap5ody",year:"2029 (soon)",type:"unreleased",tags:["rhap5ody","r5","2029"],cover:"https://raw.githubusercontent.com/bguhm/bguhm.github.io/main/music/albums/r5/IMG_6100.png",tracks:[
+    {name:"R5 DO THAT SHIT.",file:"../audio/r5/tracks/r5dothatshit.mp3",statId:"$R5_R5DOTHATSHIT"}
+]},
+{id:"eternal-atake-og",title:"Eternal Atake",artist:"Lil Uzi Vert",year:"leaked 2019",type:"unreleased",tags:["liluzivert","ea","2019"],cover:"https://i.redd.it/uby2xk33ybd11.jpg",tracks:[
+    {name:"Lets Go",file:"../audio/eternal-atake-og/tracks/letsgo.mp3",statId:"$EA_LETSGO"},
+    {name:"Bands",file:"../audio/eternal-atake-og/tracks/bands.mp3",statId:"$EA_BANDS"},
+    {name:"You A 10",file:"../audio/eternal-atake-og/tracks/youa10.mp3",statId:"$EA_YOUA10"},
+    {name:"Put That Money Up",file:"../audio/eternal-atake-og/tracks/putthatmoneyup.mp3",statId:"$EA_PUTTHATMONEYUP"},
+    {name:"Blue Tips",file:"../audio/eternal-atake-og/tracks/bluetips.mp3",statId:"$EA_BLUETIPS"},
+    {name:"Sticky",file:"../audio/eternal-atake-og/tracks/sticky.mp3",statId:"$EA_STICKY"},
+    {name:"Take My Cake",file:"../audio/eternal-atake-og/tracks/takemycake.mp3",statId:"$EA_TAKEMYCAKE"},
+    {name:"All My Guap",file:"../audio/eternal-atake-og/tracks/allmyguap.mp3",statId:"$EA_ALLMYGUAP"},
+    {name:"Keep It Real",file:"../audio/eternal-atake-og/tracks/keepitreal.mp3",statId:"$EA_KEEPITREAL"},
+    {name:"Diamonds",file:"../audio/eternal-atake-og/tracks/diamonds.mp3",statId:"$EA_DIAMONDS"},
+    {name:"Of Course",file:"../audio/eternal-atake-og/tracks/ofcourse.mp3",statId:"$EA_OFCOURSE"},
+    {name:"1600 (RAGER ANTHEM)",file:"../audio/eternal-atake-og/tracks/1600rageranthem.mp3",statId:"$EA_1600RAGERANTHEM"},
+    {name:"Not The Same",file:"../audio/eternal-atake-og/tracks/notthesame.mp3",statId:"$EA_NOTTHESAME"},
+    {name:"Closure",file:"../audio/eternal-atake-og/tracks/closure.mp3",statId:"$EA_CLOSURE"},
+    {name:"Extraed Out",file:"../audio/eternal-atake-og/tracks/extraedout.mp3",statId:"$EA_EXTRAEDOUT"},
+    {name:"Run It Up",file:"../audio/eternal-atake-og/tracks/runitup.mp3",statId:"$EA_RUNITUP"},
+    {name:"Extra - New Patek",file:"../audio/eternal-atake-og/tracks/extranewpatek.mp3",statId:"$EA_EXTRANEWPATEK"},
+    {name:"Extra - The End Is Near",file:"../audio/eternal-atake-og/tracks/extratheendisnear.mp3",statId:"$EA_EXTRATHEENDISNEAR"}
+]},
+{id:"16-29-collab",title:"16*29",artist:"Lil Uzi Vert & Playboi Carti",year:"unreleased",type:"unreleased",tags:["liluzivert","playboicarti","collab","1629"],cover:"https://i.pinimg.com/736x/59/4c/1c/594c1c54684244b2feda1fc9650e4f14.jpg",tracks:[
+    {name:"Intro (16*29)",file:"../audio/16-29-collab/tracks/intro1629.mp3",statId:"$1629_INTRO"},
+    {name:"Fell In Luv",file:"../audio/16-29-collab/tracks/fellinluv.mp3",statId:"$1629_FELLINLUV"},
+    {name:"No Stylist",file:"../audio/16-29-collab/tracks/nostylist.mp3",statId:"$1629_NOSTYLIST"},
+    {name:"Drip Season",file:"../audio/16-29-collab/tracks/dripseason.mp3",statId:"$1629_DRIPSEASON"},
+    {name:"Twin Turbos",file:"../audio/16-29-collab/tracks/twinturbos.mp3",statId:"$1629_TWINTURBOS"},
+    {name:"Slatt Walk",file:"../audio/16-29-collab/tracks/slattwalk.mp3",statId:"$1629_SLATTWALK"},
+    {name:"On Site (feat. Lil Uzi Vert)",file:"../audio/16-29-collab/tracks/onsite.mp3",statId:"$1629_ONSITE"},
+    {name:"Rockstar Shit",file:"../audio/16-29-collab/tracks/rockstarshit.mp3",statId:"$1629_ROCKSTARSHIT"},
+    {name:"Purple Haze",file:"../audio/16-29-collab/tracks/purplehaze.mp3",statId:"$1629_PURPLEHAZE"},
+    {name:"Rager 4 Life",file:"../audio/16-29-collab/tracks/rager4life.mp3",statId:"$1629_RAGER4LIFE"},
+    {name:"No Ceilings",file:"../audio/16-29-collab/tracks/noceilings.mp3",statId:"$1629_NOCEILINGS"},
+    {name:"Eternal Rage",file:"../audio/16-29-collab/tracks/eternalrage.mp3",statId:"$1629_ETERNALRAGE"},
+    {name:"Iced Out Halo",file:"../audio/16-29-collab/tracks/icedouthalo.mp3",statId:"$1629_ICEDOUTHALO"},
+    {name:"Carti Season",file:"../audio/16-29-collab/tracks/cartiseason.mp3",statId:"$1629_CARTISEASON"},
+    {name:"Outro (End Of Days)",file:"../audio/16-29-collab/tracks/outroendofdays.mp3",statId:"$1629_OUTRO"}
+]},
+{
+  id: "bastard",
+  title: "Bastard",
+  artist: "Tyler, the Creator",
+  year: "2009",
+  type: "unreleased",
+  tags: ["tyler the creator","rap","2009","mixtape"],
+  cover: "https://raw.githubusercontent.com/soundscapeonline/soundscapeonline.github.io/main/audio/bastard/covers/IMG_6376.png",
+  tracks: [
+    {name:"Bastard",file:"../audio/bastard/tracks/bastard.mp3",statId:"$BAS_BAS"},
+    {name:"Seven",file:"../audio/bastard/tracks/seven.mp3",statId:"$BAS_SEV"},
+    {name:"Odd Toddlers (feat. Casey Veggies)",file:"../audio/bastard/tracks/odd-toddlers.mp3",statId:"$BAS_OT"},
+    {name:"French!",file:"../audio/bastard/tracks/french.mp3",statId:"$BAS_FR"},
+    {name:"Blow",file:"../audio/bastard/tracks/blow.mp3",statId:"$BAS_BL"},
+    {name:"Pigs Fly (feat. Domo Genesis)",file:"../audio/bastard/tracks/pigs-fly.mp3",statId:"$BAS_PF"},
+    {name:"Parade",file:"../audio/bastard/tracks/parade.mp3",statId:"$BAS_PAR"},
+    {name:"Slow It Down (feat. Hodgy)",file:"../audio/bastard/tracks/slow-it-down.mp3",statId:"$BAS_SID"},
+    {name:"AssMilk (feat. Earl Sweatshirt)",file:"../audio/bastard/tracks/assmilk.mp3",statId:"$BAS_AM"},
+    {name:"VCR/Wheels",file:"../audio/bastard/tracks/vcr-wheels.mp3",statId:"$BAS_VW"},
+    {name:"Session (feat. Hodgy & Mike G)",file:"../audio/bastard/tracks/session.mp3",statId:"$BAS_SES"},
+    {name:"Sarah",file:"../audio/bastard/tracks/sarah.mp3",statId:"$BAS_SAR"},
+    {name:"Jack and the Beanstalk",file:"../audio/bastard/tracks/jack-and-the-beanstalk.mp3",statId:"$BAS_JB"},
+    {name:"Tina (feat. Jasper & Taco)",file:"../audio/bastard/tracks/tina.mp3",statId:"$BAS_TIN"},
+    {name:"Inglorious",file:"../audio/bastard/tracks/inglorious.mp3",statId:"$BAS_ING"}
+  ]
+},
+{
+id: "no-luv-lost",
+title: "No Luv Lost",
+artist: "artist",
+year: "leaked?",
+type: "unreleased",
+tags: [],
+cover: "https://raw.githubusercontent.com/soundscapeonline/soundscapeonline.github.io/main/audio/no-luv-lost/covers/IMG_6389.jpeg",
+tracks: []
+},
+{
+id: "wlr-v1",
+title: "whole lotta red v1",
+artist: "artist",
+year: "leaked?",
+type: "unreleased",
+tags: [],
+cover: "https://raw.githubusercontent.com/soundscapeonline/soundscapeonline.github.io/main/audio/whole-lotta-red-v1/covers/IMG_6392.jpeg",
+tracks: []
+},
+{
+id: "the-world-pt1",
+title: "TheWorld pt.1",
+artist: "artist",
+year: "leaked?",
+type: "unreleased",
+tags: [],
+cover: "https://raw.githubusercontent.com/soundscapeonline/soundscapeonline.github.io/main/audio/theworldpt1/covers/IMG_6393.jpeg",
+tracks: []
+},
 ];
+</script>
 
+<script>
 // ══════════════════════════════════════════════════════
 //  ACCOUNT SYSTEM
 // ══════════════════════════════════════════════════════
@@ -1221,42 +1830,94 @@ function isPendingDelete(u) { return (Date.now() - u.lastActive) > ((INACTIVE_DA
 function touchActivity() { const u = getCurrentUser(); if (!u) return; const a = getAccounts(); a[u.id].lastActive = Date.now(); saveAccounts(a); }
 function genId() { const c = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; let r = '#'; for (let i = 0; i < 8; i++) r += c[Math.floor(Math.random() * c.length)]; return r; }
 function cleanInactive() { const a = getAccounts(); let changed = false; Object.keys(a).forEach(id => { if (isPendingDelete(a[id])) { delete a[id]; changed = true; } }); if (changed) saveAccounts(a); }
+</script>
 
+<script>
 // ══════════════════════════════════════════════════════
-//  AUDIO ENGINE — based on proven simple player pattern
+//  SETTINGS PERSISTENCE
 // ══════════════════════════════════════════════════════
+function getSettings() {
+  try { return JSON.parse(localStorage.getItem('player_settings') || '{}'); } catch { return {}; }
+}
+function saveSettings(s) { localStorage.setItem('player_settings', JSON.stringify(s)); }
 
-// Single Audio element, created once, never recreated
-const curr_track = new Audio();
+let playerSettings = Object.assign({ maxVol: 300, defaultVol: 100, shuffleDefault: false, repeatDefault: 0 }, getSettings());
 
-// AudioContext created LAZILY on first user gesture — browser blocks it if created at page load
-let audioCtx = null, analyser = null, bufferLength = 0, dataArray = null;
+function initSettingsUI() {
+  const maxVolSlider = document.getElementById('settingsMaxVol');
+  const maxVolVal = document.getElementById('settingsMaxVolVal');
+  const defVolSlider = document.getElementById('settingsDefaultVol');
+  const defVolVal = document.getElementById('settingsDefaultVolVal');
+  const shuffleCheck = document.getElementById('settingsShuffle');
+  const repeatSel = document.getElementById('settingsRepeat');
 
+  maxVolSlider.value = playerSettings.maxVol;
+  maxVolVal.textContent = playerSettings.maxVol + '%';
+  defVolSlider.value = playerSettings.defaultVol;
+  defVolVal.textContent = playerSettings.defaultVol + '%';
+  shuffleCheck.checked = playerSettings.shuffleDefault;
+  repeatSel.value = playerSettings.repeatDefault;
+
+  // Update vol slider max based on setting
+  document.getElementById('volSlider').max = playerSettings.maxVol;
+
+  maxVolSlider.oninput = () => {
+    playerSettings.maxVol = parseInt(maxVolSlider.value);
+    maxVolVal.textContent = playerSettings.maxVol + '%';
+    document.getElementById('volSlider').max = playerSettings.maxVol;
+    saveSettings(playerSettings);
+    updateVolFill();
+  };
+  defVolSlider.oninput = () => {
+    playerSettings.defaultVol = parseInt(defVolSlider.value);
+    defVolVal.textContent = playerSettings.defaultVol + '%';
+    saveSettings(playerSettings);
+  };
+  shuffleCheck.onchange = () => {
+    playerSettings.shuffleDefault = shuffleCheck.checked;
+    saveSettings(playerSettings);
+  };
+  repeatSel.onchange = () => {
+    playerSettings.repeatDefault = parseInt(repeatSel.value);
+    saveSettings(playerSettings);
+  };
+}
+</script>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  AUDIO ENGINE — FULL IMPLEMENTATION
+// ══════════════════════════════════════════════════════
+let audio = new Audio();
+audio.preload = 'auto';
+
+// State
+let flatList = [];       // [{name, src, albumId, albumTitle, cover, artist, origIdx, pIdx, lastPIdx, isMulti}]
+let trackIdx = -1;       // current index in flatList
+let isPlaying = false;
+let shuffleOn = false;
+let repeatMode = 0;      // 0=off, 1=all, 2=one
+let shuffleOrder = [];   // shuffled indices
+let shufflePos = 0;      // current position in shuffleOrder
+let seekDragging = false;
+let cachedDurations = {};
+let vizAnimId = null;
+let audioCtx = null, analyser = null, source = null, gainNode = null;
+
+// Web Audio API setup (lazy)
 function ensureAudioCtx() {
-  if (audioCtx) {
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    return;
-  }
+  if (audioCtx) return;
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   analyser = audioCtx.createAnalyser();
-  analyser.fftSize = 256;
-  bufferLength = analyser.frequencyBinCount;
-  dataArray = new Uint8Array(bufferLength);
-  const src = audioCtx.createMediaElementSource(curr_track);
-  src.connect(analyser);
+  analyser.fftSize = 64;
+  gainNode = audioCtx.createGain();
+  source = audioCtx.createMediaElementSource(audio);
+  source.connect(gainNode);
+  gainNode.connect(analyser);
   analyser.connect(audioCtx.destination);
 }
 
-let flatList = [], trackIdx = 0, isPlaying = false, isRandom = false, isRepeat = false;
-let cachedDurations = {};
-let updateTimer = null;
-
-function fmt(s) {
-  if (isNaN(s) || !isFinite(s)) return '0:00';
-  const m = Math.floor(s / 60), sec = Math.floor(s % 60);
-  return `${m}:${sec.toString().padStart(2, '0')}`;
-}
-
+// Build flat list from album (skip unavailable)
 function buildFlat(album) {
   const list = [];
   album.tracks.forEach((t, origIdx) => {
@@ -1265,196 +1926,294 @@ function buildFlat(album) {
     files.forEach((f, pIdx) => {
       list.push({
         name: t.name,
-        src: album.basePath + f,
+        src: f,  // use file path as-is, no basePath prepended
         albumId: album.id,
         albumTitle: album.title,
         cover: album.cover,
-        artist: album.artist,
-        spotUrl: t.url || '',
-        statId: t.statId || null,
-        origIdx, pIdx,
+        artist: album.primaryArtist || album.artist,
+        origIdx,
+        pIdx,
         lastPIdx: files.length - 1,
-        isMulti: files.length > 1
+        isMulti: files.length > 1,
+        statId: t.statId || null
       });
     });
   });
   return list;
 }
 
-// Update seek bar and time — called on interval while playing
-function setUpdate() {
-  if (isNaN(curr_track.duration) || curr_track.duration === 0) return;
-  const seekPosition = (curr_track.currentTime / curr_track.duration) * 100;
-  document.getElementById('seekSlider').value = seekPosition;
-  document.getElementById('seekFill').style.width = seekPosition + '%';
-  document.getElementById('currTime').textContent = fmt(curr_track.currentTime);
-}
-
-// loadTrack ONLY loads — never plays. Caller must call playTrack() explicitly.
-// This matches the old working player pattern exactly.
+// Load a track by index into flatList
 function loadTrack(idx) {
   if (!flatList.length) return;
-  if (idx < 0) idx = flatList.length - 1;
-  if (idx >= flatList.length) idx = 0;
+  idx = Math.max(0, Math.min(idx, flatList.length - 1));
   trackIdx = idx;
   const t = flatList[idx];
 
-  // Stop current playback and clear update timer
-  curr_track.pause();
-  isPlaying = false;
-  clearInterval(updateTimer);
-
-  // Reset UI
-  document.getElementById('seekSlider').value = 0;
-  document.getElementById('seekFill').style.width = '0%';
-  document.getElementById('currTime').textContent = '0:00';
-  document.getElementById('totalTime').textContent = '0:00';
-  document.getElementById('btnPlay').innerHTML = '<i class="fas fa-play"></i>';
-  document.getElementById('waveViz').classList.remove('visible');
-
-  // Set new source and load — exactly like the old player
-  curr_track.src = t.src;
-  curr_track.load();
-
-  // Update duration once metadata arrives
-  curr_track.onloadedmetadata = () => {
-    document.getElementById('totalTime').textContent = fmt(curr_track.duration);
-  };
+  audio.src = t.src;
+  audio.load();
 
   // Update now-playing UI
-  document.getElementById('nowTitle').innerHTML = t.spotUrl
-    ? `<a href="${t.spotUrl}" target="_blank">${t.name}</a>`
-    : t.name;
-  document.getElementById('nowArtist').textContent = t.artist;
-  const na = document.getElementById('nowArt');
-  na.src = t.cover;
-  na.classList.remove('hidden');
-  document.title = `${t.name} — ${t.artist}`;
+  const bar = document.getElementById('playerBar');
+  bar.classList.remove('hidden');
+  document.getElementById('nowArt').src = t.cover;
+  document.getElementById('nowArt').classList.remove('hidden');
+  document.getElementById('nowTitle').textContent = t.name;
+  document.getElementById('nowArtist').textContent = t.artist + ' · ' + t.albumTitle;
+  document.getElementById('currTime').textContent = '0:00';
+  document.getElementById('totalTime').textContent = '0:00';
+  document.getElementById('seekFill').style.width = '0%';
+  document.getElementById('seekSlider').value = 0;
+
+  // Set volume from slider (which respects max)
+  applyVolume();
+
+  // Update track highlighting
   renderTrackHighlights();
-  touchActivity();
+
+  // Stats
+  if (t.statId) recordTrackView(t.statId);
 }
 
+// Play current track
 function playTrack() {
-  if (!flatList.length) return;
   ensureAudioCtx();
-  curr_track.play().catch(e => console.warn('play() failed:', e.message));
-  isPlaying = true;
-  document.getElementById('btnPlay').innerHTML = '<i class="fas fa-pause"></i>';
-  document.getElementById('waveViz').classList.add('visible');
-  clearInterval(updateTimer);
-  updateTimer = setInterval(setUpdate, 500);
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  audio.play().then(() => {
+    isPlaying = true;
+    updatePlayBtn();
+    startViz();
+    const t = flatList[trackIdx];
+    if (t && t.statId) onTrackPlayStart(t.statId, audio.duration);
+  }).catch(e => console.warn('Playback failed:', e));
 }
 
+// Pause
 function pauseTrack() {
-  curr_track.pause();
+  audio.pause();
   isPlaying = false;
-  document.getElementById('btnPlay').innerHTML = '<i class="fas fa-play"></i>';
-  document.getElementById('waveViz').classList.remove('visible');
-  clearInterval(updateTimer);
+  updatePlayBtn();
+  stopViz();
 }
 
+// Toggle play/pause
 function togglePlay() {
   if (!flatList.length) return;
-  isPlaying ? pauseTrack() : playTrack();
+  if (isPlaying) pauseTrack();
+  else { ensureAudioCtx(); if (audioCtx.state === 'suspended') audioCtx.resume(); playTrack(); }
 }
 
-function nextTrack() {
-  if (isRandom) {
-    let ri;
-    do { ri = Math.floor(Math.random() * flatList.length); } while (ri === trackIdx && flatList.length > 1);
-    const origIdx = flatList[ri].origIdx;
-    ri = flatList.findIndex(f => f.origIdx === origIdx && f.pIdx === 0);
-    loadTrack(ri);
-    playTrack();
-    return;
-  }
-  loadTrack(trackIdx + 1 >= flatList.length ? 0 : trackIdx + 1);
-  playTrack();
+// Update play/pause button icon
+function updatePlayBtn() {
+  const icon = document.getElementById('playIcon');
+  if (!icon) return;
+  icon.className = isPlaying ? 'fas fa-pause' : 'fas fa-play';
 }
 
+// Previous track
 function prevTrack() {
-  if (curr_track.currentTime > 3) {
-    curr_track.currentTime = 0;
-    return;
+  if (!flatList.length) return;
+  if (audio.currentTime > 3) { audio.currentTime = 0; return; }
+  if (shuffleOn) {
+    shufflePos = Math.max(0, shufflePos - 1);
+    loadTrack(shuffleOrder[shufflePos]);
+  } else {
+    let ni = trackIdx - 1;
+    if (ni < 0) ni = repeatMode === 1 ? flatList.length - 1 : 0;
+    loadTrack(ni);
   }
-  loadTrack(trackIdx - 1 < 0 ? flatList.length - 1 : trackIdx - 1);
-  playTrack();
+  if (isPlaying) playTrack();
 }
 
-// Auto-advance when track ends
-curr_track.addEventListener('ended', () => {
-  isPlaying = false;
-  clearInterval(updateTimer);
-  if (isRepeat) {
-    curr_track.currentTime = 0;
-    playTrack();
-    return;
+// Next track
+function nextTrack() {
+  if (!flatList.length) return;
+  if (shuffleOn) {
+    shufflePos++;
+    if (shufflePos >= shuffleOrder.length) {
+      if (repeatMode === 1) { rebuildShuffle(); shufflePos = 0; }
+      else { shufflePos = shuffleOrder.length - 1; pauseTrack(); return; }
+    }
+    loadTrack(shuffleOrder[shufflePos]);
+  } else {
+    let ni = trackIdx + 1;
+    if (ni >= flatList.length) {
+      if (repeatMode === 1) ni = 0;
+      else { pauseTrack(); return; }
+    }
+    loadTrack(ni);
   }
-  const cur = flatList[trackIdx];
-  if (cur && cur.isMulti && cur.pIdx < cur.lastPIdx) {
-    loadTrack(trackIdx + 1);
-    playTrack();
+  if (isPlaying) playTrack();
+}
+
+// Shuffle
+function rebuildShuffle() {
+  shuffleOrder = flatList.map((_, i) => i);
+  for (let i = shuffleOrder.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffleOrder[i], shuffleOrder[j]] = [shuffleOrder[j], shuffleOrder[i]];
+  }
+  shufflePos = shuffleOrder.indexOf(trackIdx);
+  if (shufflePos < 0) shufflePos = 0;
+}
+
+function toggleShuffle() {
+  shuffleOn = !shuffleOn;
+  if (shuffleOn) rebuildShuffle();
+  document.getElementById('btnRandom').classList.toggle('active', shuffleOn);
+  showToast(shuffleOn ? 'Shuffle on' : 'Shuffle off');
+}
+
+// Repeat: 0=off, 1=all, 2=one
+function cycleRepeat() {
+  repeatMode = (repeatMode + 1) % 3;
+  const btn = document.getElementById('btnRepeat');
+  const icon = document.getElementById('repeatIcon');
+  btn.classList.remove('active');
+  if (repeatMode === 0) { icon.className = 'fas fa-redo'; showToast('Repeat off'); }
+  else if (repeatMode === 1) { icon.className = 'fas fa-redo'; btn.classList.add('active'); showToast('Repeat all'); }
+  else { icon.className = 'fas fa-redo-alt'; btn.classList.add('active'); showToast('Repeat one'); }
+}
+
+// Audio events
+audio.addEventListener('timeupdate', () => {
+  if (seekDragging) return;
+  const cur = audio.currentTime, dur = audio.duration || 0;
+  document.getElementById('currTime').textContent = fmt(cur);
+  document.getElementById('totalTime').textContent = fmt(dur);
+  const pct = dur ? (cur / dur) * 100 : 0;
+  document.getElementById('seekFill').style.width = pct + '%';
+  document.getElementById('seekSlider').value = dur ? (cur / dur) * 100 : 0;
+
+  // Full listen check (90%)
+  if (dur > 0 && cur / dur >= 0.9) onTrackFullListenComplete();
+});
+
+audio.addEventListener('loadedmetadata', () => {
+  const dur = audio.duration || 0;
+  document.getElementById('totalTime').textContent = fmt(dur);
+  const t = flatList[trackIdx];
+  if (t && t.statId) onTrackPlayStart(t.statId, dur);
+});
+
+audio.addEventListener('ended', () => {
+  if (repeatMode === 2) {
+    audio.currentTime = 0;
+    audio.play();
   } else {
     nextTrack();
   }
 });
 
+audio.addEventListener('error', (e) => {
+  console.warn('Audio error for:', audio.src, e);
+  // Try auto-advance on error
+  if (flatList.length > 1) setTimeout(() => nextTrack(), 500);
+});
+
 // Seek slider
 const seekSlider = document.getElementById('seekSlider');
-seekSlider.addEventListener('input', function () {
-  if (isNaN(curr_track.duration)) return;
-  const t = (this.value / 100) * curr_track.duration;
-  curr_track.currentTime = t;
-  document.getElementById('seekFill').style.width = this.value + '%';
-  document.getElementById('currTime').textContent = fmt(t);
+seekSlider.addEventListener('mousedown', () => seekDragging = true);
+seekSlider.addEventListener('touchstart', () => seekDragging = true);
+seekSlider.addEventListener('input', () => {
+  const dur = audio.duration || 0;
+  if (dur) {
+    const t = (seekSlider.value / 100) * dur;
+    document.getElementById('currTime').textContent = fmt(t);
+    document.getElementById('seekFill').style.width = seekSlider.value + '%';
+  }
 });
+seekSlider.addEventListener('change', () => {
+  const dur = audio.duration || 0;
+  if (dur) audio.currentTime = (seekSlider.value / 100) * dur;
+  seekDragging = false;
+});
+seekSlider.addEventListener('mouseup', () => seekDragging = false);
+seekSlider.addEventListener('touchend', () => seekDragging = false);
 
 // Volume slider
 const volSlider = document.getElementById('volSlider');
-volSlider.addEventListener('input', function () {
-  curr_track.volume = this.value / 100;
-  document.getElementById('volFill').style.width = this.value + '%';
+volSlider.value = 100;
+volSlider.addEventListener('input', () => {
+  applyVolume();
+  updateVolFill();
 });
-curr_track.volume = volSlider.value / 100;
 
-// Player button controls
-document.getElementById('btnPlay').addEventListener('click', togglePlay);
-document.getElementById('btnNext').addEventListener('click', nextTrack);
-document.getElementById('btnPrev').addEventListener('click', prevTrack);
-document.getElementById('btnRandom').addEventListener('click', function () {
-  isRandom = !isRandom;
-  this.classList.toggle('active', isRandom);
-});
-document.getElementById('btnRepeat').addEventListener('click', function () {
-  isRepeat = !isRepeat;
-  this.classList.toggle('active', isRepeat);
-});
+function applyVolume() {
+  const val = parseInt(volSlider.value);
+  const maxVol = playerSettings.maxVol || 300;
+  if (gainNode) {
+    gainNode.gain.value = val / 100;
+  } else {
+    // fallback before WebAudio init: clamp to 0-1
+    audio.volume = Math.min(1, val / 100);
+  }
+  updateVolFill();
+}
+
+function updateVolFill() {
+  const val = parseInt(volSlider.value);
+  const max = parseInt(volSlider.max) || 300;
+  document.getElementById('volFill').style.width = (val / max * 100) + '%';
+}
+updateVolFill();
+
+// Format seconds to m:ss
+function fmt(s) {
+  if (!s || isNaN(s) || !isFinite(s)) return '0:00';
+  const m = Math.floor(s / 60), ss = Math.floor(s % 60);
+  return m + ':' + String(ss).padStart(2, '0');
+}
 
 // ── VISUALIZER ──
-function renderWave() {
-  requestAnimationFrame(renderWave);
-  const strokes = document.querySelectorAll('#waveViz .stroke');
-  if (!isPlaying || !analyser) {
-    strokes.forEach(s => s.style.transform = 'scaleY(0.2)');
-    return;
+const waveStrokes = document.querySelectorAll('#waveViz .stroke');
+let vizFrameId = null;
+const vizHeights = Array.from({length: waveStrokes.length}, () => 20);
+
+function startViz() {
+  document.getElementById('waveViz').classList.add('visible');
+  if (vizFrameId) return;
+  function frame() {
+    if (!isPlaying) { stopViz(); return; }
+    if (analyser) {
+      const buf = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(buf);
+      const step = Math.floor(buf.length / waveStrokes.length);
+      waveStrokes.forEach((s, i) => {
+        const val = buf[i * step] || 0;
+        const h = Math.max(10, (val / 255) * 18);
+        vizHeights[i] = vizHeights[i] * 0.7 + h * 0.3;
+        s.style.height = vizHeights[i] + 'px';
+      });
+    } else {
+      waveStrokes.forEach((s, i) => {
+        const h = 4 + Math.abs(Math.sin(Date.now() / 300 + i * 0.8)) * 14;
+        s.style.height = h + 'px';
+      });
+    }
+    vizFrameId = requestAnimationFrame(frame);
   }
-  analyser.getByteFrequencyData(dataArray);
-  const step = Math.floor(bufferLength / strokes.length);
-  strokes.forEach((s, i) => {
-    const v = dataArray[i * step] / 256;
-    s.style.transform = `scaleY(${Math.max(0.15, v)})`;
+  vizFrameId = requestAnimationFrame(frame);
+}
+
+function stopViz() {
+  document.getElementById('waveViz').classList.remove('visible');
+  if (vizFrameId) { cancelAnimationFrame(vizFrameId); vizFrameId = null; }
+  waveStrokes.forEach(s => s.style.height = '3px');
+}
+
+// Helper: highlight playing track rows
+function renderTrackHighlights() {
+  document.querySelectorAll('[data-orig-idx]').forEach(row => {
+    const oi = parseInt(row.dataset.origIdx);
+    const aid = row.dataset.albumId;
+    const cur = flatList[trackIdx];
+    const active = cur && cur.origIdx === oi && cur.albumId === aid;
+    row.classList.toggle('playing', active);
   });
 }
-renderWave();
+</script>
 
-// ── KEYBOARD ──
-document.addEventListener('keydown', e => {
-  if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
-  if (e.key === ' ') { e.preventDefault(); togglePlay(); }
-  if (e.key === 'ArrowRight') nextTrack();
-  if (e.key === 'ArrowLeft') prevTrack();
-});
-
+<script>
 // ══════════════════════════════════════════════════════
 //  NAV HISTORY
 // ══════════════════════════════════════════════════════
@@ -1482,24 +2241,13 @@ function showView(id, push = true) {
 
 function renderHome() {
   const grid = document.getElementById('gridHome');
-  if (!grid || grid.children.length) return; // already rendered
-  // Show the 6 most recently added albums
+  if (!grid || grid.children.length) return;
   const recent = [...ALBUMS].slice(-6).reverse();
   recent.forEach(album => grid.appendChild(makeAlbumCard(album)));
 }
 
-function renderTrackHighlights() {
-  document.querySelectorAll('[data-orig-idx]').forEach(row => {
-    const oi = parseInt(row.dataset.origIdx);
-    const aid = row.dataset.albumId;
-    const cur = flatList[trackIdx];
-    const active = cur && cur.origIdx === oi && cur.albumId === aid;
-    row.classList.toggle('playing', active);
-  });
-}
-
 // ══════════════════════════════════════════════════════
-//  DISCOVER VIEW — fixed grid limits
+//  DISCOVER VIEW
 // ══════════════════════════════════════════════════════
 const DISCOVER_RELEASED_LIMIT = 18;
 const DISCOVER_UNRELEASED_LIMIT = 6;
@@ -1509,17 +2257,10 @@ function renderDiscover() {
   const unreleased = document.getElementById('gridUnreleased');
   official.innerHTML = '';
   unreleased.innerHTML = '';
-
   const officialAlbums = ALBUMS.filter(a => a.type !== 'unreleased');
   const unreleasedAlbums = ALBUMS.filter(a => a.type === 'unreleased');
-
-  officialAlbums.slice(0, DISCOVER_RELEASED_LIMIT).forEach(album => {
-    official.appendChild(makeAlbumCard(album));
-  });
-
-  unreleasedAlbums.slice(0, DISCOVER_UNRELEASED_LIMIT).forEach(album => {
-    unreleased.appendChild(makeAlbumCard(album));
-  });
+  officialAlbums.slice(0, DISCOVER_RELEASED_LIMIT).forEach(album => official.appendChild(makeAlbumCard(album)));
+  unreleasedAlbums.slice(0, DISCOVER_UNRELEASED_LIMIT).forEach(album => unreleased.appendChild(makeAlbumCard(album)));
 }
 
 function makeAlbumCard(album) {
@@ -1530,7 +2271,6 @@ function makeAlbumCard(album) {
   return card;
 }
 
-// ── Full List Views ──
 function openFullList(type, push = true) {
   if (type === 'released') {
     const albums = ALBUMS.filter(a => a.type !== 'unreleased');
@@ -1565,6 +2305,7 @@ const ARTIST_PROFILES = {
   "GOOD Music": { pfp: "", bio: "Kanye West's record label collective featuring Big Sean, Pusha T, Teyana Taylor, and more." },
   "¥$": { pfp: "", bio: "Collaborative project between Kanye West and Ty Dolla $ign, released as Vultures 1 & 2." },
   "Playboi Carti": { pfp: "", bio: "Atlanta-based rapper known for his experimental sound and Die Lit." },
+  "Lil Uzi Vert": { pfp: "", bio: "Philadelphia rapper known for Eternal Atake and melodic rap style." },
   "Rhap5ody": { pfp: "", bio: "Upcoming artist with unreleased projects including maybe (Maybe). and Syndicate." }
 };
 function getArtistProfile(name) { return ARTIST_PROFILES[name] || { pfp: '', bio: '' }; }
@@ -1603,13 +2344,12 @@ function openAlbum(id, push = true) {
     row.className = 'track-row' + (unavail ? ' unavailable' : '');
     row.dataset.origIdx = origIdx;
     row.dataset.albumId = id;
-    const isMulti = Array.isArray(t.file);
     row.innerHTML = `
       <div class="track-num">
         <span class="track-num-text">${logicalNum || '·'}</span>
         <span class="track-num-icon" style="display:none"><i class="fas fa-volume-up"></i></span>
       </div>
-      <div class="track-name-cell">${t.name}${isMulti ? '<span style="color:var(--muted);font-size:10px;margin-left:4px;">(multi)</span>' : ''}</div>
+      <div class="track-name-cell">${t.name}</div>
       <div class="track-dur">—</div>
       ${!unavail ? `<button class="track-menu-btn" onclick="openTrackCtx(event,'${id}',${origIdx})"><i class="fas fa-ellipsis-h"></i></button>` : '<div></div>'}`;
     if (!unavail) {
@@ -1624,16 +2364,13 @@ function openAlbum(id, push = true) {
   showView('album');
   if (push) pushNav(() => openAlbum(id, false));
   renderSidebarLibrary();
-  // Lazy-load durations
   setTimeout(() => loadDurationsFor(album, (src, dur) => {
     rows.querySelectorAll('.track-row').forEach(row => {
       const oi = parseInt(row.dataset.origIdx);
       const t2 = album.tracks[oi];
       if (!t2) return;
       const files = Array.isArray(t2.file) ? t2.file : [t2.file];
-      if (files[0] && album.basePath + files[0] === src) {
-        row.querySelector('.track-dur').textContent = dur;
-      }
+      if (files[0] && files[0] === src) row.querySelector('.track-dur').textContent = dur;
     });
   }), 50);
 }
@@ -1642,7 +2379,8 @@ function playAlbum(id) {
   const album = ALBUMS.find(a => a.id === id);
   if (!album) return;
   flatList = buildFlat(album);
-  loadTrack(0);
+  if (shuffleOn) { rebuildShuffle(); loadTrack(shuffleOrder[0]); }
+  else loadTrack(0);
   playTrack();
 }
 
@@ -1650,6 +2388,7 @@ function playAlbumFromTrack(albumId, origIdx) {
   const album = ALBUMS.find(a => a.id === albumId);
   if (!album) return;
   flatList = buildFlat(album);
+  if (shuffleOn) { rebuildShuffle(); }
   const fi = flatList.findIndex(f => f.origIdx === origIdx && f.pIdx === 0);
   loadTrack(fi === -1 ? 0 : fi);
   playTrack();
@@ -1733,10 +2472,13 @@ function playArtist(artistName) {
   let all = [];
   albums.forEach(a => all = all.concat(buildFlat(a)));
   flatList = all;
-  loadTrack(0);
+  if (shuffleOn) { rebuildShuffle(); loadTrack(shuffleOrder[0]); }
+  else loadTrack(0);
   playTrack();
 }
+</script>
 
+<script>
 // ══════════════════════════════════════════════════════
 //  SEARCH
 // ══════════════════════════════════════════════════════
@@ -1807,7 +2549,9 @@ function doSearch(q) {
     }); res.appendChild(sec);
   }
 }
+</script>
 
+<script>
 // ══════════════════════════════════════════════════════
 //  SAVE ALBUM / FOLLOW ARTIST
 // ══════════════════════════════════════════════════════
@@ -1835,7 +2579,9 @@ function toggleFollowArtist(artistName) {
   const btn = document.getElementById('btnFollowArtist');
   if (btn) { const f2 = acc.following.includes(artistName); btn.textContent = f2 ? 'Following' : 'Follow'; btn.classList.toggle('following', f2); }
 }
+</script>
 
+<script>
 // ══════════════════════════════════════════════════════
 //  PLAYLISTS
 // ══════════════════════════════════════════════════════
@@ -1931,8 +2677,9 @@ function playPlaylist(playlistId) {
   flatList = pl.tracks.map(t => {
     const album = ALBUMS.find(a => a.id === t.albumId); if (!album) return null;
     const files = Array.isArray(album.tracks[t.origIdx]?.file) ? album.tracks[t.origIdx].file : [album.tracks[t.origIdx]?.file];
-    return { name: t.name, src: album.basePath + files[0], albumId: t.albumId, albumTitle: t.albumTitle, cover: t.cover, artist: t.artist, origIdx: t.origIdx, pIdx: 0, lastPIdx: 0, isMulti: false };
+    return { name: t.name, src: files[0], albumId: t.albumId, albumTitle: t.albumTitle, cover: t.cover, artist: t.artist, origIdx: t.origIdx, pIdx: 0, lastPIdx: 0, isMulti: false };
   }).filter(Boolean);
+  if (shuffleOn) rebuildShuffle();
   loadTrack(0);
   playTrack();
 }
@@ -1942,15 +2689,13 @@ function playPlaylistFromIndex(playlistId, startIdx) {
   flatList = pl.tracks.map(t => {
     const album = ALBUMS.find(a => a.id === t.albumId); if (!album) return null;
     const files = Array.isArray(album.tracks[t.origIdx]?.file) ? album.tracks[t.origIdx].file : [album.tracks[t.origIdx]?.file];
-    return { name: t.name, src: album.basePath + files[0], albumId: t.albumId, albumTitle: t.albumTitle, cover: t.cover, artist: t.artist, origIdx: t.origIdx, pIdx: 0, lastPIdx: 0, isMulti: false };
+    return { name: t.name, src: files[0], albumId: t.albumId, albumTitle: t.albumTitle, cover: t.cover, artist: t.artist, origIdx: t.origIdx, pIdx: 0, lastPIdx: 0, isMulti: false };
   }).filter(Boolean);
+  if (shuffleOn) rebuildShuffle();
   loadTrack(startIdx);
   playTrack();
 }
 
-// ══════════════════════════════════════════════════════
-//  PLAYLIST EDITOR
-// ══════════════════════════════════════════════════════
 function openPlaylistEditor(playlistId) {
   const u = getCurrentUser(); if (!u) return;
   const pl = (u.playlists || []).find(p => p.id === playlistId); if (!pl) return;
@@ -2012,9 +2757,6 @@ function removeAlbumFromPlaylist(playlistId, albumTitle) {
   saveAccounts(a); showToast(`Removed ${before - pl.tracks.length} tracks from ${albumTitle}`); renderEditorTracks(playlistId); renderPlaylistView(playlistId);
 }
 
-// ══════════════════════════════════════════════════════
-//  SIDEBAR LIBRARY
-// ══════════════════════════════════════════════════════
 function renderSidebarLibrary() {
   const lib = document.getElementById('sidebarLibrary');
   lib.innerHTML = '';
@@ -2033,7 +2775,9 @@ function renderSidebarLibrary() {
   });
   if (!u.playlists?.length && !u.savedAlbums?.length) lib.innerHTML += '<div style="padding:8px 10px;font-family:\'Space Mono\',monospace;font-size:11px;color:var(--muted);">Save albums & create playlists to see them here</div>';
 }
+</script>
 
+<script>
 // ══════════════════════════════════════════════════════
 //  PROFILE
 // ══════════════════════════════════════════════════════
@@ -2131,7 +2875,9 @@ function doRegister() {
   renderTopbarRight(); renderSidebarLibrary();
 }
 function doLogout() { setSession(null); renderTopbarRight(); renderSidebarLibrary(); showView('home'); showToast('Signed out'); }
+</script>
 
+<script>
 // ══════════════════════════════════════════════════════
 //  TOPBAR RIGHT
 // ══════════════════════════════════════════════════════
@@ -2174,7 +2920,9 @@ function showCtxMenu(x, y, items) {
   const close = e => { if (!menu.contains(e.target)) { menu.classList.remove('open'); document.removeEventListener('click', close); } };
   setTimeout(() => document.addEventListener('click', close), 10); ctxCleanup = close;
 }
+</script>
 
+<script>
 // ══════════════════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════════════════
@@ -2182,8 +2930,28 @@ cleanInactive();
 renderDiscover();
 renderTopbarRight();
 renderSidebarLibrary();
+initSettingsUI();
 pushNav(() => { showView('home'); });
 loadAndRenderStats().catch(e => console.warn('Stats load error:', e));
+
+// Apply saved settings on load
+document.getElementById('volSlider').max = playerSettings.maxVol;
+document.getElementById('volSlider').value = playerSettings.defaultVol;
+updateVolFill();
+shuffleOn = playerSettings.shuffleDefault;
+repeatMode = playerSettings.repeatDefault;
+if (shuffleOn) document.getElementById('btnRandom').classList.add('active');
+if (repeatMode === 1) { document.getElementById('btnRepeat').classList.add('active'); }
+else if (repeatMode === 2) { document.getElementById('btnRepeat').classList.add('active'); document.getElementById('repeatIcon').className = 'fas fa-redo-alt'; }
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  const tag = document.activeElement.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+  if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+  if (e.code === 'ArrowRight' && e.shiftKey) nextTrack();
+  if (e.code === 'ArrowLeft' && e.shiftKey) prevTrack();
+});
 </script>
 </body>
 </html>
