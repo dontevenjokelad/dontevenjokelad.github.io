@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>National Educational Standards Archive & Research</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"/>
+  <link rel="stylesheet" href="stylium.css">
+</head>
+<body>
+
+<div class="app" id="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo-row">
+    <div class="sidebar-logo"><img style="width:100%;height:100%;" src="https://raw.githubusercontent.com/soundscapeonline/soundscapeonline.github.io/main/images/logos/Untitled162_20260220130644.png"/></div>
+  </div>
+  <div class="sidebar-nav">
+    <button class="nav-btn" id="navSearch" onclick="showView('search')"><i class="fas fa-search"></i>Search</button>
+    <button class="nav-btn active" id="navHome" onclick="showView('home')"><i class="fas fa-home"></i>Home</button>
+    <button class="nav-btn" id="navDiscover" onclick="showView('discover')"><i class="fas fa-compass"></i>Discover</button>
+    <button class="nav-btn" id="navSettings" onclick="showView('settings')"><i class="fas fa-cog"></i>Settings</button>
+  </div>
+  <div class="sidebar-section-label">
+    <span>Library</span>
+    <button onclick="openCreatePlaylist()" title="New playlist"><i class="fas fa-plus"></i></button>
+  </div>
+  <div class="sidebar-list" id="sidebarLibrary"></div>
+  <div style="padding:0 8px 10px;">
+    <button class="create-playlist-btn" onclick="openCreatePlaylist()"><i class="fas fa-plus"></i>New Playlist</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <button class="topbar-back" id="btnBack" onclick="navBack()"><i class="fas fa-chevron-left"></i></button>
+    <button class="topbar-fwd" id="btnFwd" onclick="navFwd()"><i class="fas fa-chevron-right"></i></button>
+    <div class="search-wrap">
+      <i class="fas fa-search"></i>
+      <input type="text" id="globalSearch" placeholder="Search albums, artists, tracks, users..." autocomplete="off"/>
+    </div>
+    <div class="topbar-right" id="topbarRight"></div>
+  </div>
+
+<!-- HOME VIEW -->
+<div class="view active" id="viewHome">
+  <div class="discovery-hero">
+    <h1>HOME</h1>
+    <p>Welcome back. Pick up where you left off.</p>
+  </div>
+
+  <!-- Featured Artists -->
+  <div class="section-title"><div class="section-title-left">Featured Artists</div></div>
+  <div style="display:flex;gap:16px;padding:0 24px 20px;overflow-x:auto;flex-shrink:0;">
+    <div id="homeFeaturedArtists" style="display:flex;gap:16px;"></div>
+  </div>
+
+  <!-- Recently Added -->
+  <div class="section-title">
+    <div class="section-title-left">Recently Added         <span style="font-size:14px;color:var(--muted);font-family:'Space Mono',monospace;margin-left:6px;" id="releasedCountSpan">(loading…)</span>
+        <button class="see-all-btn" onclick="openFullList('allAlbums')" style="margin-left:8px;">Check em' out</button></div>
+    <button class="see-all-btn" onclick="openFullList('released')">See All</button>
+  </div>
+  <div class="album-grid" id="gridHome"></div>
+
+  <!-- Recommended Albums -->
+  <div class="section-title">
+    <div class="section-title-left">Recommended For You<span style="font-size:14px;color:var(--muted);font-family:'Space Mono',monospace;margin-left:6px;" id="releasedCountSpan">(loading…)</span>
+        <button class="see-all-btn" onclick="openFullList('released')" style="margin-left:8px;">More</button></div>
+    <button class="see-all-btn" onclick="openFullList('released')">See All</button>
+  </div>
+  <div class="album-grid" id="gridHomeRecommended"></div>
+
+  <!-- Unreleased picks -->
+  <div class="section-title">
+    <div class="section-title-left">Unreleased Picks     
+<span style="font-size:14px;color:var(--muted);font-family:'Space Mono',monospace;margin-left:6px;" id="unreleasedCountSpan">(loading…)</span>
+        <button class="see-all-btn" onclick="openFullList('unreleased')" style="margin-left:8px;">holy grails!</button>
+</div>
+    <button class="see-all-btn" onclick="openFullList('unreleased')">See All</button>
+  </div>
+  <div class="album-grid" id="gridHomeUnreleased"></div>
+</div>
+
+  <!-- DISCOVER VIEW -->
+  <div class="view" id="viewDiscover">
+    <div class="discovery-hero">
+      <h1>DISCOVERY</h1>
+      <p>Find the Best Music available! <br>adding more albums soon! recommend an album at<button class="see-all-btn" onclick="window.open('https://padlet.com/rhap5ody/albums_recommendations', '_blank')" style="margin-left:8px;">Recommendations</button>
+    </div>
+    <div class="podium-section">
+      <div class="podium-title"><i class="fas fa-trophy"></i>BEST</div>
+      <div class="podium-row" id="podiumRow">
+        <div class="podium-loading"><span class="stats-dot"></span>Loading live stats…</div>
+      </div>
+    </div>
+    <div class="section-title">
+      <div class="section-title-left">Top #100</div>
+      <button class="see-all-btn" onclick="openFullStats()"><i class="fas fa-expand-alt"></i> Full Stats</button>
+    </div>
+    <div class="top100-section">
+      <div class="top100-grid" id="top100Grid">
+        <div style="grid-column:1/-1;padding:20px;text-align:center;color:var(--muted);font-family:'Space Mono',monospace;font-size:12px;"><span class="stats-dot"></span>Loading stats…</div>
+      </div>
+    </div>
+    <div class="section-title">
+      <div class="section-title-left">
+        Albums
+        <span style="font-size:14px;color:var(--muted);font-family:'Space Mono',monospace;margin-left:6px;" id="releasedCountSpan">(loading…)</span>
+        <button class="see-all-btn" onclick="openFullList('released')" style="margin-left:8px;">More</button>
+      </div>
+    </div>
+    <div class="album-grid" id="gridOfficial"></div>
+    <div class="section-title">
+      <div class="section-title-left">
+        Unreleased / Shelved Albums
+        <span style="font-size:14px;color:var(--muted);font-family:'Space Mono',monospace;margin-left:6px;" id="unreleasedCountSpan">(loading…)</span>
+        <button class="see-all-btn" onclick="openFullList('unreleased')" style="margin-left:8px;">More</button>
+      </div>
+    </div>
+    <div class="album-grid" id="gridUnreleased"></div>
+  </div>
+
+  <!-- FULL LIST: RELEASED -->
+  <div class="view" id="viewFullReleased">
+    <div class="full-list-hero">
+      <h1>ALL RELEASED ALBUMS</h1>
+      <p id="fullReleasedDesc">All official releases</p>
+    </div>
+    <div class="album-grid" id="gridFullReleased"></div>
+  </div>
+
+  <!-- FULL LIST: UNRELEASED -->
+  <div class="view" id="viewFullUnreleased">
+    <div class="full-list-hero">
+      <h1>ALL UNRELEASED / SHELVED</h1>
+      <p id="fullUnreleasedDesc">Shelved and unreleased projects</p>
+    </div>
+    <div class="album-grid" id="gridFullUnreleased"></div>
+  </div>
+
+<!-- FULL LIST: REL/UNREL -->
+  <div class="view" id="viewFullAlbums">
+    <div class="full-list-hero">
+      <h1>ALL ALBUMS</h1>
+      <p id="fullUnreleasedDesc">Shelved and unreleased projects</p>
+    </div>
+    <div class="album-grid" id="gridFullReleased"></div>
+    <div class="album-grid" id="gridFullUnreleased"></div>
+  </div>
+
+  <!-- ALBUM VIEW -->
+  <div class="view" id="viewAlbum">
+    <div class="album-hero" id="albumHero"></div>
+    <div class="tracklist-wrap">
+      <div class="tracklist-header">
+        <span>#</span><span>TITLE</span><span style="text-align:right">DURATION</span><span></span>
+      </div>
+      <div id="albumTrackRows"></div>
+    </div>
+  </div>
+
+  <!-- ARTIST VIEW -->
+  <div class="view" id="viewArtist">
+    <div id="artistHero"></div>
+    <div id="artistAlbums"></div>
+  </div>
+
+  <!-- SEARCH RESULTS VIEW -->
+  <div class="view" id="viewSearch">
+    <div class="search-results" id="searchResults">
+      <div class="empty-state"><i class="fas fa-search"></i>Type to search albums, artists, tracks, users</div>
+    </div>
+  </div>
+
+  <!-- PROFILE (own) VIEW -->
+  <div class="view" id="viewProfile">
+    <div id="profileContent"></div>
+  </div>
+
+  <!-- OTHER USER VIEW -->
+  <div class="view" id="viewUser">
+    <div id="userContent"></div>
+  </div>
+
+  <!-- PLAYLIST VIEW -->
+  <div class="view" id="viewPlaylist">
+    <div class="playlist-hero" id="playlistHero"></div>
+    <div style="padding:0 16px 8px;display:flex;align-items:center;justify-content:space-between;">
+      <div id="playlistActionRow" style="display:flex;gap:10px;align-items:center;"></div>
+      <button class="btn btn-secondary" onclick="openPlaylistEditor(currentPlaylistId)" style="font-size:11px;padding:6px 14px;"><i class="fas fa-sliders-h"></i> Edit</button>
+    </div>
+    <div style="padding:0 16px 20px;">
+      <div style="display:grid;grid-template-columns:36px 42px 1fr 100px 40px;padding:6px 12px;border-bottom:1px solid var(--border);margin-bottom:4px;">
+        <span style="font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;">#</span>
+        <span></span>
+        <span style="font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;">TITLE</span>
+        <span style="font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;text-align:right;">DURATION</span>
+        <span></span>
+      </div>
+      <div id="playlistTrackRows"></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS VIEW -->
+  <div class="view" id="viewSettings">
+    <div class="settings-view">
+      <div class="discovery-hero" style="padding:0 0 20px;">
+        <h1>SETTINGS</h1>
+        <p>Customize your player experience.</p>
+      </div>
+      <div class="settings-section">
+        <h2>Audio</h2>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Max Volume</div>
+            <div class="settings-sub">Set the maximum volume cap (100% = normal, 300% = boosted)</div>
+          </div>
+          <div class="settings-control settings-slider-wrap">
+            <input type="range" class="settings-slider" id="settingsMaxVol" min="100" max="300" step="10" value="300"/>
+            <div class="settings-val" id="settingsMaxVolVal">300%</div>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Default Volume</div>
+            <div class="settings-sub">Volume level when player starts</div>
+          </div>
+          <div class="settings-control settings-slider-wrap">
+            <input type="range" class="settings-slider" id="settingsDefaultVol" min="0" max="100" step="1" value="100"/>
+            <div class="settings-val" id="settingsDefaultVolVal">100%</div>
+          </div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <h2>Playback</h2>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Shuffle by Default</div>
+            <div class="settings-sub">Enable shuffle mode when a new album plays</div>
+          </div>
+          <div class="settings-control">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+              <input type="checkbox" id="settingsShuffle" style="width:16px;height:16px;accent-color:var(--accent2);cursor:pointer;"/>
+              <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);">Enabled</span>
+            </label>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Repeat Mode Default</div>
+            <div class="settings-sub">Default repeat behavior</div>
+          </div>
+          <div class="settings-control">
+            <select id="settingsRepeat" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Space Mono',monospace;font-size:11px;padding:6px 10px;border-radius:6px;cursor:pointer;outline:none;">
+              <option value="0">Off</option>
+              <option value="1">Repeat All</option>
+              <option value="2">Repeat One</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- PLAYER BAR -->
+<div class="player-bar hidden" id="playerBar">
+  <div class="now-info">
+    <img class="now-art hidden" id="nowArt" src="" alt=""/>
+    <div class="now-text">
+      <div class="now-title" id="nowTitle">—</div>
+      <div class="now-artist" id="nowArtist">—</div>
+    </div>
+  </div>
+  <div class="controls">
+    <div class="ctrl-btns">
+      <button class="ctrl-btn" id="btnRandom" title="Shuffle" onclick="toggleShuffle()"><i class="fas fa-random"></i></button>
+      <button class="ctrl-btn" id="btnPrev" onclick="prevTrack()"><i class="fas fa-step-backward"></i></button>
+      <button class="ctrl-btn ctrl-play" id="btnPlay" onclick="togglePlay()"><i class="fas fa-play" id="playIcon"></i></button>
+      <button class="ctrl-btn" id="btnNext" onclick="nextTrack()"><i class="fas fa-step-forward"></i></button>
+      <button class="ctrl-btn" id="btnRepeat" title="Repeat" onclick="cycleRepeat()"><i class="fas fa-redo" id="repeatIcon"></i></button>
+    </div>
+    <div class="progress-row">
+      <span class="time-label" id="currTime">0:00</span>
+      <div class="seek-wrap"><div class="seek-fill" id="seekFill"></div><input type="range" class="seek-input" id="seekSlider" min="0" max="100" value="0" step="0.1"/></div>
+      <span class="time-label" id="totalTime">0:00</span>
+    </div>
+  </div>
+  <div class="right-ctrl">
+    <div class="wave-viz" id="waveViz">
+      <span class="stroke"></span><span class="stroke"></span><span class="stroke"></span>
+      <span class="stroke"></span><span class="stroke"></span><span class="stroke"></span><span class="stroke"></span>
+    </div>
+    <div class="vol-wrap">
+      <i class="fas fa-volume-down"></i>
+      <div class="vol-slider"><div class="vol-fill" id="volFill"></div><input type="range" class="vol-input" id="volSlider" min="0" max="300" value="100"/></div>
+      <i class="fas fa-volume-up"></i>
+    </div>
+  </div>
+</div>
+
+</div><!-- end .app -->
+
+<!-- FULL STATS OVERLAY -->
+<div class="fullstats-overlay" id="fullStatsOverlay">
+  <div class="fullstats-inner">
+    <div class="fullstats-header">
+      <div class="fullstats-title">FULL STATS</div>
+      <button class="fullstats-close" onclick="closeFullStats()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="fullstats-tabs">
+      <button class="fstab active" onclick="switchFSTab('best')">Best Score</button>
+      <button class="fstab" onclick="switchFSTab('views')">Views</button>
+      <button class="fstab" onclick="switchFSTab('listens')">Listens</button>
+      <button class="fstab" onclick="switchFSTab('saves')">Saves</button>
+      <button class="fstab" onclick="switchFSTab('downloads')">Downloads</button>
+    </div>
+    <div class="fullstats-body" id="fullStatsBody"></div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modalAuth">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modalAuth')"><i class="fas fa-times"></i></button>
+    <div class="tabs">
+      <button class="tab active" onclick="switchAuthTab('login')">Sign In</button>
+      <button class="tab" onclick="switchAuthTab('register')">Create Account</button>
+    </div>
+    <div id="authLogin">
+      <div class="modal-title">WELCOME BACK</div>
+      <div class="modal-sub">Sign in with username or #ID</div>
+      <div class="form-group">
+        <label class="form-label">Username or #ID</label>
+        <input class="form-input" id="loginUser" placeholder="@username or #WHAb90l2" autocomplete="off"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" id="loginPass" type="password" placeholder="••••••••" autocomplete="off"/>
+        <div class="form-error" id="loginError">Invalid username/ID or password</div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" onclick="doLogin()">Sign In</button>
+      </div>
+    </div>
+    <div id="authRegister" style="display:none;">
+      <div class="modal-title">CREATE ACCOUNT</div>
+      <div class="modal-sub">No email or payment info needed</div>
+      <div class="form-group">
+        <label class="form-label">Username <span style="color:var(--accent);">*</span></label>
+        <input class="form-input" id="regUser" placeholder="lowercase, no spaces" autocomplete="off"/>
+        <div class="form-hint">3–20 chars, letters/numbers/underscores only</div>
+        <div class="form-error" id="regUserError"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Display Name</label>
+        <input class="form-input" id="regDisplay" placeholder="How you appear to others" autocomplete="off"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password <span style="color:var(--accent);">*</span></label>
+        <input class="form-input" id="regPass" type="password" placeholder="••••••••" autocomplete="off"/>
+        <div class="form-hint">At least 6 characters</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Recovery Answer <span style="color:var(--accent);">*</span></label>
+        <input class="form-input" id="regFallback" placeholder="e.g. name of your first pet" autocomplete="off"/>
+        <div class="form-hint">Remember this — it's your only recovery option</div>
+        <div class="form-error" id="regError"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" onclick="doRegister()">Create Account</button>
+      </div>
+    </div>
+    <div id="authSuccess" style="display:none;text-align:center;">
+      <div class="modal-title">ACCOUNT CREATED</div>
+      <div class="modal-sub">Your unique ID:</div>
+      <div class="id-badge" id="newIdBadge"></div>
+      <p style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;">Save this ID — you can use it to sign in</p>
+      <div class="modal-actions" style="justify-content:center;margin-top:16px;">
+        <button class="btn btn-primary" onclick="closeModal('modalAuth')">Start Listening</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalEditProfile">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modalEditProfile')"><i class="fas fa-times"></i></button>
+    <div class="modal-title">EDIT PROFILE</div>
+    <div class="form-group">
+      <label class="form-label">Display Name</label>
+      <input class="form-input" id="editDisplayName" placeholder="How you appear to others"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Profile Picture URL</label>
+      <input class="form-input" id="editPfpUrl" placeholder="https://..."/>
+      <div class="form-hint">Link to an image URL</div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-title" style="font-size:20px;">CHANGE PASSWORD</div>
+    <div class="form-group">
+      <label class="form-label">Current Password</label>
+      <input class="form-input" id="editOldPass" type="password" placeholder="••••••••"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">New Password</label>
+      <input class="form-input" id="editNewPass" type="password" placeholder="••••••••"/>
+      <div class="form-error" id="editPassError"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('modalEditProfile')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProfileEdit()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalCreatePlaylist">
+  <div class="modal" style="max-width:360px;">
+    <button class="modal-close" onclick="closeModal('modalCreatePlaylist')"><i class="fas fa-times"></i></button>
+    <div class="modal-title">NEW PLAYLIST</div>
+    <div class="form-group">
+      <label class="form-label">Playlist Name</label>
+      <input class="form-input" id="newPlaylistName" placeholder="My Playlist"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Description (optional)</label>
+      <input class="form-input" id="newPlaylistDesc" placeholder="What's this playlist about?"/>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('modalCreatePlaylist')">Cancel</button>
+      <button class="btn btn-primary" onclick="doCreatePlaylist()">Create</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalAddToPlaylist">
+  <div class="modal" style="max-width:360px;">
+    <button class="modal-close" onclick="closeModal('modalAddToPlaylist')"><i class="fas fa-times"></i></button>
+    <div class="modal-title">ADD TO PLAYLIST</div>
+    <div class="modal-sub" id="addToPlaylistTrackName" style="margin-bottom:12px;"></div>
+    <div id="addToPlaylistList"></div>
+    <div class="modal-divider"></div>
+    <button class="create-playlist-btn" onclick="openCreatePlaylistFromAdd()"><i class="fas fa-plus"></i> New Playlist</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalPlaylistEditor">
+  <div class="modal" style="max-width:500px;">
+    <button class="modal-close" onclick="closeModal('modalPlaylistEditor')"><i class="fas fa-times"></i></button>
+    <div class="modal-title">PLAYLIST EDITOR</div>
+    <div class="modal-sub" id="editorPlaylistName"></div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+      <button class="btn btn-secondary" style="font-size:11px;" onclick="editorRemoveAll()"><i class="fas fa-trash"></i> Clear All</button>
+      <button class="btn btn-secondary" style="font-size:11px;" id="editorRemoveArtistBtn"><i class="fas fa-user-minus"></i> Remove Artist</button>
+      <button class="btn btn-secondary" style="font-size:11px;" id="editorRemoveAlbumBtn"><i class="fas fa-compact-disc"></i> Remove Album</button>
+    </div>
+    <div id="editorTrackList" style="max-height:360px;overflow-y:auto;"></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="closeModal('modalPlaylistEditor');renderPlaylistView(currentPlaylistId);">Done</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalRemoveGroup">
+  <div class="modal" style="max-width:360px;">
+    <button class="modal-close" onclick="closeModal('modalRemoveGroup')"><i class="fas fa-times"></i></button>
+    <div class="modal-title" id="removeGroupTitle">REMOVE</div>
+    <div id="removeGroupList" style="max-height:300px;overflow-y:auto;"></div>
+  </div>
+</div>
+
+<div class="ctx-menu" id="ctxMenu"></div>
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script src="accounts.js"></script>
+<script src="settings.js"></script>
+<script src="updatedaudio.js"></script>
+<script src="stats.js"></script>
+<script src="playlists.js"></script>
+<script src="search.js"></script>
+<script src="updatedui.js"></script>
+<script src="init.js"></script>
+
+</body>
+</html>
